@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@nestjs/platform-fastify": "^9.2.1"
+  }
+}
