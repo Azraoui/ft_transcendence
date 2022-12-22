@@ -26,4 +26,4 @@ export class AuthController {
     createMsg(@Body() chatData: CreateAuth): any {
         return {from: 'abdellah', data: chatData}
     }
-}  
+}
