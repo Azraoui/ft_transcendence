@@ -1,5 +1,6 @@
-import { Body, Controller, Get, HttpCode, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthService } from "./auth.service";
+import { CreateAuth } from "./dto/CreateAuth.dto";
 
 @Controller('chat')
 export class AuthController {
@@ -21,7 +22,8 @@ export class AuthController {
      * i can use @HttpCode(200) to change status code from 201 to 200
     */
     // @HttpCode(200)
-    createMsg(@Body() chatData): any {
+    @UsePipes(ValidationPipe)
+    createMsg(@Body() chatData: CreateAuth): any {
         return {from: 'abdellah', data: chatData}
     }
 }  
