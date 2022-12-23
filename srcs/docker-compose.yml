@@ -13,12 +13,12 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - pgdata:/var/lib/postgresql/data
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
-  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
   # pgadmin:
   #   image: dpage/pgadmin4
   #   restart: always
