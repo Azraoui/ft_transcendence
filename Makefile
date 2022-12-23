@@ -1,7 +1,6 @@
-NAME= PingPong
 
-all: $(NAME)
-
+all:
+	docker-compose -f srcs/docker-compose.yml up
 clean:
 
 fclean:
