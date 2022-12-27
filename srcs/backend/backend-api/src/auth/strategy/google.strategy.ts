@@ -20,7 +20,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         const { name, emails, photos } = profile;
         const user = {
             email: emails[0].value,
-            firstName: name.gavenName,
+            firstName: name.givenName,
             lastName: name.familyName,
             picture: photos[0].value,
             accessToken,
@@ -28,5 +28,4 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         }
         done(null, user);
     }
-
 }

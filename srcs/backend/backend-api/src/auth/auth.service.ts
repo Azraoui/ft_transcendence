@@ -11,4 +11,15 @@ export class AuthService {
         return "you just signup"
     }
 
+    googleLogin(req) {
+        if (!req.user) {
+            return "No user from google"
+        }
+
+        return {
+            message: "user information from google",
+            user: req.user,
+        }
+    }
+
 }
