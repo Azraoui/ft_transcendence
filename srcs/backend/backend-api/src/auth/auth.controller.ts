@@ -20,7 +20,7 @@ export class AuthController {
     // }
 
     @Get()
-    fortytwoAuth(@Req() req) {
+    async fortytwoAuth(@Req() req) {
 
     }
 

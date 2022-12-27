@@ -13,11 +13,12 @@ export class AuthService {
 
     fortytwoLogin(req) {
         if (!req.user) {
-            return "No user from google"
+            console.log("No user from 42")
+            return "No user from 42"
         }
 
         return {
-            message: "user information from google",
+            message: "user information from 42",
             user: req.user,
         }
     }
