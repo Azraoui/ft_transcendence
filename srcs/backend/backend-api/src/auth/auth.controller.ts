@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
 @UseGuards(FortyTwoOAuthGuard)
-@Controller('api/auth')
+@Controller('auth')
 
 export class AuthController {
 
