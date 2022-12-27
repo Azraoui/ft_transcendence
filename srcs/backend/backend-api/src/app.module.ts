@@ -8,4 +8,5 @@ import { AuthService } from './auth/auth.service';
   controllers: [AuthController],
   providers: [AuthService],
 })
+
 export class AppModule {}
