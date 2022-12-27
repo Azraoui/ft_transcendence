@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GoogleOAuthGuard } from './guard/google-oauth.guard';
+import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
-@UseGuards(GoogleOAuthGuard)
+@UseGuards(FortyTwoOAuthGuard)
 @Controller('api/auth')
 
 export class AuthController {
@@ -20,14 +20,14 @@ export class AuthController {
     // }
 
     @Get()
-    async googleAuth(@Req() req) {
+    async fortytwoAuth(@Req() req) {
 
     }
 
-    @Get('google-redirect')
-    googleAuthRedirect(@Req() req) {
+    @Get('42-redirect')
+    fortyTwoAuthRedirect(@Req() req) {
         console.log(req.user);
-        return this.authService.googleLogin(req);
+        return this.authService.fortytwoLogin(req);
     }
 
 }

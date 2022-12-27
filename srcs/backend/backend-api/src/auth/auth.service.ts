@@ -11,7 +11,7 @@ export class AuthService {
         return "you just signup"
     }
 
-    googleLogin(req) {
+    fortytwoLogin(req) {
         if (!req.user) {
             return "No user from google"
         }
