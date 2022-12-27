@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
-import { GoogleStrategy } from './strategy';
+import {FortyTwoStrategy } from './strategy';
 
 @Module({
   imports: [ConfigModule.forRoot()],
   controllers: [],
-  providers: [AuthService, GoogleStrategy]
+  providers: [AuthService, FortyTwoStrategy]
 })
 export class AuthModule {}
