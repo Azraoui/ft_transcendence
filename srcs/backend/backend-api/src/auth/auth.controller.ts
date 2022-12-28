@@ -9,16 +9,6 @@ export class AuthController {
 
     constructor (private authService: AuthService) {}
 
-    // @Post('signin')
-    // signIn() :string {
-    //     return this.authService.signIn();
-    // }
-
-    // @Post('signup')
-    // signUp() :string {
-    //     return this.authService.signUp();
-    // }
-
     @Get()
     async fortytwoAuth(@Req() req) {
 
