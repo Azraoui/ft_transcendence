@@ -8,4 +8,5 @@ import {FortyTwoStrategy } from './strategy';
   controllers: [],
   providers: [AuthService, FortyTwoStrategy]
 })
+
 export class AuthModule {}
