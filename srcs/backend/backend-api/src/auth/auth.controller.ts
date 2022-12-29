@@ -11,14 +11,12 @@ export class AuthController {
     constructor (private authService: AuthService) {}
 
     @Get()
-    async fortytwoAuth(@Req() req) {
+    async fortytwoAuth(@Req() req) {}
 
-    }
 
     @Get('42-redirect')
     fortyTwoAuthRedirect(@Req() req) {
-
         return this.authService.fortytwoLogin(req.user);
     }
-
+ 
 }

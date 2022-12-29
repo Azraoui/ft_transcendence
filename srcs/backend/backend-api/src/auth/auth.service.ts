@@ -1,23 +1,62 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { userInfo } from 'os';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 
 @Injectable()
 export class AuthService {
 
-    fortytwoLogin(data: AuthDto) {
-        console.log(data);
-        if (!data) {
-            console.log(`No user from 42 ${data}`)
-            return "No user from 42"
+    constructor(
+        private prisma: PrismaService,
+        private jwt: JwtService,
+        private config: ConfigService
+    ) {
+
+    }
+
+    async fortytwoLogin(apiData: AuthDto) {
+
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: apiData.email
+            }
+        })
+        if (!user)
+        {
+            const user = await this.prisma.user.create({
+                data: {
+                    username: apiData.username,
+                    firstName: apiData.firstName,
+                    lastName: apiData.lastName,
+                    email: apiData.email,
+                    pictureLink: apiData.pictureLink,
+                    accessToken: apiData.accessToken,
+                    refreshToken: apiData.refreshToken,
+                }
+            })
+        }
+        else
+        {
+             
+        }
+    }
+
+    signToken(userId: number, username: string) {
+        const payloud = {
+            sub: userId,
+            username
         }
 
-        // validateUser () {
+        const secret = this.config.get("JWT_SECRET");
+        const expriedTime = this.config.get('JWT_EXPIRED_TIME');
 
-        // }
-        return {
-            message: "user information from 42",
-            user: data,
-        }
+        return this.jwt.signAsync(payloud, {
+            expiresIn: expriedTime,
+            secret: secret,
+        })
     }
 
 }

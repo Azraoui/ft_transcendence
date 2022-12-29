@@ -17,11 +17,11 @@ model User {
   username        String @unique
   firstName       String
   lastName        String
-  email           String
+  email           String @unique
   pictureLink     String
   accessToken     String
   refreshToken    String
   bio             String?
 
-  @@unique([id, username])
+  @@unique([id, username, email])
 }
