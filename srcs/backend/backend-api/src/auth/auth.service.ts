@@ -1,25 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { AuthDto } from './dto';
 
 @Injectable()
 export class AuthService {
 
-    signIn() : string {
-        return "you just signin"
-    }
-
-    signUp() : string {
-        return "you just signup"
-    }
-
-    fortytwoLogin(req) {
-        if (!req.user) {
-            console.log("No user from 42")
+    fortytwoLogin(data: AuthDto) {
+        console.log(data);
+        if (!data) {
+            console.log(`No user from 42 ${data}`)
             return "No user from 42"
         }
 
+        // validateUser () {
+
+        // }
         return {
             message: "user information from 42",
-            user: req.user,
+            user: data,
         }
     }
 

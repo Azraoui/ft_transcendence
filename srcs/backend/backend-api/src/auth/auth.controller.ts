@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
 @UseGuards(FortyTwoOAuthGuard)
@@ -16,8 +17,8 @@ export class AuthController {
 
     @Get('42-redirect')
     fortyTwoAuthRedirect(@Req() req) {
-        console.log(req.user);
-        return this.authService.fortytwoLogin(req);
+
+        return this.authService.fortytwoLogin(req.user);
     }
 
 }

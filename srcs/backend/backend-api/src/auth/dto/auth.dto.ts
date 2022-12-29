@@ -1,7 +1,26 @@
-import { IsString } from "class-validator";
+import { IsEmail, IsString } from "class-validator";
 
 export class AuthDto {
 
     @IsString()
     username: string;
+    
+    @IsEmail()
+    @IsString()
+    email: string;
+
+    @IsString()
+    firstName: string;
+
+    @IsString()
+    lastName: string;
+
+    @IsString()
+    pictureLink: string;
+
+    @IsString()
+    accessToken: string;
+
+    @IsString()
+    refreshToken: string;
 }
