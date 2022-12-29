@@ -1,8 +1,6 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { userInfo } from 'os';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 
@@ -40,7 +38,7 @@ export class AuthService {
         }
         else
         {
-             
+            return user;
         }
     }
 
