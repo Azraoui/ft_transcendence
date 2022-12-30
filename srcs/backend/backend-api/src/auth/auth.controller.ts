@@ -10,7 +10,6 @@ export class AuthController {
 
     constructor (private authService: AuthService) {}
 
-    
     @Get()
     async fortytwoAuth(@Req() req) {}
 
