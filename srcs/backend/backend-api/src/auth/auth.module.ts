@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { PrismaModule } from 'src/prisma/prisma.module';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import {FortyTwoStrategy } from './strategy';
 
 @Module({
-  imports: [ConfigModule.forRoot(), JwtModule.register({})],
-  controllers: [],
-  providers: [AuthService, FortyTwoStrategy, PrismaService]
+  imports: [ConfigModule.forRoot(), JwtModule.register({}), PrismaModule],
+  controllers: [AuthController],
+  providers: [AuthService, FortyTwoStrategy, PrismaService, ConfigService, JwtService]
 })
 
 export class AuthModule {}

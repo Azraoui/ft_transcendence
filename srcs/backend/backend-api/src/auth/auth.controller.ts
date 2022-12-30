@@ -7,24 +7,23 @@ import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
 export class AuthController {
 
-    constructor (private authService: AuthService, private context: ExecutionContext) {}
+    constructor (private authService: AuthService) {}
 
     @UseGuards(FortyTwoOAuthGuard)
-    @Get('login')
+    @Get()
     async fortytwoAuth() {}
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect')
-    async fortyTwoAuthRedirect(@Req() req) {
+    async fortyTwoAuthRedirect(@Req() req, @Res() res) {
         const userAndAcessToken =  await this.authService.fortytwoLogin(req.user);
-        const request = this.context.switchToHttp().getRequest();
-        request.headers['Authorization'] =  `Bearer ${userAndAcessToken.access_token}`;
-        return userAndAcessToken.user;
+        res.cookie('access_token', userAndAcessToken.access_token, {httpOnly: true});
+        res.redirect(301, "http://localhost:5173/profile");
     }
 
-    @Get('user')
-    @UseGuards(AuthGuard('jwt'))
-    getUser(id: number) {
-        return this.authService.getUser(id);
-    }
+    // @Get('user')
+    // @UseGuards(AuthGuard('jwt'))
+    // getUser(id: number) {
+    //     return this.authService.getUser(id);
+    // }
 }
