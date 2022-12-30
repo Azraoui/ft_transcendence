@@ -10,6 +10,7 @@ export class AuthController {
 
     constructor (private authService: AuthService) {}
 
+    
     @Get()
     async fortytwoAuth(@Req() req) {}
 
@@ -18,5 +19,4 @@ export class AuthController {
     fortyTwoAuthRedirect(@Req() req) {
         return this.authService.fortytwoLogin(req.user);
     }
- 
 }
