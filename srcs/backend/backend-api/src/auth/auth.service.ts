@@ -15,7 +15,7 @@ export class AuthService {
 
     }
 
-    async fortytwoLogin(apiData: AuthDto) {
+    async fortytwoLogin(apiData: AuthDto, res: Response) {
 
         const user = await this.prisma.user.findUnique({
             where: {
