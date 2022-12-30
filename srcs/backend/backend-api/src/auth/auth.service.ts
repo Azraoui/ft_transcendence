@@ -15,7 +15,7 @@ export class AuthService {
 
     }
 
-    async fortytwoLogin(apiData: AuthDto, res: Response) {
+    async fortytwoLogin(apiData: AuthDto) {
 
         const user = await this.prisma.user.findUnique({
             where: {
@@ -36,10 +36,7 @@ export class AuthService {
                 }
             })
         }
-        else
-        {
-            return user;
-        }
+        return this.signToken(user.id, user.username);
     }
 
     signToken(userId: number, username: string) {
@@ -55,6 +52,19 @@ export class AuthService {
             expiresIn: expriedTime,
             secret: secret,
         })
+    }
+
+    async getUser(id: number) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: id
+            }
+        })
+        if (!user)
+        {
+            console.log("user not found");
+        }
+        return user;
     }
 
 }
