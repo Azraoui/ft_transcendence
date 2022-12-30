@@ -16,10 +16,11 @@ export class AuthController {
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect')
-    fortyTwoAuthRedirect(@Req() req, @GetUserReq() userReq) {
-        const access_token =  this.authService.fortytwoLogin(req.user);
+    async fortyTwoAuthRedirect(@Req() req, @GetUserReq() userReq) {
+        const userAndAcessToken =  await this.authService.fortytwoLogin(req.user);
         const request = this.context.switchToHttp().getRequest();
-        request.headers['Authorization'] = `Bearer ${access_token}`;
+        request.headers['Authorization'] =  `Bearer ${userAndAcessToken.access_token}`;
+        return userAndAcessToken.user;
     }
 
     @Get('user')

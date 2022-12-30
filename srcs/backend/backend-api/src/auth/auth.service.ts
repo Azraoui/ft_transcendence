@@ -36,7 +36,7 @@ export class AuthService {
                 }
             })
         }
-        return this.signToken(user.id, user.username);
+        return {access_token :this.signToken(user.id, user.username), user};
     }
 
     signToken(userId: number, username: string) {
