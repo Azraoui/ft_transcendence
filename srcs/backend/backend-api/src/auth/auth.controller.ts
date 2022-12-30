@@ -1,22 +1,30 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, ExecutionContext, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUserReq } from 'src/decorator';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
-@UseGuards(FortyTwoOAuthGuard)
 @Controller('auth')
 
 export class AuthController {
 
-    constructor (private authService: AuthService) {}
+    constructor (private authService: AuthService, private context: ExecutionContext) {}
 
-    @Get()
+    @UseGuards(FortyTwoOAuthGuard)
+    @Get('login')
     async fortytwoAuth() {}
 
-
+    @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect')
-    fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
-        const jwt =  this.authService.fortytwoLogin(req.user, res);
-        // res.set('authorization', jwt.access_token);
-        // res.json(req.user);
+    fortyTwoAuthRedirect(@Req() req, @GetUserReq() userReq) {
+        const access_token =  this.authService.fortytwoLogin(req.user);
+        const request = this.context.switchToHttp().getRequest();
+        request.headers['Authorization'] = `Bearer ${access_token}`;
+    }
+
+    @Get('user')
+    @UseGuards(AuthGuard('jwt'))
+    getUser(id: number) {
+        return this.authService.getUser(id);
     }
 }
