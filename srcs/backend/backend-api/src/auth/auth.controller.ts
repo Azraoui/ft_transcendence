@@ -10,11 +10,13 @@ export class AuthController {
     constructor (private authService: AuthService) {}
 
     @Get()
-    async fortytwoAuth(@Req() req) {}
+    async fortytwoAuth() {}
 
 
     @Get('42-redirect')
     fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
-        return this.authService.fortytwoLogin(req.user, res);
+        const jwt =  this.authService.fortytwoLogin(req.user, res);
+        // res.set('authorization', jwt.access_token);
+        // res.json(req.user);
     }
 }
