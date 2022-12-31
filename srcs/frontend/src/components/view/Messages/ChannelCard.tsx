@@ -14,14 +14,21 @@ type ChannelCardPorps =
             bio: string
             id: number
             active: string
-            type:string
-            pass?:string
+            type: string
+            pass?: string
             chatlog: {
                 text: string,
                 side: string
                 message_id: number
                 timestamp: string
-            }
+            }[]
+            participants: {
+                id: number,
+                name: string,
+                picture: string
+                bio: string
+                active: string
+            }[]
 
 
         }
@@ -49,27 +56,26 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setActiveNavItem(data.id);
             setChat(data.chatlog);
         }} className={`flex items-center space-x-4 py-7 ${activeNacItem === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
-
-            <div className="flex-shrink-0 relative ">
-                <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
-                <img src={data.picture} alt="avatar" className=' h-12 rounded-full ring-2 ring-offset-2  shadow-lg shadow-gray-700' />
-            </div>
             <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium ">
                     {data.name}
                 </p>
-                <p className="text-sm  truncate">
-                    {data.bio}
-                </p>
+                <div className="mt-3 flex -space-x-2 overflow-hidden">
+                    <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                    <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                    <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt="" />
+                    <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                    <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                </div>
             </div>
             {/* Ban Modal*/}
             <BanModal name={data.name} />
             <div className="dropdown dropdown-left ">
                 {/* invisible hover:visible */}
-                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon'/></div>
+                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal" className="btn m-1 w-full">Block</label></li>
-                    <li><a className="btn m-1 w-full text-sm ">View Profile</a></li>
+                    <li><label htmlFor="my-modal" className="btn m-1 w-full">Join</label></li>
+                    <li><a className="btn m-1 w-full text-sm ">View Participants</a></li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

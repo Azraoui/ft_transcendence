@@ -3,8 +3,9 @@ import React from 'react'
 import Card from './FriendCard'
 import { PlusIcon } from '@heroicons/react/24/outline';
 
-import junkData from '../../model/ChatDB.json'
+import junkData from '../../model/ChannelDB.json'
 import AddChannelModal from './AddChannelModal';
+import ChannelCard from './ChannelCard';
 
 
 function ChannelList(my_message: any) {
@@ -22,9 +23,9 @@ function ChannelList(my_message: any) {
             </div>
 
             {
-                junkData.friends.map((item) =>
+                junkData.channels.map((item) =>
                 (
-                    <Card key={item.id} data={item} />
+                    <ChannelCard key={item.id} data={item} />
 
                 ))
             }
