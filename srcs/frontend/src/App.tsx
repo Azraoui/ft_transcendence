@@ -6,11 +6,16 @@ import Login from './components/view/Login/Login'
 import Messages from './components/view/Messages/Messages'
 import Navbar from './components/view/Navbar/Navbar'
 import Profile from './components/view/Profile/Profile'
+import { getCookie } from 'typescript-cookie'
+
 
 function App() {
+  const token = getCookie('Token');
+  console.log(token);
+  
   return (
     <div className='text-white  '>
-      {/* <Login/> */}
+      <Login/>
       <div>
 
       <Header/>
