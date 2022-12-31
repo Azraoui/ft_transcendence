@@ -3,7 +3,7 @@ import React from 'react'
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 
-function LeftPart() {
+function Conversation() {
 
   return (
     <div className="col-span-4  max-h-[800px] w-full sm:px-12 px-1 bg-[#242424] py-4">
@@ -90,4 +90,4 @@ function LeftPart() {
   )
 }
 
-export default LeftPart
+export default Conversation
