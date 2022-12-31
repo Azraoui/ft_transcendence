@@ -13,10 +13,10 @@ type TabsContentProps = {
 export function TabsPlayContent({ params }: TabsContentProps) {
   return (
     <div className='flex xl:flex-col 2xl:w-80 w-full px-8 items-center justify-around 2xl:justify-between xl:h-96 bg-[#242424] ring-1 ring-white hover:bg-tab-gradient rounded-xl py-6 my-2 cursor-pointer'>
-      <div className='w-56   '>
-        <img className=' ' src={params.img} alt={params.title} />
+      <div className='w-56 hidden sm:flex'>
+        <img className='' src={params.img} alt={params.title} />
       </div>
-      <span className='md:flex hidden flex-col space-y-5 items-center justify-center'>
+      <span className=' flex-col space-y-5 items-center justify-center'>
         <h1 className='font-bold text-center'>{params.title}</h1>
         <h1 className= 'font-bold'>Play</h1>
       </span>

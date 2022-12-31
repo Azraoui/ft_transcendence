@@ -19,7 +19,7 @@ type CardPorps =
                 side: string
                 message_id: number
                 timestamp: string
-            }
+            }[]
 
 
         }
@@ -62,18 +62,14 @@ function Card({ data }: CardPorps) {
             </div>
             {/* Ban Modal*/}
             <BanModal name={data.name} />
-            <div className="dropdown dropdown-left  ">
-                {/* <label tabIndex={0} className=""> Options</label> */}
-                <div tabIndex={0}><EllipsisVerticalIcon className='header-icon'/></div>
-                <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-52">
-                    <li><label htmlFor="my-modal" className="btn m-1">Block</label>
-                    </li>
-                    <li><a className="btn m-1">View Profile</a></li>
+            <div className="dropdown dropdown-left ">
+                {/* invisible hover:visible */}
+                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon'/></div>
+                <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
+                    <li><label htmlFor="my-modal" className="btn m-1 w-full">Block</label></li>
+                    <li><a className="btn m-1 w-full text-sm ">View Profile</a></li>
                 </ul>
             </div>
-            {/* <div className="inline-flex items-center text-base font-semibold">
-                <div className='w-6 bg-red-600 rounded-lg text-center font-bold'>1</div>
-            </div> */}
         </div>
     )
 }
