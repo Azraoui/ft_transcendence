@@ -27,9 +27,10 @@ export class AuthController {
         else res.redirect(301, "http://localhost:5173");
     }
 
-    // @Get('user')
-    // @UseGuards(AuthGuard('jwt'))
-    // getUser(id: number) {
-    //     return this.authService.getUser(id);
-    // }
+    @Get('user')
+    @UseGuards(AuthGuard('jwt'))
+    getUser() {
+        console.log(`http://localhost:5000/api/auth/user`);
+        // return this.authService.getUser(id);
+    }
 }
