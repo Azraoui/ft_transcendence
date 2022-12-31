@@ -10,7 +10,7 @@ import Profile from './components/view/Profile/Profile'
 function App() {
   return (
     <div className='text-white  '>
-      {/* <Login/> */}
+      <Login/>
       <div>
 
       <Header/>

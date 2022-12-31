@@ -38,7 +38,7 @@ export class AuthService {
         }
     }
 
-    signToken(userId: number, username: string) {
+    async signToken(userId: number, username: string) {
         const payloud = {
             sub: userId,
             username
@@ -47,10 +47,12 @@ export class AuthService {
         const secret = this.config.get("JWT_SECRET");
         const expriedTime = this.config.get('JWT_EXPIRED_TIME');
 
-        return this.jwt.signAsync(payloud, {
+        const token = await this.jwt.signAsync(payloud, {
             expiresIn: expriedTime,
             secret: secret,
         })
+        console.log(`token = ${token}`);
+        return token;
     }
 
     async getUser(id: number | undefined, email?: string | undefined) {
