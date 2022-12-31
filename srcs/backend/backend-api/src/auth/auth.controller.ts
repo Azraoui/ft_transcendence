@@ -1,4 +1,4 @@
-import { Controller, ExecutionContext, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
@@ -16,9 +16,15 @@ export class AuthController {
     @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect')
     async fortyTwoAuthRedirect(@Req() req, @Res() res) {
-        const userAndAcessToken =  await this.authService.fortytwoLogin(req.user);
-        res.cookie('access_token', userAndAcessToken.access_token, {httpOnly: true});
-        res.redirect(301, "http://localhost:5173/profile");
+        await this.authService.fortytwoLogin(req.user);
+        const user = await this.authService.getUser(undefined, req.user.email);
+        if (user)
+        {
+            const access_token = this.authService.signToken(user.id, user.username);
+            res.cookie('access_token', access_token, {httpOnly: true});
+            res.redirect(301, "http://localhost:5173/profile");
+        }
+        else res.redirect(301, "http://localhost:5173");
     }
 
     // @Get('user')

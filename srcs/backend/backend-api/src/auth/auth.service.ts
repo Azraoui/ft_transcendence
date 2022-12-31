@@ -24,7 +24,7 @@ export class AuthService {
         })
         if (!user)
         {
-            this.prisma.user.create({
+            await this.prisma.user.create({
                 data: {
                     username: apiData.username,
                     firstName: apiData.firstName,
@@ -36,7 +36,6 @@ export class AuthService {
                 }
             })
         }
-        return {access_token :this.signToken(user.id, user.username), user};
     }
 
     signToken(userId: number, username: string) {
@@ -54,17 +53,25 @@ export class AuthService {
         })
     }
 
-    async getUser(id: number) {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                id: id
-            }
-        })
-        if (!user)
+    async getUser(id: number | undefined, email?: string | undefined) {
+        if (id != undefined)
         {
-            console.log("user not found");
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    id: id
+                }
+            })
+            return user;
         }
-        return user;
+        else if (email != undefined) {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+            return user;
+        }
+        return undefined;
     }
 
 }
