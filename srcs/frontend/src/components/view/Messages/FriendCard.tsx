@@ -6,7 +6,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import BanModal from './BanModal';
 
 
-type CardPorps =
+type FriendCardPorps =
     {
         data: {
             name: string
@@ -24,7 +24,7 @@ type CardPorps =
 
         }
     }
-function Card({ data }: CardPorps) {
+function FriendCard({ data }: FriendCardPorps) {
 
 
     let BgColour = "";
@@ -74,4 +74,4 @@ function Card({ data }: CardPorps) {
     )
 }
 
-export default Card
+export default FriendCard

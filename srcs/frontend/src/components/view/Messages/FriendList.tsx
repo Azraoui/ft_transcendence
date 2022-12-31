@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Friends } from '../../model/chatDB'
-import Card from './FriendCard'
+import FriendCard from './FriendCard'
 
 import junkData from '../../model/ChatDB.json'
 
@@ -17,7 +17,7 @@ function FriendList(my_message:any) {
                 {
                     junkData.friends.map((item) =>
                     (
-                        <Card  key={item.id} data={item}/>
+                        <FriendCard  key={item.id} data={item}/>
 
                     ))
                 }

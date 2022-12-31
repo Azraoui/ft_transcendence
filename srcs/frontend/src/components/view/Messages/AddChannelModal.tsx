@@ -34,9 +34,8 @@ function AddChannelModal() {
                         <label className="label cursor-pointer  px-6" >
                             <span className="label-text text-white font-bold ">protected</span>
                             <input type="radio" name="radio-10" className={`radio radio-info`}  value="protected"  onChange={onOptionChange}/>
-                            {isCheck === "protected" ?   <input type="text" placeholder="Channel password" className={`input w-full m-2 text-black  `} /> :  " "}
-                           
                         </label>
+                        {isCheck === "protected" ?   <input type="text" placeholder="Channel password" className={`input w-full m-2 text-black  `} /> :  " "}
                     </div>
                     <div className="modal-action">
                         <label htmlFor="my-modal-1" className="btn">Confirm</label>
