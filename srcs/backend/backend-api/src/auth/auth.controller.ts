@@ -1,6 +1,5 @@
-import { Controller, ExecutionContext, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUserReq } from 'src/decorator';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
@@ -8,23 +7,30 @@ import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 
 export class AuthController {
 
-    constructor (private authService: AuthService, private context: ExecutionContext) {}
+    constructor (private authService: AuthService) {}
 
     @UseGuards(FortyTwoOAuthGuard)
-    @Get('login')
+    @Get()
     async fortytwoAuth() {}
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect')
-    fortyTwoAuthRedirect(@Req() req, @GetUserReq() userReq) {
-        const access_token =  this.authService.fortytwoLogin(req.user);
-        const request = this.context.switchToHttp().getRequest();
-        request.headers['Authorization'] = `Bearer ${access_token}`;
+    async fortyTwoAuthRedirect(@Req() req, @Res() res) {
+        await this.authService.fortytwoLogin(req.user);
+        const user = await this.authService.getUser(undefined, req.user.email);
+        if (user)
+        {
+            const access_token = this.authService.signToken(user.id, user.username);
+            res.cookie('access_token', access_token, {httpOnly: true});
+            res.redirect(301, "http://localhost:5173/profile");
+        }
+        else res.redirect(301, "http://localhost:5173");
     }
 
     @Get('user')
     @UseGuards(AuthGuard('jwt'))
-    getUser(id: number) {
-        return this.authService.getUser(id);
+    getUser() {
+        console.log(`http://localhost:5000/api/auth/user`);
+        // return this.authService.getUser(id);
     }
 }
