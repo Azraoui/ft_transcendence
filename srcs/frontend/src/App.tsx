@@ -23,12 +23,12 @@ function App() {
   const retrieveToken = () => {
     Service.getToken()
       .then((response: any) => {
-        console.log(`respone === > ${response}`);
+        // console.log(`respone === > ${response}`);
         setStatus(false);
       })
       .catch((e: Error) => {
-        console.log(`error === > ${e}`);
-        setStatus(true);
+        // console.log(`error === > ${e}`);
+        setStatus(false);
       });
   };
 

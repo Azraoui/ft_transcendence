@@ -1,7 +1,11 @@
 import React from 'react'
+import { useRecoilState } from 'recoil';
+import { EditProfile } from '../../model/atoms/EditProfile';
 import Acheivements from './Acheivements'
 import ProfileImage from './ProfileImage'
 export function ProfileEditCard() {
+  const [isMe, setIsMe] = useRecoilState(EditProfile);
+
   return (
     <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
       <div className='flex flex-col items-center justify-between ring-2 ring-gray-600 ring-offset-1 rounded-md px-2 sm:px-12 pt-12 pb-6 shadow-lg shadow-slate-700 w-3/4 space-y-8' >
@@ -31,7 +35,10 @@ export function ProfileEditCard() {
             <input type="checkbox" className="toggle toggle-accent"  />
           </label>
         </div>
-        <button className="btn btn-accent transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">Save</button>
+        <div className='flex sm:flex-row flex-col items-center justify-evenly w-full' >
+        <button className="btn w-20 btn-accent transition duration-300 ease-in-out mb-2 hover:-translate-y-1 hover:scale-110">Save</button>
+        <button className="btn w-20 btn-secondary   mb-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" onClick={()=> setIsMe(true)}>Cancel</button>
+        </div>
         
       </div>
 
