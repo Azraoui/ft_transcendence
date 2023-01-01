@@ -16,12 +16,14 @@ export class UserService {
         if (user)
         {
             return {
-                nickName: user.nickname,
+                id: user.id,
+                name: user.nickname,
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                pictureLink: user.pictureLink
+                picture: user.pictureLink,
+                bio: user.bio
             }
         }
     }

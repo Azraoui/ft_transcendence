@@ -10,7 +10,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(config: ConfigService,private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => {
-        console.log(req?.cookies?.Token);
         return req?.cookies?.Token;
       }
     ]),
@@ -19,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 }
 
 async validate(payload: any) {
-    return this.authService.getUser(payload.id);
+    return this.authService.getUser(payload.sub);
   }
 
 }

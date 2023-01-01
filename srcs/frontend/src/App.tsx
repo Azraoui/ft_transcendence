@@ -14,9 +14,8 @@ import { useEffect, useState } from 'react'
 
 
 function App() {
-  // const token = getCookie('Token');
-  // console.log(token);
-  const [tutorials, setTutorials] = useState([]);
+
+  const [status, setStatus] = useState(true);
   useEffect(() => {
     retrieveToken();
   }, []);
@@ -24,31 +23,36 @@ function App() {
   const retrieveToken = () => {
     Service.getToken()
       .then((response: any) => {
-        console.log(response.data);
-        setTutorials(response.data);
+        console.log(`respone === > ${response}`);
+        setStatus(false);
       })
       .catch((e: Error) => {
-        console.log(e);
+        console.log(`error === > ${e}`);
+        setStatus(true);
       });
   };
-  
+
   return (
     <div className='text-white  '>
-      <Login />
-      <div>
-        <Header />
-        <div className='w-full bg-black  grid grid-cols-12'>
-          <Navbar />
-          <Routes>
-            <Route path='/' element={<Dashboard />} />
-            <Route path='/users' element={<Users />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/messages' element={<Messages />} />
-            {/* <Route path='/login' element={<Login/>}/> */}
-          </Routes>
-        </div>
-      </ div>
-    </div>
+      {
+        status ? <Login />
+          :
+          <div>
+            <Header />
+            <div className='w-full bg-black  grid grid-cols-12'>
+              <Navbar />
+              <Routes>
+                <Route path='/' element={<Dashboard />} />
+                <Route path='/users' element={<Users />} />
+                <Route path='/profile' element={<Profile />} />
+                <Route path='/messages' element={<Messages />} />
+                {/* <Route path='/login' element={<Login/>}/> */}
+              </Routes>
+            </div>
+          </ div>
+      }
+      </div>
+    
   )
 }
 

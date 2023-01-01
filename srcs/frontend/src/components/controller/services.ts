@@ -4,7 +4,7 @@ const getFriends = () => {
   return http.get("/friends");
 };
 const getToken = () => {
-  return http.get("/status");
+  return http.get("/auth/status", {withCredentials:true});
 };
 const getProfile = () => {
     return http.get("/profile");
