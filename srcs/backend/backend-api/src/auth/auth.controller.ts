@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
@@ -15,7 +16,7 @@ export class AuthController {
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get('42-redirect') // http://localhost:5000/api/auth/42-redirect/ 42 redirect url
-    async fortyTwoAuthRedirect(@Req() req, @Res() res) {
+    async fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
         await this.authService.fortytwoLogin(req.user);
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
@@ -29,6 +30,11 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get('status')
-    getStatus() {}
+    getStatus(@Res() res: Response) {
+
+        res.send({
+            msg: "salamo alaykom",
+        })
+    }
 
 }
