@@ -7,7 +7,7 @@ const getToken = () => {
   return http.get("/auth/status", {withCredentials:true});
 };
 const getProfile = () => {
-    return http.get("/profile");
+    return http.get("/user/profile");
   };
 
 // const get = (id: any) => {
