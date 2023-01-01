@@ -23,7 +23,7 @@ export class UserService {
                 lastName: user.lastName,
                 email: user.email,
                 picture: user.pictureLink,
-                bio: "user.bio"
+                bio: user.bio
             }
         }
     }

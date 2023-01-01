@@ -31,9 +31,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get('status')
-    getStatus() {
-        console.log(`from controller`)
-    }
+    getStatus() {}
 
 }
    
