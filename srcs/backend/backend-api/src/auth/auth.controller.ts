@@ -27,4 +27,8 @@ export class AuthController {
         else res.redirect(301, "http://localhost:5173");
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('status')
+    getStatus() {}
+
 }
