@@ -10,18 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id Int  @default(autoincrement()) @id
+  id Int @id @default(autoincrement())
 
-  username        String @unique
-  firstName       String
-  lastName        String
-  email           String @unique
-  pictureLink     String
-  accessToken     String
-  refreshToken    String
-  bio             String?
+  nickname     String?
+  username     String  @unique
+  firstName    String
+  lastName     String
+  email        String  @unique
+  pictureLink  String
+  accessToken  String
+  refreshToken String
+  bio          String?
 
   @@unique([id, username, email])
 }

@@ -51,7 +51,6 @@ export class AuthService {
             expiresIn: expriedTime,
             secret: secret,
         })
-        console.log(`token = ${token}`);
         return token;
     }
 
