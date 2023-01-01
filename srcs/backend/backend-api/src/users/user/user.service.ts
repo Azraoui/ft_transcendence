@@ -27,7 +27,7 @@ export class UserService {
     }
 
     async updateUserProfile(id: number) {
-        
+
     }
 
 }
