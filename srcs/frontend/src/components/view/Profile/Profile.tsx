@@ -19,7 +19,7 @@ function Profile() {
   const retrieveProfile = () => {
     Service.getProfile()
       .then((response: any) => {
-        console.log(`respone === > ${response}`);
+        console.log(response.data);
       })
       .catch((e: Error) => {
         console.log(`error === > ${e}`);

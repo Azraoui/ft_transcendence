@@ -1,13 +1,13 @@
 import http from "./http-common";
 
 const getFriends = () => {
-  return http.get("/friends");
+  return http.get("/friends");  // Andak Tnsa (withCredentials)
 };
 const getToken = () => {
   return http.get("/auth/status", {withCredentials:true});
 };
 const getProfile = () => {
-    return http.get("/profile");
+    return http.get("/user/profile", {withCredentials:true});
   };
 
 // const get = (id: any) => {
