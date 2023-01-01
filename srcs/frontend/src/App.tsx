@@ -9,26 +9,30 @@ import Profile from './components/view/Profile/Profile'
 import { getCookie } from 'typescript-cookie'
 import Service from './components/controller/services'
 import { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { Status } from './components/model/atoms/Status'
 
 
 
 
 function App() {
 
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useRecoilState(Status);
   useEffect(() => {
     retrieveToken();
-  }, []);
+  }, [status]);
 
   const retrieveToken = () => {
+    // console.log(`Herrerereereerrerere`);
+
     Service.getToken()
       .then((response: any) => {
-        // console.log(`respone === > ${response}`);
+        // console.log(response);
         setStatus(false);
       })
       .catch((e: Error) => {
         // console.log(`error === > ${e}`);
-        setStatus(false);
+        setStatus(true);
       });
   };
 
