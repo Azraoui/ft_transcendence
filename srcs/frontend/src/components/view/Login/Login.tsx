@@ -3,7 +3,7 @@ import React from 'react'
 // target='_blank'
 
 function Login() {
-  const link = "http://10.11.7.3:5000/api/auth"
+  const link = "http://localhost:5000/api/auth"
   return (
     <div className='flex items-center justify-center w-[100vw] h-[100vh] bg-login-gradient'>
         <div className='flex flex-col h-96 w-96 justify-around items-center backdrop-blur-sm bg-white/30 rounded-xl px-2 py-2'>
