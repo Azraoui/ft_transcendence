@@ -17,7 +17,7 @@ export class UserService {
         {
             return {
                 id: user.id,
-                name: user.nickname,
+                // name: user.nickname,
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,

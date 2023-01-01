@@ -1,10 +1,15 @@
 import React from 'react'
 import { useRecoilState } from 'recoil';
 import { EditProfile } from '../../model/atoms/EditProfile';
+import { ProfileData } from '../../model/atoms/ProfileData';
 import Acheivements from './Acheivements'
 import ProfileImage from './ProfileImage'
+
+
 export function ProfileEditCard() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
+
 
   return (
     <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
@@ -19,13 +24,13 @@ export function ProfileEditCard() {
         <div className="flex w-full justify-center">
           <div className="mb-3 w-full">
             <label htmlFor='exampleText0' className="form-label inline-block mb-2 ">Name</label>
-            <input type="text" placeholder="Mohamed El Hadjaoui" className="input input-bordered input-success w-full" />
+            <input type="text" placeholder={profileData.username} className="input input-bordered input-success w-full" />
           </div>
         </div>
         <div className="flex w-full justify-center">
           <div className="mb-3 w-full">
             <label className="form-label inline-block mb-2 ">About You</label>
-            <textarea className="textarea textarea-accent w-full text-gray-800" placeholder="Bio"></textarea>
+            <textarea className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio}></textarea>
           </div>
         </div>
 

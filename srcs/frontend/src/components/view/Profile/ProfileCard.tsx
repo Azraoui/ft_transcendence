@@ -4,10 +4,13 @@ import ProfileImage from './ProfileImage'
 import {PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRecoilState } from 'recoil';
 import { EditProfile } from '../../model/atoms/EditProfile';
+import { ProfileData } from '../../model/atoms/ProfileData';
 
 
 function ProfileCard() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
+
 
     return (
         <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
@@ -19,8 +22,9 @@ function ProfileCard() {
                 <ProfileImage />
               
 
-                <h1 className='font-bold text-center w-full overflow-auto'>Mohamed</h1>
-                <h1 className='font-bold text-center w-full overflow-auto'>Mohamed is goooooood</h1>
+                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.firstName} {profileData.firstName}</h1>
+                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.username}</h1>
+                <h1 className='font-bold text-center w-full overflow-auto'>{profileData?.bio}</h1>
                
 
             </div>

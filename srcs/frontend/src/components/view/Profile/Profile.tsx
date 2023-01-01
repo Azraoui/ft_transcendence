@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil'
 import Service from '../../controller/services'
 import { AcheivementsLinks } from '../../model/Acheivements'
 import { EditProfile } from '../../model/atoms/EditProfile'
+import { ProfileData } from '../../model/atoms/ProfileData'
 import Acheivements from './Acheivements'
 import { AcheivementCard, StatsCard } from './Cards'
 import History from './History'
@@ -12,6 +13,7 @@ import Stats from './Stats'
 
 function Profile() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
   useEffect(() => {
     retrieveProfile();
   }, []);
@@ -19,10 +21,10 @@ function Profile() {
   const retrieveProfile = () => {
     Service.getProfile()
       .then((response: any) => {
+        setprofileData(response.data)
         console.log(response.data);
       })
       .catch((e: Error) => {
-        console.log(`error === > ${e}`);
       });
   };
   return (
