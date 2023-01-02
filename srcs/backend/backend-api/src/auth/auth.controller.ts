@@ -24,7 +24,7 @@ export class AuthController {
         {
             const access_token = await this.authService.signToken(user.id, user.username);
             res.cookie('Token', access_token, {httpOnly: true});
-            res.redirect(301, "http://localhost:5173/");
+            res.redirect(301, "http://localhost:5173/porfile");
         }
         else res.redirect(301, "http://localhost:5173");
     }
@@ -32,7 +32,7 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Get('status')
     getStatus() {
-        console.log(`from controller`)
+        // console.log(`from controller`)
     }
 
 }

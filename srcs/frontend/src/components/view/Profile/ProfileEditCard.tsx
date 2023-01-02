@@ -23,8 +23,8 @@ export function ProfileEditCard() {
         </div>
         <div className="flex w-full justify-center">
           <div className="mb-3 w-full">
-            <label htmlFor='exampleText0' className="form-label inline-block mb-2 ">Name</label>
-            <input type="text" placeholder={profileData.username} className="input input-bordered input-success w-full" />
+            <label htmlFor='exampleText0' className="form-label inline-block mb-2 ">NickName</label>
+            <input type="text" placeholder={profileData.username} className="input input-bordered input-success text-gray-800 w-full" />
           </div>
         </div>
         <div className="flex w-full justify-center">

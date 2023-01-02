@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
@@ -39,14 +39,20 @@ function FriendCard({ data }: FriendCardPorps) {
             BgColour = "bg-red-500"
 
     }
-    const [activeNacItem, setActiveNavItem] = useRecoilState(ChatFriends)
+    const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
     const [chat, setChat] = useRecoilState(ChatLog)
+    useEffect(()=>
+    {
+
+    }, [activeNavItem])
 
     return (
         <div onClick={() => {
-            setActiveNavItem(data.id);
+            setActiveNavItem({...activeNavItem, id:data.id, name:data.name} );
+            // console.log("=====> name = ", activeNavItem.name);
+            
             setChat(data.chatlog);
-        }} className={`flex items-center space-x-4 py-7 ${activeNacItem === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
+        }} className={`flex items-center space-x-4 py-7 ${activeNavItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
 
             <div className="flex-shrink-0 relative ">
                 <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
@@ -61,15 +67,16 @@ function FriendCard({ data }: FriendCardPorps) {
                 </p>
             </div>
             {/* Ban Modal*/}
-            <BanModal name={data.name} />
+        
             <div className="dropdown dropdown-left ">
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon'/></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal" className="btn m-1 w-full">Block</label></li>
-                    <li><a className="btn m-1 w-full text-sm ">View Profile</a></li>
+                    <li><label htmlFor="my-modal" className="btn  w-full">Block</label></li>
+                    <li><a className="btn my-1 w-full text-sm ">View Profile</a></li>
                 </ul>
             </div>
+            <BanModal name={activeNavItem.name} />
         </div>
     )
 }

@@ -57,10 +57,10 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setChat(data.chatlog);
         }} className={`flex items-center space-x-4 py-7 ${activeNacItem === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium ">
+                <p className="text-xl font-bold ">
                     {data.name}
                 </p>
-                <div className="mt-3 flex -space-x-2 overflow-hidden">
+                <div className="mt-2  p-4 flex -space-x-2 overflow-hidden">
                     <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                     <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                     <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt="" />
@@ -74,8 +74,8 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal" className="btn m-1 w-full">Join</label></li>
-                    <li><a className="btn m-1 w-full text-sm ">View Participants</a></li>
+                    <li><label htmlFor="my-modal" className="btn  w-full">Join</label></li>
+                    <li><a className="btn my-1 w-full text-sm ">View Participants</a></li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

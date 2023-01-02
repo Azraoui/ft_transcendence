@@ -11,6 +11,7 @@ import Service from './components/controller/services'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Status } from './components/model/atoms/Status'
+import BanModal from './components/view/Messages/BanModal'
 
 
 
@@ -31,7 +32,7 @@ function App() {
         setStatus(false);
       })
       .catch((e: Error) => {
-        // console.log(`error === > ${e}`);
+        console.log(`error === > ${e}`);
         setStatus(true);
       });
   };
@@ -39,12 +40,14 @@ function App() {
   return (
     <div className='text-white  '>
       {
+        
         status ? <Login />
           :
           <div>
             <Header />
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
+            <BanModal name="ddd" />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/users' element={<Users />} />
