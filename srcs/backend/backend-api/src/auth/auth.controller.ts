@@ -2,7 +2,8 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
-import { JwtAuthGuard } from './guard/jwt.guard';
+import JwtTwoFactorGuard from './guard/jwt-two-factor.guard';
+// import { JwtAuthGuard } from './guard/jwt.guard';
 
 @Controller('auth')
 
@@ -21,14 +22,15 @@ export class AuthController {
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {
-            const access_token = await this.authService.signToken(user.id, user.username);
-            res.cookie('Token', access_token, {httpOnly: true});
+            // const access_token = await this.authService.signToken(user.id, user.username);
+            const access_token = await this.authService.getCookieWithJwtAccessToken(user.id);
+            res.cookie('TwoFacAuthToken', access_token, {httpOnly: true});
             res.redirect(301, "http://localhost:5173/profile");
         }
         else res.redirect(301, "http://localhost:5173");
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtTwoFactorGuard)
     @Get('status')
     getStatus() {}
 

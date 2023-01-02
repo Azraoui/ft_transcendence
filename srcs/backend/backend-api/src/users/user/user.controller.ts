@@ -1,4 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 import { GetUserReq } from 'src/decorator';
 import { UserService } from './user.service';
@@ -10,7 +11,13 @@ export class UserController {
     constructor (private userService: UserService) {}
 
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
+    // @Get('profile')
+    // getProfile(@GetUserReq() userReq) {
+    //     return this.userService.getUserProfile(userReq.id);
+    // }
+
+    @UseGuards(JwtTwoFactorGuard)
     @Get('profile')
     getProfile(@GetUserReq() userReq) {
         return this.userService.getUserProfile(userReq.id);
