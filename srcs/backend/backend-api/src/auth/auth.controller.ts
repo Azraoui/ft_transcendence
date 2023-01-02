@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { GetUserReq } from 'src/decorator';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
@@ -33,5 +32,7 @@ export class AuthController {
     @Get('status')
     getStatus() {}
 
+
+    
+
 }
-   
