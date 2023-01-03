@@ -12,6 +12,9 @@ const getProfile = () => {
   const get2FQRCode = (isEnabled:boolean) => {
     return http.post("/2fa/generate", isEnabled, {withCredentials:true});
   };
+  const Logout = () => {
+    return http.get("/auth/log-out", {withCredentials:true});
+  };
 
 // const get = (id: any) => {
 //   return http.get<>(`/tutorials/${id}`);
@@ -42,6 +45,7 @@ const Service = {
   getProfile,
   getToken,
   get2FQRCode,
+  Logout
   // get,
   // create,
   // update,
