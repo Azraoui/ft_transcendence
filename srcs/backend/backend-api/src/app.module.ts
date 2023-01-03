@@ -11,6 +11,7 @@ import { UserController } from './users/user/user.controller';
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
 import { TwoFactorAuthController } from './two-factor-auth/two-factor-auth.controller';
 import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [ AuthModule,
@@ -19,6 +20,7 @@ import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
     PrismaModule,
     UserModule,
     TwoFactorAuthModule,
+    ChatModule,
   ],
   controllers: [ UserController,
                 TwoFactorAuthController
