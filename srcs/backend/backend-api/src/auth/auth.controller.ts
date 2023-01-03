@@ -30,6 +30,17 @@ export class AuthController {
         else res.redirect(301, "http://localhost:5173");
     }
 
+    @UseGuards(FortyTwoOAuthGuard)
+    @Get('log-out')
+    async logOut(@Req() req, @Res() res: Response) {
+        const user = await this.authService.getUser(undefined, req.user.email);
+        if (user)
+        {
+            res.cookie('TwoFacAuthToken', '', {httpOnly: true});
+            res.redirect(301, "http://localhost:5173");
+        }
+    }
+
     @UseGuards(JwtTwoFactorGuard)
     @Get('status')
     getStatus() {}
