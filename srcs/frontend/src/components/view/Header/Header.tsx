@@ -19,9 +19,22 @@ function Header() {
     Service.getProfile()
       .then((response: any) => {
         setprofileData(response.data)
-        // console.log(response.data);
+        console.log(response.data);
       })
       .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+    const LogOut = () => {
+    Service.Logout()
+      .then((response: any) => {
+
+        console.log(response.data);
+        window.location.reload()
+        window.location.href = "/";
+      })
+      .catch((e: Error) => {
+        console.log("=>>>>>>.", e);
       });
   };
   return (
@@ -49,7 +62,9 @@ function Header() {
           <li>
             <Link to={'/profile'} className="btn w-full"> Profile </Link>
           </li>
-          <li><a className="btn my-1 w-full">Logout</a></li>
+          <li>  <a className="btn my-1 w-full" onClick={() => {
+            LogOut();
+          }}>Logout</a></li>
         </ul>
       </div>
     </div>

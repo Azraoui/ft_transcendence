@@ -10,7 +10,7 @@ const getProfile = () => {
     return http.get("/user/profile", {withCredentials:true});
   };
   const get2FQRCode = (isEnabled:boolean) => {
-    return http.post("/2fa/generate", isEnabled, {withCredentials:true});
+    return http.post("/2fa/generate", isEnabled, {withCredentials:true,responseType: "arraybuffer",} ,);
   };
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
