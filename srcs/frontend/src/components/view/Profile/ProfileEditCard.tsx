@@ -5,6 +5,8 @@ import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
 import Acheivements from './Acheivements'
 import ProfileImage from './ProfileImage'
+// import {Buffer} from 'buffer';
+
 
 
 
@@ -18,8 +20,14 @@ export function ProfileEditCard() {
     set2F(e.target.checked);
     Service.get2FQRCode(is2fEnabled).then((response:any)=>
     {
-      setQrCode(response.data); //convert Binary to readable png
-      console.log("====>>>>",qrCode);
+      console.log(response.data);
+      const base64 = btoa(
+        new Uint8Array(response.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ''
+        )
+      )
+      setQrCode(base64)
     }).catch((e:Error) => 
     {
       console.log(e);
@@ -57,7 +65,7 @@ export function ProfileEditCard() {
             <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa} />
           </label>
         </div>
-        {is2fEnabled  ?  <img src={``} alt="adsfadfad"></img> : ""}
+        {is2fEnabled  ?  <img src={`data:image/jpeg;charset=utf-8;base64,${qrCode}`} alt="adsfadfad"></img> : ""}
         <div className='flex sm:flex-row flex-col items-center justify-evenly w-full' >
         <button className="btn w-20 btn-accent transition duration-300 ease-in-out mb-2 hover:-translate-y-1 hover:scale-110">Save</button>
         <button className="btn w-20 btn-secondary   mb-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" onClick={()=> setIsMe(true)}>Cancel</button>

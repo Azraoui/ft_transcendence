@@ -15,7 +15,7 @@ function Navbar() {
             <div>
                 {
                     navLinks.slice(4).map((link) => (
-                        <NavItem key={link.id} link={link} />
+                        <NavItem  key={link.id} link={link} />
                     ))
                 }
             </div>

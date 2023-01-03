@@ -28,7 +28,7 @@
    },
    {
      id: 4,
-     to: "/login",
+     to: "/",
      title: "LogOut",
      icon: <ArrowLeftOnRectangleIcon className="nav-icon" />,
    },
