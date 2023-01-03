@@ -41,9 +41,16 @@ export class UserService {
     }
 
 
-    // async turnOnTwoFacAuth(userId: number) {
-    //     return this.
-    // }
+    async turnOnTwoFacAuth(userId: number) {
+        return this.prismaService.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                isTwoFacAuthEnabled: true,
+            }
+        })
+    }
 
     async updateUserProfile(id: number) {
 

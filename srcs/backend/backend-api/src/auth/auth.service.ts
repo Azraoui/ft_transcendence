@@ -75,4 +75,18 @@ export class AuthService {
         return undefined;
     }
 
+    getCookieWithJwtAccessToken(
+        userId: number,
+        isTwoFacAuth: boolean = false
+    ) {
+        const payload = {
+            userId,
+            isTwoFacAuth
+        };
+        const token = this.jwt.sign(payload, {
+            secret: this.config.get('JWT_SECRET'),
+            expiresIn: this.config.get('JWT_EXPIRED_TIME')
+        });
+        return token;
+    }
 }

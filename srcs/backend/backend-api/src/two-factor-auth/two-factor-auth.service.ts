@@ -32,4 +32,12 @@ export class TwoFactorAuthService {
         return toFileStream(stream, otpauthUrl);
     }
 
+    public isTwoFacAuthValid(twoFacAuthCode: string, user: User) {
+        return authenticator.verify({
+            token: twoFacAuthCode,
+            secret: user.twoFacAuthSecret
+        })
+    }
+
+
 }
