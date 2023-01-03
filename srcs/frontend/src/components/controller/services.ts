@@ -12,9 +12,9 @@ const getProfile = () => {
   const get2FQRCode = () => {
     return http.get("/2fa/generate", {withCredentials:true,responseType: "arraybuffer",} ,);
   };
-  //   const get2FQRCode = (isEnabled:boolean) => {
-  //   return http.post("/2fa/generate", {isEnabled}, {withCredentials:true,responseType: "arraybuffer",} ,);
-  // };
+    const post2FQRCode = (twoFactorAuthenticationCode:string) => {
+    return http.post("/2fa/turn-on", {twoFactorAuthenticationCode}, {withCredentials:true} ,);
+  };
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
   };
@@ -48,6 +48,7 @@ const Service = {
   getProfile,
   getToken,
   get2FQRCode,
+  post2FQRCode,
   Logout
   // get,
   // create,

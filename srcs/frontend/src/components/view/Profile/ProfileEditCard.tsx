@@ -17,8 +17,9 @@ export function ProfileEditCard() {
   const [is2fEnabled, set2F] = useState(profileData.twofactor)
   const [qrCode, setQrCode] = useState("")
 
-  const onChangeEnable2fa = (e: ChangeEvent<HTMLInputElement>) => {
-    set2F(e.target.checked);
+  //e: ChangeEvent<HTMLInputElement>
+  const onClickEnable2fa = () => {
+    // set2F(e.target.checked);
     Service.get2FQRCode().then((response:any)=>
     {
       console.log(response.data);
@@ -64,7 +65,7 @@ export function ProfileEditCard() {
           <label className="cursor-pointer label">
             {/* <span className="label-text text-white font-extrabold sm:text-xl">Enabale 2f verification</span> */}
             {/**onChange={onChangeEnable2fa} */}
-            <label htmlFor="my-modal-2" className="btn w-full">Enabale 2FA Verification</label>
+            <label htmlFor="my-modal-2" className="btn w-full" onClick={onClickEnable2fa}>{is2fEnabled ? "Disable" : "Enabale "} 2FA Verification</label>
             {/* <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa}></input> */}
           </label>
         </div>
