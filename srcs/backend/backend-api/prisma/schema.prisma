@@ -26,4 +26,12 @@ model User {
   isTwoFacAuthEnabled Boolean @default(false)
 
   @@unique([id, username, email])
+  @@map("users")
+}
+
+model UserFriends {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  friendId Int
 }
