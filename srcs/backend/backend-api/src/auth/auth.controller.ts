@@ -28,6 +28,7 @@ export class AuthController {
             res.redirect(301, "http://localhost:5173/profile");
         }
         else res.redirect(301, "http://localhost:5173");
+        res.end();
     }
 
     @UseGuards(JwtTwoFactorGuard)
@@ -37,13 +38,11 @@ export class AuthController {
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {
-            // res.cookie('TwoFacAuthToken', '', {httpOnly: true});
-            res.clearCookie('TwoFacAuthToken');
-            // res.redirect(301, "http://localhost:5173");
+            res.clearCookie('TwoFacAuthToken')
             res.json({
                 logout: true,
             })
-            res.end();
+            res.end()
         }
     }
 

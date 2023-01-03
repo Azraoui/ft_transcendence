@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import BanModal from './BanModal';
+import BanModal from '../Modals/BanModal';
 
 
 type FriendCardPorps =
@@ -48,9 +48,7 @@ function FriendCard({ data }: FriendCardPorps) {
 
     return (
         <div onClick={() => {
-            setActiveNavItem({...activeNavItem, id:data.id, name:data.name, chatlog:data.chatlog} );
-            // console.log("=====> name = ", activeNavItem.name);
-            
+            setActiveNavItem({...activeNavItem, ...data} );
             setChat(data.chatlog);
         }} className={`flex items-center space-x-4 py-7 ${activeNavItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
 
@@ -66,17 +64,14 @@ function FriendCard({ data }: FriendCardPorps) {
                     {data.bio}
                 </p>
             </div>
-            {/* Ban Modal*/}
-        
+            {/* Block Modal*/}
             <div className="dropdown dropdown-left  ">
-                {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon '/></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal" className="btn  w-full">Block</label></li>
+                    <li><label htmlFor="my-modal-3" className="btn  w-full">Block</label></li>
                     <li><a className="btn my-1 w-full text-sm ">View Profile</a></li>
                 </ul>
             </div>
-            {/* <BanModal name={activeNavItem.name} /> */}
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import Service from '../../controller/services';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
+import Confirm2FAModal from '../Modals/Confirm2FAModal';
 import Acheivements from './Acheivements'
 import ProfileImage from './ProfileImage'
 // import {Buffer} from 'buffer';
@@ -18,7 +19,7 @@ export function ProfileEditCard() {
 
   const onChangeEnable2fa = (e: ChangeEvent<HTMLInputElement>) => {
     set2F(e.target.checked);
-    Service.get2FQRCode(is2fEnabled).then((response:any)=>
+    Service.get2FQRCode().then((response:any)=>
     {
       console.log(response.data);
       const base64 = btoa(
@@ -61,11 +62,15 @@ export function ProfileEditCard() {
 
         <div className="form-control flex w-full justify-center ">
           <label className="cursor-pointer label">
-            <span className="label-text text-white font-extrabold sm:text-xl">Enabale 2f verification</span>
-            <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa} />
+            {/* <span className="label-text text-white font-extrabold sm:text-xl">Enabale 2f verification</span> */}
+            {/**onChange={onChangeEnable2fa} */}
+            <label htmlFor="my-modal-2" className="btn w-full">Enabale 2FA Verification</label>
+            {/* <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa}></input> */}
           </label>
         </div>
-        {is2fEnabled  ?  <img src={`data:image/jpeg;charset=utf-8;base64,${qrCode}`} alt="adsfadfad"></img> : ""}
+        {/** Call Confirm 2FA Modal */}
+        <Confirm2FAModal src={qrCode} isEnabled={is2fEnabled}/>
+        {/* {is2fEnabled  ?  <img src={`data:image/jpeg;charset=utf-8;base64,${qrCode}`} alt="QRCode"></img> : ""} */}
         <div className='flex sm:flex-row flex-col items-center justify-evenly w-full' >
         <button className="btn w-20 btn-accent transition duration-300 ease-in-out mb-2 hover:-translate-y-1 hover:scale-110">Save</button>
         <button className="btn w-20 btn-secondary   mb-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" onClick={()=> setIsMe(true)}>Cancel</button>

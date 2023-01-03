@@ -16,6 +16,7 @@ export class JwtTwoFactorStrategy extends PassportStrategy (
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([(req: Request) => {
+                console.log(`token = ${req?.cookies?.TwoFacAuthToken}`)
                 return req?.cookies?.TwoFacAuthToken;
               }
             ]),

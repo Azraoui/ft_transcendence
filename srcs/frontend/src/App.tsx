@@ -11,7 +11,10 @@ import Service from './components/controller/services'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { Status } from './components/model/atoms/Status'
-import BanModal from './components/view/Messages/BanModal'
+import BanModal from './components/view/Modals/BanModal'
+import AddChannelModal from './components/view/Modals/AddChannelModal'
+import Confirm2FAModal from './components/view/Modals/Confirm2FAModal'
+import BlockModal from './components/view/Modals/BlockModal'
 
 
 
@@ -45,7 +48,10 @@ function App() {
           :
           <div>
             <Header />
-            <BanModal name="ddd" /> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
+            {/** All those Modals are being called by the user there not visible till they got called */}
+            <BanModal/> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
+            <BlockModal/>
+            <AddChannelModal/>
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
               <Routes>

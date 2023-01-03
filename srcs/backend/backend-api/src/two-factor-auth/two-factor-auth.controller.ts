@@ -19,10 +19,11 @@ export class TwoFactorAuthController {
         @UseGuards(JwtTwoFactorGuard)
         @Post('generate')
         async register(@Res() res: Response, @GetUserReq('id') userId:number) {
+            // console.log(res);
             const user = await this.authService.getUser(userId);
+            // this.userService.turnOnTwoFacAuth(userId, true);
             const {otpauthUrl} = await this.twoFacAuthService.generateTwoFacAuth(user);
-            console.log('auth controller enable -------------');
-            this.userService.turnOnTwoFacAuth(userId);
+            // console.log('auth controller enable -------------');
             return this.twoFacAuthService.pipeQrCodeStream(res, otpauthUrl);
         }
 
@@ -32,7 +33,7 @@ export class TwoFactorAuthController {
         async turnOnTwoFacAuth(
             @GetUserReq() user,
             @Body() {twoFactorAuthenticationCode} : twoFactorAuthenticationDto,
-            @Body('id') id:number, @Res() res: Response) {
+            @GetUserReq('userId') id:number, @Res() res: Response) {
             
             const isCodeValid = this.twoFacAuthService.isTwoFacAuthValid(
                 twoFactorAuthenticationCode,
@@ -49,7 +50,11 @@ export class TwoFactorAuthController {
             );
 
             res.cookie('TwoFacAuthToken', accessTokenCookie);
-            res.redirect(301, 'http://localhost:5173/profile')
+            res.json({
+                status: true,
+            })
+            res.end();
+            // res.redirect(301, 'http://localhost:5173/profile')
         }
 
 }

@@ -24,11 +24,10 @@ export class UserService {
                 email: user.email,
                 picture: user.pictureLink,
                 bio: user.bio,
-                twofactor: user.isTwoFacAuthEnabled
+                twofactor: user.isTwoFacAuthEnabled,
             }
         }
     }
-
 
     async setTwoAuthSecret(secret: string, userId: number) {
         await this.prismaService.user.update({
@@ -41,14 +40,13 @@ export class UserService {
         })
     }
 
-
-    async turnOnTwoFacAuth(userId: number) {
+    async turnOnTwoFacAuth(userId: number, status: boolean = false) {
         return this.prismaService.user.update({
             where: {
                 id: userId,
             },
             data: {
-                isTwoFacAuthEnabled: true,
+                isTwoFacAuthEnabled: status,
             }
         })
     }
