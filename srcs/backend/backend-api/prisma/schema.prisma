@@ -22,6 +22,8 @@ model User {
   accessToken  String
   refreshToken String
   bio          String?
+  twoFacAuthSecret  String?
+  isTwoFacAuthEnabled Boolean @default(false)
 
   @@unique([id, username, email])
 }

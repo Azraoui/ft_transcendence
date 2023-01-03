@@ -1,13 +1,16 @@
 import { atom } from "recoil";
 
 export const ProfileData = atom({
-    key:"ProfileData",
-    default:{
+    key: "ProfileData",
+    default: {
         firstName: "",
         lastName: "",
         id: 0,
-        picture:"",
+        picture: "",
         username: "",
-        bio:""
+        bio: "",
+        twofactor: false
+      
+        
     }
 })

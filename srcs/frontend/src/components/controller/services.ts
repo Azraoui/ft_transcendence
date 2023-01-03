@@ -9,6 +9,9 @@ const getToken = () => {
 const getProfile = () => {
     return http.get("/user/profile", {withCredentials:true});
   };
+  const get2FQRCode = (isEnabled:boolean) => {
+    return http.post("/2fa/generate", isEnabled, {withCredentials:true});
+  };
 
 // const get = (id: any) => {
 //   return http.get<>(`/tutorials/${id}`);
@@ -38,6 +41,7 @@ const Service = {
   getFriends,
   getProfile,
   getToken,
+  get2FQRCode,
   // get,
   // create,
   // update,

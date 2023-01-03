@@ -10,6 +10,8 @@ CREATE TABLE "User" (
     "accessToken" TEXT NOT NULL,
     "refreshToken" TEXT NOT NULL,
     "bio" TEXT,
+    "twoFacAuthSecret" TEXT,
+    "isTwoFacAuthEnabled" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

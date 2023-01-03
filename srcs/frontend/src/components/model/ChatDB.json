@@ -125,7 +125,7 @@
             "text":
               "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet",
             "timestamp": "10:03 AM",
-            "side": "left",
+            "side": "right",
             "message_id": 4
           },
           {
@@ -138,7 +138,7 @@
           {
             "text": "I believe they must have misplaced it elsewhere?!",
             "timestamp": "10:02 AM",
-            "side": "left",
+            "side": "right",
             "message_id": 2
           },
           {

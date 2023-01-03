@@ -48,7 +48,7 @@ function FriendCard({ data }: FriendCardPorps) {
 
     return (
         <div onClick={() => {
-            setActiveNavItem({...activeNavItem, id:data.id, name:data.name} );
+            setActiveNavItem({...activeNavItem, id:data.id, name:data.name, chatlog:data.chatlog} );
             // console.log("=====> name = ", activeNavItem.name);
             
             setChat(data.chatlog);
@@ -68,15 +68,15 @@ function FriendCard({ data }: FriendCardPorps) {
             </div>
             {/* Ban Modal*/}
         
-            <div className="dropdown dropdown-left ">
+            <div className="dropdown dropdown-left  ">
                 {/* invisible hover:visible */}
-                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon'/></div>
+                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon '/></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li><label htmlFor="my-modal" className="btn  w-full">Block</label></li>
                     <li><a className="btn my-1 w-full text-sm ">View Profile</a></li>
                 </ul>
             </div>
-            <BanModal name={activeNavItem.name} />
+            {/* <BanModal name={activeNavItem.name} /> */}
         </div>
     )
 }

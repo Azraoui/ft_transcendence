@@ -1,14 +1,31 @@
-import React from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
+import Service from '../../controller/services';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
 import Acheivements from './Acheivements'
 import ProfileImage from './ProfileImage'
 
 
+
 export function ProfileEditCard() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
   const [profileData, setprofileData] = useRecoilState(ProfileData);
+  const [is2fEnabled, set2F] = useState(profileData.twofactor)
+  const [qrCode, setQrCode] = useState("")
+
+  const onChangeEnable2fa = (e: ChangeEvent<HTMLInputElement>) => {
+    set2F(e.target.checked);
+    Service.get2FQRCode(is2fEnabled).then((response:any)=>
+    {
+      setQrCode(response.data); //convert Binary to readable png
+      console.log("====>>>>",qrCode);
+    }).catch((e:Error) => 
+    {
+      console.log(e);
+    })
+  };
+
 
 
   return (
@@ -37,9 +54,10 @@ export function ProfileEditCard() {
         <div className="form-control flex w-full justify-center ">
           <label className="cursor-pointer label">
             <span className="label-text text-white font-extrabold sm:text-xl">Enabale 2f verification</span>
-            <input type="checkbox" className="toggle toggle-accent"  />
+            <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa} />
           </label>
         </div>
+        {is2fEnabled  ?  <img src={``} alt="adsfadfad"></img> : ""}
         <div className='flex sm:flex-row flex-col items-center justify-evenly w-full' >
         <button className="btn w-20 btn-accent transition duration-300 ease-in-out mb-2 hover:-translate-y-1 hover:scale-110">Save</button>
         <button className="btn w-20 btn-secondary   mb-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" onClick={()=> setIsMe(true)}>Cancel</button>

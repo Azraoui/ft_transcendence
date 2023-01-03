@@ -1,9 +1,12 @@
 
 
 all:
+	git add .
+	git commit -m "checking for new updates to pull them"
+	git pull
 	docker-compose -f srcs/docker-compose.yml up --build -d
 migrate: 
-	./src/backend/backend-api/npx prisma migrate dev
+	./src/backend/backend-api/ npx prisma migrate dev 
 
 down:
 	docker-compose -f srcs/docker-compose.yml down  --remove-orphans

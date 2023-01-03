@@ -45,15 +45,14 @@ function App() {
           :
           <div>
             <Header />
+            <BanModal name="ddd" /> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
-            <BanModal name="ddd" />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />
-                {/* <Route path='/login' element={<Login/>}/> */}
               </Routes>
             </div>
           </ div>
