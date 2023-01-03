@@ -4,6 +4,7 @@ import { AuthService } from 'src/auth/auth.service';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
 import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 import { GetUserReq } from 'src/decorator';
+import { UserService } from 'src/users/user/user.service';
 import { twoFactorAuthenticationDto } from './dto';
 import { TwoFactorAuthService } from './two-factor-auth.service';
 
@@ -13,6 +14,7 @@ export class TwoFactorAuthController {
     constructor (
         private readonly twoFacAuthService: TwoFactorAuthService,
         private readonly authService: AuthService,
+        private readonly userService: UserService,
         ) {}
 
         @UseGuards(JwtTwoFactorGuard)
@@ -20,6 +22,7 @@ export class TwoFactorAuthController {
         async register(@Res() res: Response, @GetUserReq('id') userId:number) {
             const user = await this.authService.getUser(userId);
             const {otpauthUrl} = await this.twoFacAuthService.generateTwoFacAuth(user);
+            this.userService.turnOnTwoFacAuth(userId);
             return this.twoFacAuthService.pipeQrCodeStream(res, otpauthUrl);
         }
 
