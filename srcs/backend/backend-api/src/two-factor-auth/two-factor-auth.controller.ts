@@ -21,7 +21,6 @@ export class TwoFactorAuthController {
         async register(@Res() res: Response, @GetUserReq('id') userId:number) {
             const user = await this.authService.getUser(userId);
             const {otpauthUrl} = await this.twoFacAuthService.generateTwoFacAuth(user);
-            // console.log('auth controller enable -------------');
             return this.twoFacAuthService.pipeQrCodeStream(res, otpauthUrl);
         }
 
@@ -50,7 +49,7 @@ export class TwoFactorAuthController {
                     true
                 );
                 this.userService.turnOnTwoFacAuth(id, true);
-                res.cookie('TwoFacAuthToken', accessTokenCookie);
+                res.cookie('TwoFacAuthToken', accessTokenCookie, {httpOnly: true});
                 res.json({
                     status: true,
                 })
@@ -58,16 +57,14 @@ export class TwoFactorAuthController {
             res.end();
         }
 
-
         @UseGuards(JwtTwoFactorGuard)
-        @HttpCode(200)
-        @Post('turn-off')
+        @Get('turn-off')
         async turnOffTwoFacAuth (
             @GetUserReq('id') id:number,
 
         ) {
-            this.userService.turnOnTwoFacAuth(id, false);
-            this.userService.setTwoAuthSecret(null, id);
-        }
+            await this.userService.turnOnTwoFacAuth(id, false);
+            await this.userService.setTwoAuthSecret(null, id);
+        } 
 
-}
+} 
