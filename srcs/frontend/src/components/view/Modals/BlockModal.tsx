@@ -2,10 +2,9 @@ import React, { useEffect } from 'react'
 import { useRecoilState } from 'recoil';
 import { ChatFriends } from '../../model/atoms/ChatFriends';
 
-function BanModal({name} :{name:string}) {
+function BlockModal() {
 
     const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
-    console.log(name);
     useEffect(()=>
     {
 
@@ -13,14 +12,14 @@ function BanModal({name} :{name:string}) {
     
     return (
         <div>
-            <input type="checkbox" id="my-modal" className="modal-toggle" />
+            <input type="checkbox" id="my-modal-3" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box relative bg-black">
-                <label htmlFor="my-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="font-bold text-lg">Block {activeNavItem.name}</h3>
                     <p className="py-4">{activeNavItem.name} will be blocked you can unblock him/her anytime</p>
                     <div className="modal-action">
-                        <label htmlFor="my-modal" className="btn">Confirm</label>
+                        <label htmlFor="my-modal-3" className="btn">Confirm</label>
                     </div>
                 </div>
             </div>
@@ -29,4 +28,4 @@ function BanModal({name} :{name:string}) {
     )
 }
 
-export default BanModal
+export default BlockModal

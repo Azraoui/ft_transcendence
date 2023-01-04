@@ -10,7 +10,6 @@ import { TwoFactorAuthService } from './two-factor-auth.service';
 
 @Controller('2fa')
 export class TwoFactorAuthController {
-
     constructor (
         private readonly twoFacAuthService: TwoFactorAuthService,
         private readonly authService: AuthService,
@@ -22,6 +21,7 @@ export class TwoFactorAuthController {
         async register(@Res() res: Response, @GetUserReq('id') userId:number) {
             const user = await this.authService.getUser(userId);
             const {otpauthUrl} = await this.twoFacAuthService.generateTwoFacAuth(user);
+            // console.log('auth controller enable -------------');
             return this.twoFacAuthService.pipeQrCodeStream(res, otpauthUrl);
         }
 

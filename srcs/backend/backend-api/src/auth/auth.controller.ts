@@ -34,6 +34,7 @@ export class AuthController {
     @UseGuards(JwtTwoFactorGuard)
     @Get('log-out')
     async logOut(@Req() req, @Res() res: Response) {
+        console.log('hi ---------------------------');
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {

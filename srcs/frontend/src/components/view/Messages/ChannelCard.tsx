@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import BanModal from './BanModal';
+import BanModal from '../Modals/BanModal';
 
 
 type ChannelCardPorps =
@@ -53,9 +53,9 @@ function ChannelCard({ data }: ChannelCardPorps) {
 
     return (
         <div onClick={() => {
-            setActiveNavItem(data.id);
+            setActiveNavItem({...activeNacItem, ...data});
             setChat(data.chatlog);
-        }} className={`flex items-center space-x-4 py-7 ${activeNacItem === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
+        }} className={`flex items-center space-x-4 py-7 ${activeNacItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">
                 <p className="text-xl font-bold ">
                     {data.name}
@@ -69,7 +69,6 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 </div>
             </div>
             {/* Ban Modal*/}
-            <BanModal name={data.name} />
             <div className="dropdown dropdown-left ">
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
