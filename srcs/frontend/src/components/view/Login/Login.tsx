@@ -1,8 +1,12 @@
 import React from 'react'
+import { useRecoilState } from 'recoil';
+import { ProfileData } from '../../model/atoms/ProfileData';
 
 // target='_blank'
 
 function Login() {
+
+
   const link = "http://localhost:5000/api/auth"
   return (
     <div className='flex items-center justify-center w-[100vw] h-[100vh] bg-login-gradient'>

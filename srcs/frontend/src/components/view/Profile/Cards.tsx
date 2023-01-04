@@ -27,7 +27,6 @@ export function StatsCard({title, count, color} :StatsCardProps) {
 }
 
 export function AcheivementCard({title, cost, color, avatar, wingames = 0} :AcheivementCardProps) {
-  console.log(wingames);
   
   return (
     <div data-tip={`${cost} Wins to unlock this badge`} className={`flex items-center justify-around flex-col sm:flex-row xl:flex-col ${  cost > wingames && "grayscale"} ${color} h-40 w-full rounded-xl mt-8 p-4 ring-1 ring-white  tooltip` }>

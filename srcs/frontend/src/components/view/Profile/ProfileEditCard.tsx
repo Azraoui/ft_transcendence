@@ -24,7 +24,7 @@ export function ProfileEditCard() {
     Service.turnOff2FQRCode().then((response:any)=>
     {
       console.log(response.data);
-    // set2F(e.target.);
+        set2F(false);
 
   
     }).catch((e:Error) => 
@@ -36,7 +36,6 @@ export function ProfileEditCard() {
     // set2F(e.target.checked);
     Service.get2FQRCode().then((response:any)=>
     {
-      console.log(response.data);
       const base64 = btoa(
         new Uint8Array(response.data).reduce(
           (data, byte) => data + String.fromCharCode(byte),
