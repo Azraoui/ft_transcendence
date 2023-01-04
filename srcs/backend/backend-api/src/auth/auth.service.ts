@@ -80,7 +80,7 @@ export class AuthService {
         isTwoFacAuth: boolean = false
     ) {
         const payload = {
-            userId,
+            userId: userId,
             isTwoFacAuth
         };
         const token = this.jwt.sign(payload, {
