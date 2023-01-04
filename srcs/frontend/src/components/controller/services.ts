@@ -13,7 +13,10 @@ const getProfile = () => {
     return http.get("/2fa/generate", {withCredentials:true,responseType: "arraybuffer",} ,);
   };
     const post2FQRCode = (twoFactorAuthenticationCode:string) => {
-    return http.post("/2fa/turn-on", {twoFactorAuthenticationCode}, {withCredentials:true} ,);
+    return http.post("/2fa/turn-on", {twoFactorAuthenticationCode}, {withCredentials:true} );
+  };
+  const turnOff2FQRCode = () => {
+    return http.post("/2fa/turn-off", {withCredentials:true} ,);
   };
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
@@ -49,6 +52,7 @@ const Service = {
   getToken,
   get2FQRCode,
   post2FQRCode,
+  turnOff2FQRCode,
   Logout
   // get,
   // create,
