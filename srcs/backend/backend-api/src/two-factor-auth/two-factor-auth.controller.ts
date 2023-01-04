@@ -40,7 +40,7 @@ export class TwoFactorAuthController {
 
             if (!isCodeValid) {
                 res.json({
-                    status: true,
+                    status: false,
                 })
             }
             else
