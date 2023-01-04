@@ -31,7 +31,7 @@ export class TwoFactorAuthController {
         async turnOnTwoFacAuth(
             @GetUserReq() user,
             @Body() {twoFactorAuthenticationCode} : twoFactorAuthenticationDto,
-            @GetUserReq('userId') id:number, @Res() res: Response) {
+            @GetUserReq('id') id:number, @Res() res: Response) {
             
             const isCodeValid = this.twoFacAuthService.isTwoFacAuthValid(
                 twoFactorAuthenticationCode,
@@ -57,4 +57,17 @@ export class TwoFactorAuthController {
             }
             res.end();
         }
+
+
+        @UseGuards(JwtTwoFactorGuard)
+        @HttpCode(200)
+        @Post('turn-off')
+        async turnOffTwoFacAuth (
+            @GetUserReq('id') id:number,
+
+        ) {
+            this.userService.turnOnTwoFacAuth(id, false);
+            this.userService.setTwoAuthSecret(null, id);
+        }
+
 }
