@@ -16,7 +16,11 @@ const getProfile = () => {
     return http.post("/2fa/turn-on", {twoFactorAuthenticationCode}, {withCredentials:true} );
   };
   const turnOff2FQRCode = () => {
+<<<<<<< HEAD
     return http.put("/2fa/turn-off", {test:false}, {withCredentials:true});
+=======
+    return http.put("/2fa/turn-off", {test:false},{withCredentials:true});
+>>>>>>> ebc752a290085c976778eb02e493055aef7e0caa
   };
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});

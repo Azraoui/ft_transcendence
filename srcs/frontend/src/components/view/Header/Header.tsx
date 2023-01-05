@@ -11,20 +11,20 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-  useEffect(() => {
-    retrieveProfile();
-  }, []);
+  // useEffect(() => {
+  //   retrieveProfile();
+  // }, []);
 
-  const retrieveProfile = () => {
-    Service.getProfile()
-      .then((response: any) => {
-        setprofileData(response.data)
-        console.log(response.data);
-      })
-      .catch((e: Error) => {
-        console.log(e);
-      });
-  };
+  // const retrieveProfile = () => {
+  //   Service.getProfile()
+  //     .then((response: any) => {
+  //       setprofileData(response.data)
+  //       console.log(response.data);
+  //     })
+  //     .catch((e: Error) => {
+  //       console.log(e);
+  //     });
+  // };
     const LogOut = () => {
     Service.Logout()
       .then((response: any) => {

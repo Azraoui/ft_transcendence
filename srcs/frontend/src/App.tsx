@@ -15,6 +15,9 @@ import BanModal from './components/view/Modals/BanModal'
 import AddChannelModal from './components/view/Modals/AddChannelModal'
 import Confirm2FAModal from './components/view/Modals/Confirm2FAModal'
 import BlockModal from './components/view/Modals/BlockModal'
+import { ProfileData } from './components/model/atoms/ProfileData'
+import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
+import TwoFA from './components/view/Login/TwoFA'
 
 
 
@@ -22,16 +25,33 @@ import BlockModal from './components/view/Modals/BlockModal'
 function App() {
 
   const [status, setStatus] = useRecoilState(Status);
+  const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
+
   useEffect(() => {
     retrieveToken();
+    retrieveProfile();
   }, [status]);
 
+
+
+
+  const retrieveProfile = () => {
+    Service.getProfile()
+      .then((response: any) => {
+        setprofileData(response.data)
+        console.log(profileData.twofactor);
+        
+        settwofaEnabled(profileData.twofactor)
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
   const retrieveToken = () => {
-    // console.log(`Herrerereereerrerere`);
 
     Service.getToken()
       .then((response: any) => {
-        // console.log(response);
         setStatus(false);
       })
       .catch((e: Error) => {
@@ -43,9 +63,10 @@ function App() {
   return (
     <div className='text-white  '>
       {
-        
+      
         status ? <Login />
           :
+          twofaEnabled ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}

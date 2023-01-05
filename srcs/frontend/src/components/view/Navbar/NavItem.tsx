@@ -23,13 +23,10 @@ function NavItem({ link }: NavItemPorp) {
   const LogOut = () => {
     Service.Logout()
       .then((response: any) => {
-
-        console.log(response.data);
         window.location.reload()
         window.location.href = "/";
       })
       .catch((e: Error) => {
-        console.log("=>>>>>>.", e);
       });
   };
   return (
