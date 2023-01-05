@@ -27,7 +27,7 @@ export class JwtTwoFactorStrategy extends PassportStrategy (
 
     async validate(payload: any) {
         const user = await this.authService.getUser(payload.userId);
-
+        console.log(`userId = ${payload.userId}`);
         if (!user?.isTwoFacAuthEnabled) {
             return user
         }

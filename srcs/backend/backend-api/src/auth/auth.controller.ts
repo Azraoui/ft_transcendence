@@ -47,7 +47,9 @@ export class AuthController {
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('status')
-    getStatus() {}
+    getStatus() {
+        
+    }
 
 
     

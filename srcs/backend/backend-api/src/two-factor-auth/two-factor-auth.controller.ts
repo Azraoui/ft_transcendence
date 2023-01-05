@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Put, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
@@ -58,7 +58,7 @@ export class TwoFactorAuthController {
         }
 
         @UseGuards(JwtTwoFactorGuard)
-        @Get('turn-off')
+        @Put('turn-off')
         async turnOffTwoFacAuth (
             @GetUserReq('id') id:number,
 
