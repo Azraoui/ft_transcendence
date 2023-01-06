@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDto } from './dto';
 import * as admin from 'firebase-admin';
 import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
+import { User } from '@prisma/client';
 
 @Injectable()
 
@@ -58,24 +59,32 @@ export class UserService {
         })
     }
 
-    async updateUserProfile(userId: number, newData: UserDto) {
+    async updateProfile(userId: number, {bio, nickname, pictureLink}) {
         await this.prismaService.user.update({
             where: {
                 id: userId,
             },
             data: {
-                nickname: newData.nickname,
-                pictureLink: newData.pictureLink,
-                bio: newData.bio,
+                nickname: nickname,
+                pictureLink: pictureLink,
+                bio: bio,
             }
         })
     }
 
 
-    async uploadAndGetUrl(@UploadedFile() file) {
-        const filePath = await this.storageProvider.upload(file, 'ael-azra', "11");
-        console.log(filePath);
-        return filePath;
+    async uploadAndGetUrl(@UploadedFile() file, username: string, id: string) {
+        return await this.storageProvider.upload(file, username, id);
     }
+
+    async updateUserProfile(
+        userReq: User,
+        {bio, nickname}: UserDto,
+        file: Express.Multer.File
+        ) {
+            const user = await this.getUserProfile(userReq.id);
+            const pictureLink = await this.uploadAndGetUrl(file, user.username, user.id.toString());
+            await this.updateProfile(userReq.id, {bio, nickname, pictureLink});
+        }
 
 }
