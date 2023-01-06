@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UploadedFile } from '@nestjs/common';
+import { FirebaseApp } from 'firebase/app';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDto } from './dto';
+import * as admin from 'firebase-admin';
+import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
 
 @Injectable()
 
 export class UserService {
 
-    constructor(private prismaService: PrismaService) {}
+    constructor(
+        private prismaService: PrismaService,
+        private storageProvider: FirebaseStorageProvider
+    ) {}
 
     async getUserProfile(id: number) {
         const user = await this.prismaService.user.findUnique({
@@ -63,6 +69,13 @@ export class UserService {
                 bio: newData.bio,
             }
         })
+    }
+
+
+    async uploadAndGetUrl(@UploadedFile() file) {
+        const filePath = await this.storageProvider.upload(file, 'ael-azra', "11");
+        console.log(filePath);
+        return filePath;
     }
 
 }

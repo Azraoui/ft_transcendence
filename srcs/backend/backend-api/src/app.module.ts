@@ -12,6 +12,7 @@ import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service'
 import { TwoFactorAuthController } from './two-factor-auth/two-factor-auth.controller';
 import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
 import { ChatModule } from './chat/chat.module';
+import { FirebaseStorageProvider } from './utils/firebase-storage.provider';
 
 @Module({
   imports: [ AuthModule,
@@ -30,7 +31,8 @@ import { ChatModule } from './chat/chat.module';
               ConfigService,
               UserService,
               AuthService,
-              TwoFactorAuthService
+              TwoFactorAuthService,
+              FirebaseStorageProvider
             ],
 })
 

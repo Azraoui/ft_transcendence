@@ -29,7 +29,8 @@ export class UserController {
         // @Body() {bio, nickname, pictureLink}/*: UserDto*/,
         @UploadedFile() file: Express.Multer.File
     ) {
-        console.log(file);
+        // console.log(file);
+        this.userService.uploadAndGetUrl(file);
     }
 
 
