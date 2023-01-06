@@ -25,9 +25,12 @@ export class AuthController {
             // const access_token = await this.authService.signToken(user.id, user.username);
             const access_token = await this.authService.getCookieWithJwtAccessToken(user.id);
             res.cookie('TwoFacAuthToken', access_token, {httpOnly: true});
-            res.redirect(301, "http://localhost:5173/profile");
+            res.json({
+                user,
+            })
+            // res.redirect(301, "http://localhost:5173/profile");
         }
-        else res.redirect(301, "http://localhost:5173");
+        // else res.redirect(301, "http://localhost:5173");
         res.end();
     }
 
@@ -47,7 +50,9 @@ export class AuthController {
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('status')
-    getStatus() {}
+    getStatus() {
+        
+    }
 
 
     
