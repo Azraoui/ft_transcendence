@@ -8,6 +8,7 @@ export const ProfileData = atom({
         id: 0,
         picture: "",
         username: "",
+        nickName: "",
         bio: "",
         twofactor: false
       

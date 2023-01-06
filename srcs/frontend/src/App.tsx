@@ -30,28 +30,30 @@ function App() {
 
   useEffect(() => {
     retrieveToken();
-    retrieveProfile();
+    // retrieveProfile();
   }, [status]);
 
 
 
 
-  const retrieveProfile = () => {
-    Service.getProfile()
-      .then((response: any) => {
-        setprofileData(response.data)
-        console.log(profileData.twofactor);
+  // const retrieveProfile = () => {
+  //   Service.getProfile()
+  //     .then((response: any) => {
+  //       setprofileData(response.data)
+  //       console.log(profileData);
         
-        settwofaEnabled(profileData.twofactor)
-      })
-      .catch((e: Error) => {
-        console.log(e);
-      });
-  };
+  //       settwofaEnabled(profileData.twofactor)
+  //     })
+  //     .catch((e: Error) => {
+  //       console.log(e);
+  //     });
+  // };
   const retrieveToken = () => {
 
     Service.getToken()
       .then((response: any) => {
+        console.log(response);
+        
         setStatus(false);
       })
       .catch((e: Error) => {

@@ -14,8 +14,13 @@ import ProfileImage from './ProfileImage'
 export function ProfileEditCard() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-  const [is2fEnabled, set2F] = useState(profileData.twofactor)
-  const [qrCode, setQrCode] = useState("")
+  const [is2fEnabled, set2F] = useState(profileData.twofactor);
+  const [qrCode, setQrCode] = useState("");
+  const [inputs, setInputs] = useState({
+    file : null,
+    nickname: "",
+    bio: ""
+  })
 
   //e: ChangeEvent<HTMLInputElement>
 
@@ -23,7 +28,15 @@ export function ProfileEditCard() {
     // evt.preventDefault();
 
 }
-
+function handleChange(evt:any) {
+  const value = evt.target.value;
+  console.log(value);
+  
+  setInputs({
+    ...inputs,
+    [evt.target.name]: value
+  });
+}
   const onClickDisable2fa = () => {
     Service.turnOff2FQRCode().then((response: any) => {
       console.log(response.data);
@@ -59,20 +72,20 @@ export function ProfileEditCard() {
 
           <div className="mb-2 w-full">
             <label htmlFor="formFile" className="form-label inline-block mb-3">Choose your Image</label>
-            <input required type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " />
+            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleChange}/>
             {/* <input className="form-control block w-full px-3 py-1.5 text-base font-normal    text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" /> */}
           </div>
           <div className="flex w-full justify-center">
             <div className="mb-3 w-full">
               <label htmlFor='exampleText0' className="form-label inline-block mb-3 ">NickName</label>
-              <input required type="text" placeholder={profileData.username} className="input input-bordered input-success text-gray-800 w-full" />
+              <input  type="text" placeholder={profileData.nickName} name='nickname' className="input input-bordered input-success text-gray-800 w-full" onChange={handleChange}/>
             </div>
           </div>
           <div className="flex w-full justify-center">
             <div className="mb-1 w-full">
               <label className="form-label inline-block mb-3 ">About You</label>
-              <textarea required className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio}></textarea>
+              <textarea  name='bio'  className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
             </div>
           </div>
 
@@ -80,17 +93,17 @@ export function ProfileEditCard() {
             <label className="cursor-pointer label">
               {/* <span className="label-text text-white font-extrabold sm:text-xl">Enabale 2f verification</span> */}
               {/**onChange={onChangeEnable2fa} */}
-              {is2fEnabled ? <button className="btn w-full mb-2" onClick={onClickDisable2fa}>Disable 2FA Verification</button> : <label htmlFor="my-modal-2" className="btn w-full mb-2" onClick={onClickEnable2fa}>Enabale 2FA Verification</label>}
+              {is2fEnabled ? <button className="btn w-full mb-2" onClick={onClickDisable2fa}>Disable 2FA Verification</button> : <label htmlFor="my-modal-2" className="btn w-full mb-2" onClick={onClickEnable2fa}>Enable 2FA Verification</label>}
               {/* <input type="checkbox" className="toggle toggle-accent"  onChange={onChangeEnable2fa}></input> */}
             </label>
           </div>
           {/** Call Confirm 2FA Modal */}
-          <Confirm2FAModal src={qrCode} isEnabled={is2fEnabled} />
           <div className='flex sm:flex-row flex-col items-center justify-evenly w-full' >
             <button type='submit' className="btn w-20 btn-accent transition duration-300 ease-in-out mb-2 hover:-translate-y-1 hover:scale-110">Save</button>
             <button className="btn w-20 btn-secondary   mb-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" onClick={() => setIsMe(true)}>Cancel</button>
           </div>
         </form>
+        <Confirm2FAModal src={qrCode} isEnabled={is2fEnabled} />
       </div>
 
 
