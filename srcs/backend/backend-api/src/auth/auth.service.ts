@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { AuthDto } from './dto';
 
 @Injectable()
@@ -13,7 +14,7 @@ export class AuthService {
         private config: ConfigService
     ) {
 
-    }
+}
 
     async fortytwoLogin(apiData: AuthDto) {
 
@@ -26,6 +27,7 @@ export class AuthService {
         {
             await this.prisma.user.create({
                 data: {
+                    nickname: uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }),
                     username: apiData.username,
                     firstName: apiData.firstName,
                     lastName: apiData.lastName,
@@ -33,6 +35,7 @@ export class AuthService {
                     pictureLink: apiData.pictureLink,
                     accessToken: apiData.accessToken,
                     refreshToken: apiData.refreshToken,
+                    bio: "I am Noob"
                 }
             })
         }
