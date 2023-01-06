@@ -9,10 +9,6 @@ export class UserDto {
 
     @IsString()
     @IsNotEmpty()
-    pictureLink: string;
-
-    @IsString()
-    @IsNotEmpty()
     bio: string;
 
 }

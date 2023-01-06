@@ -7,12 +7,16 @@ import { GetUserReq } from 'src/decorator';
 import { UserService } from './user.service';
 import { UserDto } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('user')
 
 export class UserController {
 
-    constructor (private userService: UserService) {}
+    constructor (
+        private userService: UserService,
+        private prismaService: PrismaService
+        ) {}
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('profile')
@@ -24,13 +28,15 @@ export class UserController {
     @UseGuards(JwtTwoFactorGuard)
     @Put('updateProfile')
     @UseInterceptors(FileInterceptor('file'))
-    updateUserProfile (
-        // @GetUserReq() userReq,
-        // @Body() {bio, nickname, pictureLink}/*: UserDto*/,
+    async updateUserProfile (
+        @GetUserReq() userReq,
+        @Body() {bio, nickname}/*: UserDto*/,
         @UploadedFile() file: Express.Multer.File
     ) {
         // console.log(file);
-        this.userService.uploadAndGetUrl(file);
+        // const user = await this.userService.getUserProfile(userReq.id);
+        // this.userService.uploadAndGetUrl(file);
+        return await this.updateUserProfile(userReq, {bio, nickname}, file);
     }
 
 
