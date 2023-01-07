@@ -49,7 +49,14 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Get('status')
     async getStatus(@GetUserReq('id') userId) {
-        return await this.authService.getUser(userId);
+        const user =  await this.authService.getUser(userId);
+        return {
+            picture: user.pictureLink,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            id: user.id,
+        }
     }
 
 }
