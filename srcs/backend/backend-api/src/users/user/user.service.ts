@@ -79,11 +79,14 @@ export class UserService {
 
     async updateUserProfile(
         userReq: User,
-        {bio, nickname}: UserDto,
-        file: Express.Multer.File
+        {bio, nickname, file}: UserDto,
+        // file: Express.Multer.File
         ) {
+            let image = new Image();
+            image.src = file;
+            document.body.appendChild(image);
             const user = await this.getUserProfile(userReq.id);
-            const pictureLink = await this.uploadAndGetUrl(file, user.username, user.id.toString());
+            const pictureLink = await this.uploadAndGetUrl(image, user.username, user.id.toString());
             await this.updateProfile(userReq.id, {bio, nickname, pictureLink});
         }
 

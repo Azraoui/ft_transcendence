@@ -30,13 +30,13 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async updateUserProfile (
         @GetUserReq() userReq,
-        @Body() {bio, nickname}/*: UserDto*/,
-        @UploadedFile() file: Express.Multer.File
+        @Body() {bio, nickname, file}/*: UserDto*/,
+        // @UploadedFile() file: Express.Multer.File
     ) {
         // console.log(file);
         // const user = await this.userService.getUserProfile(userReq.id);
         // this.userService.uploadAndGetUrl(file);
-        return await this.userService.updateUserProfile(userReq, {bio, nickname}, file);
+        return await this.userService.updateUserProfile(userReq, {bio, nickname, file});
     }
 
 

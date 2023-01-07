@@ -11,4 +11,8 @@ export class UserDto {
     @IsNotEmpty()
     bio: string;
 
+    @IsNotEmpty()
+    @IsString()
+    file: string
+
 }
