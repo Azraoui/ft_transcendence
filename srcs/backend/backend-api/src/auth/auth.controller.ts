@@ -52,9 +52,11 @@ export class AuthController {
         const user =  await this.authService.getUser(userId);
         return {
             picture: user.pictureLink,
-            username: user.username,
+            nickName: user.nickname,
+            bio: user.bio,
             firstName: user.firstName,
             lastName: user.lastName,
+
             id: user.id,
         }
     }
