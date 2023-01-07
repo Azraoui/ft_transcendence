@@ -31,7 +31,7 @@ export class UserService {
                 email: user.email,
                 picture: user.pictureLink,
                 bio: user.bio,
-                twofactor: user.isTwoFacAuthEnabled,
+                isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
                 isTwoFacAuthVerified: user.isTwoFacAuthVerified,
             }
         }
