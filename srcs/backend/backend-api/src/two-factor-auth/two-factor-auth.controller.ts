@@ -24,7 +24,7 @@ export class TwoFactorAuthController {
             return this.twoFacAuthService.pipeQrCodeStream(res, otpauthUrl);
         }
 
-        @UseGuards(JwtTwoFactorGuard)
+        @UseGuards(JwtAuthGuard)
         @HttpCode(200)
         @Post('turn-on')
         async turnOnTwoFacAuth(
