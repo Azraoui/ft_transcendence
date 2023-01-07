@@ -25,13 +25,18 @@ model User {
   twoFacAuthSecret  String?
   isTwoFacAuthEnabled Boolean @default(false)
 
+  friends Friends[]
+
   @@unique([id, username, email])
   @@map("users")
 }
 
-model UserFriends {
+model Friends {
   id Int @id @default(autoincrement())
 
+  user User @relation(fields: [userId], references: [id])
   userId Int
   friendId Int
+
+  @@map("friends")
 }

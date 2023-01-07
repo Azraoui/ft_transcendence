@@ -1,10 +1,9 @@
 import { Injectable, UploadedFile } from '@nestjs/common';
-import { FirebaseApp } from 'firebase/app';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDto } from './dto';
-import * as admin from 'firebase-admin';
 import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
 import { User } from '@prisma/client';
+import { database } from 'firebase-admin';
 
 @Injectable()
 
@@ -112,4 +111,32 @@ export class UserService {
         ) {
             return await this.updateProfile(userReq.id, {bio, nickname});
         }
+
+        async getAllUsers() {
+            let allUsers = [];
+
+            const users = await this.prismaService.user.findMany();
+            users.forEach(element => {
+                let obj = {
+                    id: element.id,
+                    pictureLink: element.pictureLink,
+                    nickName: element.nickname,
+                    firstName: element.firstName,
+                    lastName: element.lastName
+                }
+                allUsers.push(obj);
+            });
+            return allUsers;
+        }
+
+        async addFriend(userId: number, friendId: number) {
+            await this.prismaService.friends.create({
+                data: {
+                    userId: userId,
+                    friendId: friendId
+                }
+            })
+        }
+
+
 }
