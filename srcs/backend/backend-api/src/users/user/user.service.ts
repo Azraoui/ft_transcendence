@@ -32,6 +32,7 @@ export class UserService {
                 picture: user.pictureLink,
                 bio: user.bio,
                 twofactor: user.isTwoFacAuthEnabled,
+                isTwoFacAuthVerified: user.isTwoFacAuthVerified,
             }
         }
     }
@@ -137,4 +138,16 @@ export class UserService {
                 }
             })
         }
+
+        async update2FAValidationStatus(userId: number, status: boolean = false) {
+            await this.prismaService.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    isTwoFacAuthVerified: status,
+                }
+            })
+        }
+
 }

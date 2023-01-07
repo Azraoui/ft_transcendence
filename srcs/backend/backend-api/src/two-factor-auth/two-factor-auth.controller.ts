@@ -49,6 +49,7 @@ export class TwoFactorAuthController {
                     true
                 );
                 this.userService.turnOnTwoFacAuth(id, true);
+                this.userService.update2FAValidationStatus(id, true);
                 res.cookie('TwoFacAuthToken', accessTokenCookie, {httpOnly: true});
                 res.json({
                     status: true,
@@ -65,6 +66,7 @@ export class TwoFactorAuthController {
         ) {
             await this.userService.turnOnTwoFacAuth(id, false);
             await this.userService.setTwoAuthSecret(null, id);
+            this.userService.update2FAValidationStatus(id, false);
         } 
 
 } 
