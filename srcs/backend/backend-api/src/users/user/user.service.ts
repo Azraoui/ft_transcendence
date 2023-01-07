@@ -119,7 +119,7 @@ export class UserService {
             users.forEach(element => {
                 let obj = {
                     id: element.id,
-                    pictureLink: element.pictureLink,
+                    picture: element.pictureLink,
                     nickName: element.nickname,
                     firstName: element.firstName,
                     lastName: element.lastName
@@ -137,6 +137,4 @@ export class UserService {
                 }
             })
         }
-
-
 }
