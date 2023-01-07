@@ -1,9 +1,10 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { GetUserReq } from 'src/decorator';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 import JwtTwoFactorGuard from './guard/jwt-two-factor.guard';
-// import { JwtAuthGuard } from './guard/jwt.guard';
+import { JwtAuthGuard } from './guard/jwt.guard';
 
 @Controller('auth')
 
@@ -45,13 +46,10 @@ export class AuthController {
         }
     }
 
-    @UseGuards(JwtTwoFactorGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('status')
-    getStatus() {
-        
+    async getStatus(@GetUserReq('id') userId) {
+        return await this.authService.getUser(userId);
     }
-
-
-    
 
 }

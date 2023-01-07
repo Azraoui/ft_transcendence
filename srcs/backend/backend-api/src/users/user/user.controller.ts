@@ -36,9 +36,7 @@ export class UserController {
         // console.log(file);
         // const user = await this.userService.getUserProfile(userReq.id);
         // this.userService.uploadAndGetUrl(file);
-        console.log(file);
-        console.log(`nickname = ${nickname}, bio = ${bio}`);
-        // return await this.userService.updateUserProfile(userReq, {bio, nickname}, file);
+        return await this.userService.updateUserProfile(userReq, {bio, nickname}, file);
     }
 
 
