@@ -51,13 +51,13 @@ export class AuthController {
     async getStatus(@GetUserReq('id') userId) {
         const user =  await this.authService.getUser(userId);
         return {
+            id: user.id,
             picture: user.pictureLink,
             nickName: user.nickname,
             bio: user.bio,
             firstName: user.firstName,
             lastName: user.lastName,
-
-            id: user.id,
+            isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
         }
     }
 
