@@ -26,7 +26,7 @@ function App() {
 
   const [status, setStatus] = useRecoilState(Status);
   const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
-  // const [profileData, setprofileData] = useRecoilState(ProfileData);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
     retrieveToken();
@@ -52,7 +52,8 @@ function App() {
 
     Service.getToken()
       .then((response: any) => {
-        console.log(response);
+        setprofileData({...profileData, ...response.data})
+        console.log(response.data);
         
         setStatus(false);
       })
@@ -68,7 +69,7 @@ function App() {
       
         status ? <Login />
           :
-          twofaEnabled ? <TwoFA/> : 
+          profileData.isTwoFacAuthEnabled ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}

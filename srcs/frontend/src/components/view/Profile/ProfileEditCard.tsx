@@ -14,7 +14,7 @@ import ProfileImage from './ProfileImage'
 export function ProfileEditCard() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-  const [is2fEnabled, set2F] = useState(profileData.twofactor);
+  const [is2fEnabled, set2F] = useState(profileData.isTwoFacAuthEnabled);
   const [qrCode, setQrCode] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [inputs, setInputs] = useState({

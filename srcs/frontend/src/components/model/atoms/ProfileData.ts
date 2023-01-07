@@ -10,7 +10,7 @@ export const ProfileData = atom({
         username: "",
         nickName: "",
         bio: "",
-        twofactor: false
+        isTwoFacAuthEnabled: false
       
         
     }
