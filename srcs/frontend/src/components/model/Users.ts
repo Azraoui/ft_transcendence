@@ -3,36 +3,141 @@ import obama from '../../assets/notbad.png'
 import cake from '../../assets/pieceofcake.png'
 
 
-export const Users = [
+export const UsersDB = [
     {
         id: 0,
-        name: "Mohamed El Hadjaoui ",
-        about: "hello woerlkj adf adfkajdfl;kadjfl;ak alksdjfal;dkfjdljhfkgjhkfjh fk hfdkgsdhfgjh",
-        avatar: avtar,
-        active: "on"
+        firstName: "Mohamed ",
+        bio: "hello woerlkj adf adfkajdfl;kadjfl;ak alksdjfal;dkfjdljhfkgjhkfjh fk hfdkgsdhfgjh",
+        picture: avtar,
+        active: "on",
+        lastName: "El Hadjaoui",
+        nickname: "",
+        twofactor: false,
+        username: ""
+
 
     },
     {
         id: 1,
-        name: "Azraoui Abdellah",
-        about: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
-        avatar: cake,
-        active: "off"
+        firstName: " Abdellah",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: cake,
+        active: "off",
+        lastName: "Azraoui",
+        nickname: "",
+        twofactor: false,
+        username: ""
 
     },
     {
         id: 2,
-        name: "Achraf Hakimi",
-        about: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
-        avatar: obama,
-        active: "in"
+        firstName: "Achraf ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: obama,
+        active: "in",
+        lastName: "Hakimi",
+        nickname: "",
+        twofactor: false,
+        username: ""
     },
     {
         id: 3,
-        name: "Zakria Ikhan",
-        about: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
-        avatar:avtar,
-        active: "on"
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
+    },
+    {
+        id: 3,
+        firstName: "Zakria ",
+        bio: "import Navbar from ./components/view/Navbar/Navbar import Profile from./components/view/Profile/Profile9",
+        picture: avtar,
+        active: "on",
+        lastName: "Ikhan",
+        nickname: "",
+        twofactor: false,
+        username: ""
     },
 
 ];

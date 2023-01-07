@@ -1,3 +1,5 @@
+import axios from "axios";
+import { fileURLToPath } from "url";
 import http from "./http-common";
 
 const getFriends = () => {
@@ -21,6 +23,9 @@ const getProfile = () => {
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
   };
+  const Login = () => {
+    return http.get("/auth/42-redirect", {withCredentials:true});
+  };
 
 // const get = (id: any) => {
 //   return http.get<>(`/tutorials/${id}`);
@@ -30,9 +35,25 @@ const getProfile = () => {
 //   return http.post<>("/tutorials", data);
 // };
 
-// const update = (id: any, data: ) => {
-//   return http.put<any>(`/tutorials/${id}`, data);
-// };
+const updateProfile = async (data: {file:FormData,nickname:string,bio:string}) => {
+  try {
+    console.log("================>",data.file);
+    
+    const response = await axios({
+      method: "put",
+      url: "http://localhost:5000/api/user/updateProfile",
+      data: {
+        file: data.file,
+        bio: data.bio,
+        nickname: data.nickname
+      },
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials:true,
+    });
+  } catch(error) {
+    console.log(error)
+  }
+};
 
 // const remove = (id: any) => {
 //   return http.delete<any>(`/tutorials/${id}`);
@@ -53,7 +74,9 @@ const Service = {
   get2FQRCode,
   post2FQRCode,
   turnOff2FQRCode,
-  Logout
+  Logout,
+  Login,
+  updateProfile
   // get,
   // create,
   // update,

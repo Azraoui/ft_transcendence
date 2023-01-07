@@ -16,8 +16,8 @@ export function ProfileEditCard() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
   const [is2fEnabled, set2F] = useState(profileData.twofactor);
   const [qrCode, setQrCode] = useState("");
+  const [selectedFile, setSelectedFile] = useState("");
   const [inputs, setInputs] = useState({
-    file : null,
     nickname: "",
     bio: ""
   })
@@ -25,24 +25,42 @@ export function ProfileEditCard() {
   //e: ChangeEvent<HTMLInputElement>
 
   const Save = (evt:FormEvent) => {
-    // evt.preventDefault();
+    evt.preventDefault();
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    const data = {
+      file:formData,
+      nickname: inputs.nickname,
+      bio:inputs.bio
+    }
+    Service.updateProfile(data).then((res:any)=>
+    {
 
+    }).catch((e:Error)=>
+    {
+      console.log(e);
+      
+    })
+
+}
+const handleFileSelect = (event:any) => {
+  console.log( event.target.files[0]);
+  setSelectedFile(event.target.files[0])
 }
 function handleChange(evt:any) {
   const value = evt.target.value;
   console.log(value);
   
+  
   setInputs({
     ...inputs,
-    [evt.target.name]: value
+    [evt.target.name]: value,
   });
 }
   const onClickDisable2fa = () => {
     Service.turnOff2FQRCode().then((response: any) => {
       console.log(response.data);
       set2F(false);
-
-
     }).catch((e: Error) => {
       console.log(e);
     })
@@ -72,7 +90,7 @@ function handleChange(evt:any) {
 
           <div className="mb-2 w-full">
             <label htmlFor="formFile" className="form-label inline-block mb-3">Choose your Image</label>
-            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleChange}/>
+            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleFileSelect}/>
             {/* <input className="form-control block w-full px-3 py-1.5 text-base font-normal    text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" /> */}
           </div>

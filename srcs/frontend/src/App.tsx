@@ -26,7 +26,7 @@ function App() {
 
   const [status, setStatus] = useRecoilState(Status);
   const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
-  const [profileData, setprofileData] = useRecoilState(ProfileData);
+  // const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
     retrieveToken();
