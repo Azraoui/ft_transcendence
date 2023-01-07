@@ -22,8 +22,8 @@ function ProfileCard() {
                 <ProfileImage />
               
 
-                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.firstName} {profileData.firstName}</h1>
-                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.username}</h1>
+                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.firstName} {profileData.lastName}</h1>
+                <h1 className='font-bold text-center w-full overflow-auto'>{profileData.nickName}</h1>
                 <h1 className='font-bold text-center w-full overflow-auto'>{profileData?.bio}</h1>
                
 

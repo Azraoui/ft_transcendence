@@ -1,3 +1,4 @@
+import axios from "axios";
 import http from "./http-common";
 
 const getFriends = () => {
@@ -21,18 +22,24 @@ const getProfile = () => {
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
   };
+  const updateUserInfo = (data: {bio:string, nickname:string}) => {
+    return http.put("/user/updateUserInfo", data, {withCredentials:true});
+  };
 
-// const get = (id: any) => {
-//   return http.get<>(`/tutorials/${id}`);
-// };
-
-// const create = (data: ) => {
-//   return http.post<>("/tutorials", data);
-// };
-
-// const update = (id: any, data: ) => {
-//   return http.put<any>(`/tutorials/${id}`, data);
-// };
+const updatePicture = async (file:FormData) => {
+  try {
+    
+    const response = await axios({
+      method: "put",
+      url: "http://localhost:5000/api/user/updatePicture",
+      data: file,
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials:true,
+    });
+  } catch(error) {
+    console.log(error)
+  }
+};
 
 // const remove = (id: any) => {
 //   return http.delete<any>(`/tutorials/${id}`);
@@ -53,7 +60,9 @@ const Service = {
   get2FQRCode,
   post2FQRCode,
   turnOff2FQRCode,
-  Logout
+  Logout,
+  updatePicture,
+  updateUserInfo
   // get,
   // create,
   // update,

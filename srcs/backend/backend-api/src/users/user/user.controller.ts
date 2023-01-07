@@ -25,18 +25,24 @@ export class UserController {
     }
     
     
+    
     @UseGuards(JwtTwoFactorGuard)
-    @Put('updateProfile')
+    @Put('updatePicture')
     @UseInterceptors(FileInterceptor('file'))
-    async updateUserProfile (
+    async updatePicture (
         @GetUserReq() userReq,
-        @Body() {bio, nickname, file}/*: UserDto*/,
-        // @UploadedFile() file: Express.Multer.File
+        @UploadedFile() file: Express.Multer.File
     ) {
-        // console.log(file);
-        // const user = await this.userService.getUserProfile(userReq.id);
-        // this.userService.uploadAndGetUrl(file);
-        return await this.userService.updateUserProfile(userReq, {bio, nickname, file});
+        return await this.userService.updateImgUrl(userReq, file);
+    }
+    
+    @UseGuards(JwtTwoFactorGuard)
+    @Put('updateUserInfo')
+    async updateUserInfo (
+        @GetUserReq() userReq,
+        @Body() {bio, nickname}: {bio:string, nickname:string}
+    ) {
+        return await this.userService.updateUserInfo(userReq, {bio, nickname});
     }
 
 

@@ -26,32 +26,34 @@ function App() {
 
   const [status, setStatus] = useRecoilState(Status);
   const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
-  const [profileData, setprofileData] = useRecoilState(ProfileData);
+  // const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
     retrieveToken();
-    retrieveProfile();
+    // retrieveProfile();
   }, [status]);
 
 
 
 
-  const retrieveProfile = () => {
-    Service.getProfile()
-      .then((response: any) => {
-        setprofileData(response.data)
-        console.log(profileData.twofactor);
+  // const retrieveProfile = () => {
+  //   Service.getProfile()
+  //     .then((response: any) => {
+  //       setprofileData(response.data)
+  //       console.log(profileData);
         
-        settwofaEnabled(profileData.twofactor)
-      })
-      .catch((e: Error) => {
-        console.log(e);
-      });
-  };
+  //       settwofaEnabled(profileData.twofactor)
+  //     })
+  //     .catch((e: Error) => {
+  //       console.log(e);
+  //     });
+  // };
   const retrieveToken = () => {
 
     Service.getToken()
       .then((response: any) => {
+        console.log(response);
+        
         setStatus(false);
       })
       .catch((e: Error) => {

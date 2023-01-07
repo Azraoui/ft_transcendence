@@ -14,10 +14,15 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
     const [code, setCode] = useState("");
     const [isOK, setOK] = useState(false);
 
+
     const Activate = (evt:FormEvent) => {
+        
         evt.preventDefault();
+
         Service.post2FQRCode(code).then((res: any) => {
             setOK(res.data.status);
+            setCode("");
+
             console.log(res.data);
         })
             .catch((e: Error) => {
@@ -29,7 +34,6 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
 
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
         const val = e.target.value;
         setCode(e.target.value)
     }
@@ -55,7 +59,7 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
                         <img src={`data:image/jpeg;charset=utf-8;base64,${src}`} alt="QRCode" ></img>
                     </div>
                     <form onSubmit={Activate}>
-                        <input required type="text" placeholder="Code" className="input w-full m-2 text-black" onChange={onInputChange} />
+                        <input required type="text" placeholder="Code" name="code" value={code} className="input w-full m-2 text-black" onChange={onInputChange} />
                         <div className="modal-action ">
                             {isOK ? Alert(): ""}
                             {isOK ? <label htmlFor="my-modal-2" className="btn">Close</label> : <button type="submit"  className="btn "> Verify & Activate</button >}

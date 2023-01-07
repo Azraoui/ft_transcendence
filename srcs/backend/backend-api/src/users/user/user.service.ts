@@ -25,7 +25,7 @@ export class UserService {
         {
             return {
                 id: user.id,
-                nickname: user.nickname,
+                nickName: user.nickname,
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -59,17 +59,28 @@ export class UserService {
         })
     }
 
-    async updateProfile(userId: number, {bio, nickname, pictureLink}) {
-        await this.prismaService.user.update({
-            where: {
-                id: userId,
-            },
-            data: {
-                nickname: nickname,
-                pictureLink: pictureLink,
-                bio: bio,
-            }
-        })
+    async updateProfile(userId: number, {bio, nickname}: {bio:string, nickname: string}) {
+            if (nickname) {
+            await this.prismaService.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    nickname: nickname,
+                }
+            })
+        }
+        if (bio)
+        {
+            await this.prismaService.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    bio: bio,
+                }
+            })
+        }
     }
 
 
@@ -77,17 +88,28 @@ export class UserService {
         return await this.storageProvider.upload(file, username, id);
     }
 
-    async updateUserProfile(
+        async updateImgUrl(
         userReq: User,
-        {bio, nickname, file}: UserDto,
-        // file: Express.Multer.File
+        file: Express.Multer.File
         ) {
-            let image = new Image();
-            image.src = file;
-            document.body.appendChild(image);
-            const user = await this.getUserProfile(userReq.id);
-            const pictureLink = await this.uploadAndGetUrl(image, user.username, user.id.toString());
-            await this.updateProfile(userReq.id, {bio, nickname, pictureLink});
+            if (file) {
+                const user = await this.getUserProfile(userReq.id);
+                const pictureLink = await this.uploadAndGetUrl(file, user.username, user.id.toString());
+                await this.prismaService.user.update({
+                    where: {
+                        id: userReq.id,
+                    },
+                    data: {
+                        pictureLink: pictureLink,
+                    }
+                })
+            }
         }
 
+        async updateUserInfo(
+        userReq: User,
+        {bio, nickname}: {bio:string, nickname:string}
+        ) {
+            return await this.updateProfile(userReq.id, {bio, nickname});
+        }
 }
