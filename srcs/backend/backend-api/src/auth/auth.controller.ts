@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { GetUserReq } from 'src/decorator';
+import { UserService } from 'src/users/user/user.service';
 import { AuthService } from './auth.service';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 import JwtTwoFactorGuard from './guard/jwt-two-factor.guard';
@@ -10,7 +11,8 @@ import { JwtAuthGuard } from './guard/jwt.guard';
 
 export class AuthController {
 
-    constructor (private authService: AuthService) {}
+    constructor (private authService: AuthService,
+        private userSerivce: UserService) {}
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get() // http://localhost:5000/api/auth/
@@ -39,6 +41,7 @@ export class AuthController {
         if (user)
         {
             res.clearCookie('TwoFacAuthToken')
+            this.userSerivce.update2FAValidationStatus(user.id, false);
             res.json({
                 logout: true,
             })
@@ -49,16 +52,8 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Get('status')
     async getStatus(@GetUserReq('id') userId) {
-        const user =  await this.authService.getUser(userId);
-        return {
-            id: user.id,
-            picture: user.pictureLink,
-            nickName: user.nickname,
-            bio: user.bio,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
-        }
+        // const user =  await this.authService.getUser(userId);
+        return await this.userSerivce.getUserProfile(userId);
     }
 
 }
