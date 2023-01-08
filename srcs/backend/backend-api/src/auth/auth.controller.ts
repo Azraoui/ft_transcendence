@@ -1,8 +1,9 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { GetUserReq } from 'src/decorator';
 import { UserService } from 'src/users/user/user.service';
 import { AuthService } from './auth.service';
+import { HttpExceptionFilter } from './filters';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
 import JwtTwoFactorGuard from './guard/jwt-two-factor.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
@@ -17,8 +18,9 @@ export class AuthController {
     @UseGuards(FortyTwoOAuthGuard)
     @Get() // http://localhost:5000/api/auth/
     async fortytwoAuth() {}
-
+    
     @UseGuards(FortyTwoOAuthGuard)
+    @UseFilters(new HttpExceptionFilter())
     @Get('42-redirect') // http://localhost:5000/api/auth/42-redirect/ 42 redirect url
     async fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
         await this.authService.fortytwoLogin(req.user);
