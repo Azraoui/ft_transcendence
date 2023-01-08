@@ -19,7 +19,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
                     refreshToken: string, profile: any,
                     done: VerifyCallback, ) : Promise<any>
     {
-        console.log("i was here");
         const { username, name, emails, _json } = profile;
         const user = {
             username: username,
