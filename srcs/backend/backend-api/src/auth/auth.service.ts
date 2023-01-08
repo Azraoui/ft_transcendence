@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaClientExtensionError, PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { AuthDto } from './dto';
@@ -25,19 +26,31 @@ export class AuthService {
         })
         if (!user)
         {
-            await this.prisma.user.create({
-                data: {
-                    nickname: uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }),
-                    username: apiData.username,
-                    firstName: apiData.firstName,
-                    lastName: apiData.lastName,
-                    email: apiData.email,
-                    pictureLink: apiData.pictureLink,
-                    accessToken: apiData.accessToken,
-                    refreshToken: apiData.refreshToken,
-                    bio: "I am Noob"
+            try {
+                await this.prisma.user.create({
+                    data: {
+                        nickname: uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }),
+                        username: apiData.username,
+                        firstName: apiData.firstName,
+                        lastName: apiData.lastName,
+                        email: apiData.email,
+                        pictureLink: apiData.pictureLink,
+                        accessToken: apiData.accessToken,
+                        refreshToken: apiData.refreshToken,
+                        bio: "I am Noob"
+                    }
+                })
+            }
+            catch (error) {
+                if (error instanceof PrismaClientKnownRequestError) {
+                    if (error.code === 'P2002') {
+                        throw new ForbiddenException (
+                            'Credentials Taken'
+                        )
+                    }
                 }
-            })
+                throw error
+            };
         }
     }
 

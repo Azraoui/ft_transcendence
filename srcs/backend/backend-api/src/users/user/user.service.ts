@@ -1,9 +1,10 @@
-import { Injectable, UploadedFile } from '@nestjs/common';
+import { ForbiddenException, Injectable, UploadedFile } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDto } from './dto';
 import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
 import { User } from '@prisma/client';
 import { database } from 'firebase-admin';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
 
@@ -131,12 +132,22 @@ export class UserService {
         }
 
         async addFriend(userId: number, friendId: number) {
-            await this.prismaService.friends.create({
-                data: {
-                    userId: userId,
-                    friendId: friendId
+            try {
+                await this.prismaService.friends.create({
+                    data: {
+                        userId: userId,
+                        friendId: friendId
+                    }
+                })
+            }
+            catch (error) {
+                if (error instanceof PrismaClientKnownRequestError) {
+                    if (error.code === 'P2002') {
+                        throw new ForbiddenException ('Credentials Taken');
+                    }
                 }
-            })
+                throw error
+            }
         }
 
         async update2FAValidationStatus(userId: number, status: boolean = false) {
