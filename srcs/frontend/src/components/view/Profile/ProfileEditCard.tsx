@@ -24,50 +24,52 @@ export function ProfileEditCard() {
 
   //e: ChangeEvent<HTMLInputElement>
 
-  const Save = async (evt:FormEvent) => {
-    // evt.preventDefault();
+  const Save = async (evt: FormEvent) => {
+    evt.preventDefault();
     const formData = new FormData();
-    formData.append("file", selectedFile);
-    const data = {
-      nickname: inputs.nickname,
-      bio:inputs.bio
+    if (selectedFile !== "") {
+      formData.append("file", selectedFile);
+
+      Service.updatePicture(formData).then((res: any) => {
+        window.location.reload();
+      }).catch((e: Error) => {
+        console.log(e);
+
+      })
     }
-    Service.updatePicture(formData).then((res:any)=>
-    {
+    if (inputs.nickname !== "" || inputs.bio !== "") {
+      const data = {
+        nickname: inputs.nickname,
+        bio: inputs.bio
+      }
 
-    }).catch((e:Error)=>
-    {
-      console.log(e);
-      
-    })
+      Service.updateUserInfo(data).then((res: any) => {
+        console.log(data);
+        window.location.reload();
 
-    Service.updateUserInfo(data).then((res:any)=>
-    {
-      console.log(data);
-      
+      }).catch((e: Error) => {
+        console.log(e);
 
-    }).catch((e:Error)=>
-    {
-      console.log(e);
-      
-    })
+      })
+    }
 
-}
 
-const handleFileSelect = (event:any) => {
-  console.log( event.target.files[0]);
-  setSelectedFile(event.target.files[0])
-}
-function handleChange(evt:any) {
-  const value = evt.target.value;
-  console.log(value);
-  
-  
-  setInputs({
-    ...inputs,
-    [evt.target.name]: value,
-  });
-}
+  }
+
+  const handleFileSelect = (event: any) => {
+    console.log(event.target.files[0]);
+    setSelectedFile(event.target.files[0])
+  }
+  function handleChange(evt: any) {
+    const value = evt.target.value;
+    console.log(value);
+
+
+    setInputs({
+      ...inputs,
+      [evt.target.name]: value,
+    });
+  }
   const onClickDisable2fa = () => {
     Service.turnOff2FQRCode().then((response: any) => {
       console.log(response.data);
@@ -101,20 +103,20 @@ function handleChange(evt:any) {
 
           <div className="mb-2 w-full">
             <label htmlFor="formFile" className="form-label inline-block mb-3">Choose your Image</label>
-            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleFileSelect}/>
+            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleFileSelect} />
             {/* <input className="form-control block w-full px-3 py-1.5 text-base font-normal    text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" /> */}
           </div>
           <div className="flex w-full justify-center">
             <div className="mb-3 w-full">
               <label htmlFor='exampleText0' className="form-label inline-block mb-3 ">NickName</label>
-              <input  type="text" placeholder={profileData.nickName} name='nickname' className="input input-bordered input-success text-gray-800 w-full" onChange={handleChange}/>
+              <input type="text" placeholder={profileData.nickName} name='nickname' className="input input-bordered input-success text-gray-800 w-full" onChange={handleChange} />
             </div>
           </div>
           <div className="flex w-full justify-center">
             <div className="mb-1 w-full">
               <label className="form-label inline-block mb-3 ">About You</label>
-              <textarea  name='bio'  className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
+              <textarea name='bio' className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
             </div>
           </div>
 

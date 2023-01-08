@@ -10,6 +10,9 @@ const getToken = () => {
 const getProfile = () => {
     return http.get("/user/profile", {withCredentials:true});
   };
+  const getAllUsers = () => {
+    return http.get("/user/getAllUsers", {withCredentials:true});
+  };
   const get2FQRCode = () => {
     return http.get("/2fa/generate", {withCredentials:true,responseType: "arraybuffer",} ,);
   };
@@ -62,7 +65,8 @@ const Service = {
   turnOff2FQRCode,
   Logout,
   updatePicture,
-  updateUserInfo
+  updateUserInfo,
+  getAllUsers
   // get,
   // create,
   // update,

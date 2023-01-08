@@ -6,8 +6,11 @@ all:
 	# git pull
 	docker-compose -f srcs/docker-compose.yml up --build -d
 migrate: 
-	./src/backend/backend-api/ npx prisma migrate dev 
-
+	cd srcs/backend/backend-api/ ; npx prisma migrate dev 
+backend: 
+	cd srcs/backend/backend-api/ ; npm run dev
+frontend: 
+	cd srcs/frontend ; npm run dev
 down:
 	docker-compose -f srcs/docker-compose.yml down  --remove-orphans
 

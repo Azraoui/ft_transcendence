@@ -12,7 +12,7 @@ CREATE TABLE "users" (
     "bio" TEXT,
     "twoFacAuthSecret" TEXT,
     "isTwoFacAuthEnabled" BOOLEAN NOT NULL DEFAULT false,
-    "isTwoFacAuthVerified" BOOLEAN NOT NULL,
+    "isTwoFacAuthVerified" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

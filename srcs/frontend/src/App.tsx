@@ -18,6 +18,7 @@ import BlockModal from './components/view/Modals/BlockModal'
 import { ProfileData } from './components/model/atoms/ProfileData'
 import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
 import TwoFA from './components/view/Login/TwoFA'
+import PageNotFound from './components/view/NotFound/PageNotFound'
 
 
 
@@ -69,7 +70,7 @@ function App() {
       
         status ? <Login />
           :
-          profileData.isTwoFacAuthEnabled ? <TwoFA/> : 
+          profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}
@@ -82,7 +83,9 @@ function App() {
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/profile/:id' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />
+                <Route path="*" element={<PageNotFound />} />
               </Routes>
             </div>
           </ div>

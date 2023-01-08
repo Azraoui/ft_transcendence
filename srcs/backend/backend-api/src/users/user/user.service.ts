@@ -122,6 +122,7 @@ export class UserService {
                     id: element.id,
                     picture: element.pictureLink,
                     nickName: element.nickname,
+                    username: element.username,
                     firstName: element.firstName,
                     lastName: element.lastName
                 }

@@ -8,7 +8,8 @@ import { Alert } from '../Modals/Confirm2FAModal';
 // target='_blank'
 
 function TwoFA() {
-  const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
+
 
 
   const [code, setCode] = useState("");
@@ -16,8 +17,9 @@ function TwoFA() {
     const Activate = (evt:FormEvent) => {
         evt.preventDefault();
         Service.post2FQRCode(code).then((res: any) => {
-          settwofaEnabled(false);
-            console.log(res.data);
+          // setprofileData({});
+            // console.log(res.data);
+            window.location.reload()
         })
             .catch((e: Error) => {
                 console.log(e);
