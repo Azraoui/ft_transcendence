@@ -18,6 +18,10 @@ import avtar from '../../../assets/avatar.jpeg'
 
 
 function UserCard({ data }: UserCardProps) {
+  const AddFriend = () =>
+  {
+    
+  }
   return (
 
 
@@ -28,8 +32,8 @@ function UserCard({ data }: UserCardProps) {
         <h5 className="mb-1 lg:text-xl text-sm text-center font-medium ">{data.firstName} {data.lastName}</h5>
         <span className="text-sm ">{data.nickName}</span>
         <div className="flex flex-col lg:flex-row mt-4  lg:space-x-2">
-          <a href="#" className="btn mb-1">Add friend</a>
-          <a href="#" className="btn ">View Profile</a>
+          <button onClick={AddFriend} className="btn mb-1">Add friend</button>
+          <button  className="btn ">View Profile</button>
         </div>
       </div>
     </div>

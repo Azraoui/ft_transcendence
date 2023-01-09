@@ -28,7 +28,9 @@ const getProfile = () => {
   const updateUserInfo = (data: {bio:string, nickname:string}) => {
     return http.put("/user/updateUserInfo", data, {withCredentials:true});
   };
-
+  const addFriend = () => {
+    return http.post("/user/addFriend", {withCredentials:true} );
+  };
 const updatePicture = async (file:FormData) => {
   try {
     
@@ -66,7 +68,8 @@ const Service = {
   Logout,
   updatePicture,
   updateUserInfo,
-  getAllUsers
+  getAllUsers,
+  addFriend
   // get,
   // create,
   // update,
