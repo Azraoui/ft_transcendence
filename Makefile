@@ -15,7 +15,7 @@ studio:
 	cd srcs/backend/backend-api/ ;  npx prisma studio
 pull :
 	 git add .
-	 git commit -m "mohamed: pulling"
+	 git commit -m "${USER}: pulling"
 	 git pull
 
 clean:

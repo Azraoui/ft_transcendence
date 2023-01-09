@@ -25,11 +25,14 @@ const getProfile = () => {
   const Logout = () => {
     return http.get("/auth/log-out", {withCredentials:true});
   };
+  const viewFriend = (id:number) => {
+    return http.get(`/user/getUserProfile/${id}`, {withCredentials:true});
+  };
   const updateUserInfo = (data: {bio:string, nickname:string}) => {
     return http.put("/user/updateUserInfo", data, {withCredentials:true});
   };
-  const addFriend = () => {
-    return http.post("/user/addFriend", {withCredentials:true} );
+  const addFriend = (id:number) => {
+    return http.post(`/user/addFriend/${id}`,{}, {withCredentials:true} );
   };
 const updatePicture = async (file:FormData) => {
   try {
@@ -69,7 +72,8 @@ const Service = {
   updatePicture,
   updateUserInfo,
   getAllUsers,
-  addFriend
+  addFriend,
+  viewFriend
   // get,
   // create,
   // update,

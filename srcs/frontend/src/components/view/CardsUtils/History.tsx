@@ -7,7 +7,7 @@ function History() {
      
         <div className='flex w-full flex-col '>
 
-            <h1 className='w-full font-bold sm:text-xl px-10 py-12'> History</h1>
+            <h1 className='w-full font-bold sm:text-xl px-10 py-12 text-center'> History</h1>
             <div className='w-full bg-[#242424] ring-2 ring-white overflow-x-auto h-[500px]  rounded-lg '>
                 <table className="w-full text-sm text-left ">
                     <thead className="text-xs text-white uppercase  bg-login-gradient">

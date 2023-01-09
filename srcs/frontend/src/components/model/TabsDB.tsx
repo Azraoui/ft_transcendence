@@ -23,3 +23,16 @@
     },
 
   ];
+
+
+  export const TabFriendProfileLinks = [
+    {
+      id: 0,
+      title: "Profile",
+    },
+    {
+      id: 1,
+      title: "History",
+    },
+
+  ];

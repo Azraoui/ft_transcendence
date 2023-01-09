@@ -19,6 +19,7 @@ import { ProfileData } from './components/model/atoms/ProfileData'
 import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
 import TwoFA from './components/view/Login/TwoFA'
 import PageNotFound from './components/view/NotFound/PageNotFound'
+import FriendProfile from './components/view/FriendProfile/FriendProfile'
 
 
 
@@ -83,7 +84,7 @@ function App() {
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
-                <Route path='/profile/:id' element={<Profile />} />
+                <Route path='/profile/:id' element={<FriendProfile />} />
                 <Route path='/messages' element={<Messages />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>

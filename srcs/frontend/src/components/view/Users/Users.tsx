@@ -15,6 +15,7 @@ function Users() {
     nickName:"",
     username:"",
     picture:"",
+    bio:"",
     active:"off"
   }])
   useEffect(() => {

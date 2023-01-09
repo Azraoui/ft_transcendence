@@ -1,11 +1,11 @@
 import React from 'react'
 
-import Card from './FriendCard'
+import Card from '../CardsUtils/FriendCard'
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 import junkData from '../../model/ChannelDB.json'
 import AddChannelModal from '../Modals/AddChannelModal';
-import ChannelCard from './ChannelCard';
+import ChannelCard from '../CardsUtils/ChannelCard';
 
 
 function ChannelList(my_message: any) {
@@ -16,7 +16,7 @@ function ChannelList(my_message: any) {
             <div className="flex items-center justify-between mb-4">
                 <span className='flex items-center justify-between w-full'>
                     <h5 className="text-xl font-bold leading-none ">Channels</h5>
-                    <label htmlFor="my-modal-1" ><PlusIcon className="header-icon"/></label>
+                    <label htmlFor="my-modal-1" ><PlusIcon className="header-icon Add channel"/></label>
                 </span>
 
             </div>
