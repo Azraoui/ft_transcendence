@@ -4,7 +4,7 @@ import { clearInterval } from 'timers';
 import { GameInfo } from './utils/gameinfo';
 
 @Injectable()
-export class FirstService {
+export class GameService {
   constructor() {}
   handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[]): void 
   {

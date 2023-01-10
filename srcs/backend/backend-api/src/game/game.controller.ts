@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { FirstService } from './first.service';
+import { GameService } from './game.service';
 
 @Controller()
-export class AppController {
-  constructor(private readonly appService: FirstService) {}
+export class GameController {
+  constructor(private readonly gameService: GameService) {}
 
   @Get('/Coordinates')
   getHello(): string {

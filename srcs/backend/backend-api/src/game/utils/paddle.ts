@@ -29,6 +29,6 @@ export class Paddle {
 
     public reset(x: number, y: number): void {
       this.x = this.x;
-      this.y = this.y;
+      this.y = this.y;``
     }
   }
