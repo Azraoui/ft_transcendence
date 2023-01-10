@@ -1,7 +1,6 @@
-
+# 1337
 
 all:
-	
 	docker-compose -f srcs/docker-compose.yml up --build -d
 migrate: 
 	cd srcs/backend/backend-api/ ; npx prisma migrate dev 
