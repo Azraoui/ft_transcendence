@@ -1,10 +1,10 @@
 import React from 'react'
+import Acheivements from '../CardsUtils/Acheivements'
+import ProfileImage from '../CardsUtils/ProfileImage'
 import {PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRecoilState } from 'recoil';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
-import Acheivements from '../CardsUtils/Acheivements';
-import ProfileImage from '../CardsUtils/ProfileImage';
 
 
 function ProfileCard() {
@@ -19,7 +19,7 @@ function ProfileCard() {
 
                 <PencilSquareIcon  onClick={() => setIsMe(false)} className='header-icon hover:text-[#DA00FE] '/>
                 </div>
-                <ProfileImage avatar={profileData.picture} />
+                <ProfileImage />
               
 
                 <h1 className='font-bold text-center w-full overflow-auto'>{profileData.firstName} {profileData.lastName}</h1>

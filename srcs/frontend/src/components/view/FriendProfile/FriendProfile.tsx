@@ -4,26 +4,29 @@ import Service from '../../controller/services'
 import { AcheivementsLinks } from '../../model/Acheivements'
 import { EditProfile } from '../../model/atoms/EditProfile'
 import { ProfileData } from '../../model/atoms/ProfileData'
-import Stats from '../CardsUtils/Stats'
+import Acheivements from '../CardsUtils/Acheivements'
+import { AcheivementCard, StatsCard } from '../CardsUtils/Cards'
 import History from '../CardsUtils/History'
-
 import ProfileCard from './ProfileCard'
-import { ProfileEditCard } from './ProfileEditCard'
+import Stats from '../CardsUtils/Stats'
 
-function Profile() {
+function FriendProfile() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
   // const [profileData, setprofileData] = useRecoilState(ProfileData);
-  // useEffect(() => {
-  //   retrieveProfile();
-  // }, []);
+  useEffect(() => {
+  
+   console.log(window.location.pathname.split("/").pop());
+   
+    // retrieveFriendProfile();
+  }, []);
 
-  // const retrieveProfile = () => {
-  //   Service.getProfile()
+  // const retrieveFriendProfile = () => {
+  //   Service.viewFriend(5)
   //     .then((response: any) => {
-  //       setprofileData(response.data)
-  //       // console.log(response.data);
+  //       console.log(response.data);
   //     })
   //     .catch((e: Error) => {
+  //       console.log(e);
   //     });
   // };
   return (
@@ -32,11 +35,9 @@ function Profile() {
         <Stats />
         <History />
       </div>
-      {
-        isMe ? <ProfileCard /> : <ProfileEditCard />
-      }
+        <ProfileCard /> 
     </div>
   )
 }
 
-export default Profile
+export default FriendProfile

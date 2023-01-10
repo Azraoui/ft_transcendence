@@ -3,9 +3,9 @@ import { useRecoilState } from 'recoil';
 import Service from '../../controller/services';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
+import Acheivements from '../CardsUtils/Acheivements';
+import ProfileImage from '../CardsUtils/ProfileImage';
 import Confirm2FAModal from '../Modals/Confirm2FAModal';
-import Acheivements from './Acheivements'
-import ProfileImage from './ProfileImage'
 // import {Buffer} from 'buffer';
 
 
@@ -98,7 +98,7 @@ export function ProfileEditCard() {
   return (
     <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
       <div className='flex flex-col items-center justify-between ring-2 ring-gray-600 ring-offset-1 rounded-md px-2 sm:px-12 pt-12 pb-6 shadow-lg shadow-slate-700 w-3/4 space-y-8' >
-        <ProfileImage />
+        <ProfileImage  avatar={profileData.picture} />
         <form className="mb-2 w-full" onSubmit={Save}>
 
           <div className="mb-2 w-full">
