@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Friends } from '../../model/chatDB'
-import FriendCard from '../CardsUtils/FriendCard'
+import FriendCard from '../Utils/FriendCard'
 
 import junkData from '../../model/ChatDB.json'
 

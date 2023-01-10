@@ -1,11 +1,11 @@
 import React from 'react'
 
-import Card from '../CardsUtils/FriendCard'
+import Card from '../Utils/FriendCard'
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 import junkData from '../../model/ChannelDB.json'
 import AddChannelModal from '../Modals/AddChannelModal';
-import ChannelCard from '../CardsUtils/ChannelCard';
+import ChannelCard from '../Utils/ChannelCard';
 
 
 function ChannelList(my_message: any) {

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import Service from '../../controller/services';
 import { TabFriendProfileLinks } from '../../model/TabsDB';
-import Acheivements from '../CardsUtils/Acheivements';
-import History from '../CardsUtils/History';
-import ProfileImage from '../CardsUtils/ProfileImage';
-import Stats from '../CardsUtils/Stats';
+import Acheivements from '../Utils/Acheivements';
+import History from '../Utils/History';
+import ProfileImage from '../Utils/ProfileImage';
+import Stats from '../Utils/Stats';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function FriendProfileModal({ id }: { id: number }) {
+
+  
 
     const [data, setData] = useState({
         firstName: "",
@@ -37,6 +41,7 @@ function FriendProfileModal({ id }: { id: number }) {
     };
     return (
         <div>
+           
             <input type="checkbox" id="my-modal-4" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box relative bg-black">
@@ -46,11 +51,10 @@ function FriendProfileModal({ id }: { id: number }) {
                         {TabFriendProfileLinks.map((item) => (
                             <div key={item.id} onClick={() => { setTab(item.id) }} className={`btn ${tab === item.id && "bg-tab-gradient"}`}>{item.title}</div>
                         ))}
-                        
                     </div>
                     {
                         tab === 0 ?
-                        
+
                             <div className='flex flex-col items-center justify-center space-y-4'>
                                 {/* <hr className=' bg-slate-400 w-full' /> */}
 
