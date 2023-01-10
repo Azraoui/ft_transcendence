@@ -3,9 +3,12 @@ import { useRecoilState } from 'recoil';
 import Service from '../../controller/services';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
-import Acheivements from '../CardsUtils/Acheivements';
-import ProfileImage from '../CardsUtils/ProfileImage';
+import Acheivements from '../Utils/Acheivements';
+import ProfileImage from '../Utils/ProfileImage';
 import Confirm2FAModal from '../Modals/Confirm2FAModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { error_alert, success_alert } from '../Utils/Alerts';
 // import {Buffer} from 'buffer';
 
 
@@ -73,8 +76,10 @@ export function ProfileEditCard() {
   const onClickDisable2fa = () => {
     Service.turnOff2FQRCode().then((response: any) => {
       console.log(response.data);
+      success_alert("Your 2FA has been disabled Successfuly")
       set2F(false);
     }).catch((e: Error) => {
+      error_alert()
       console.log(e);
     })
   };
@@ -97,13 +102,14 @@ export function ProfileEditCard() {
 
   return (
     <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
+            <ToastContainer />
       <div className='flex flex-col items-center justify-between ring-2 ring-gray-600 ring-offset-1 rounded-md px-2 sm:px-12 pt-12 pb-6 shadow-lg shadow-slate-700 w-3/4 space-y-8' >
         <ProfileImage  avatar={profileData.picture} />
         <form className="mb-2 w-full" onSubmit={Save}>
 
           <div className="mb-2 w-full">
             <label htmlFor="formFile" className="form-label inline-block mb-3">Choose your Image</label>
-            <input name='file' type="file" className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleFileSelect} />
+            <input name='file' type="file" accept='image/*'  className="file-input file-input-bordered file-input-accent w-full text-gray-700 " onChange={handleFileSelect} />
             {/* <input className="form-control block w-full px-3 py-1.5 text-base font-normal    text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" id="formFile" /> */}
           </div>

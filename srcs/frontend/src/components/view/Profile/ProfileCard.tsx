@@ -3,8 +3,8 @@ import {PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRecoilState } from 'recoil';
 import { EditProfile } from '../../model/atoms/EditProfile';
 import { ProfileData } from '../../model/atoms/ProfileData';
-import Acheivements from '../CardsUtils/Acheivements';
-import ProfileImage from '../CardsUtils/ProfileImage';
+import Acheivements from '../Utils/Acheivements';
+import ProfileImage from '../Utils/ProfileImage';
 
 
 function ProfileCard() {

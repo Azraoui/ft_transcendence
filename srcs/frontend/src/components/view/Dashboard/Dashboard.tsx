@@ -13,6 +13,7 @@ function Dashboard() {
 
   return (
     <main className='col-span-10 h-[100%] xl:h-[calc(100vh-88px)]   sm:px-12  px-8 w-full  flex flex-col items-start justify-start space-y-12 pt-10'>
+    
       <section className='flex w-full flex-col px-8 sm:px-14   space-y-16'>
         <h1 className=' text-xl lg:text-3xl font-extrabold text-gradient'>Welcome, <p>{profileData.firstName} {profileData.lastName}</p>  </h1>
         <div className='rounded-lg  px-8 sm:px-12 lg:ml-8 ring-1 ring-white flex items-center justify-around h-72 bg-gradient-to-b from-[#670196] to-[#DA00FE] ' >
