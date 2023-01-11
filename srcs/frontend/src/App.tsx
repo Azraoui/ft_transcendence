@@ -30,6 +30,7 @@ function App() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
+    console.log(import.meta.env.VITE_IP) 
     retrieveToken();
     // retrieveProfile();
   }, [status]);

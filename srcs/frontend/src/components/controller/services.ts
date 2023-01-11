@@ -39,7 +39,7 @@ const updatePicture = async (file:FormData) => {
     
     const response = await axios({
       method: "put",
-      url: "http://10.11.6.11:5000/api/user/updatePicture",
+      url:`http://${import.meta.env.VITE_IP}:5000/api/user/updatePicture`,
       data: file,
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials:true,

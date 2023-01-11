@@ -25,7 +25,7 @@ function Login() {
   //       console.log(e);
   //     });
   // };
-  const link = "http://10.11.6.11:5000/api/auth"
+  const link = `http://${import.meta.env.VITE_IP}:5000/api/auth`
 
   return (
     <div className='flex items-center justify-center w-[100vw] h-[100vh] bg-login-gradient'>

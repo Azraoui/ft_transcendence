@@ -24,7 +24,7 @@ async function bootstrap() {
   // -----------
 
   app.enableCors({
-    origin: process.env.HOST_MACHINE_URL + ':5173',
+    origin:  'http://localhost:5173',
     credentials: true,
   });
   await app.listen(5000);
