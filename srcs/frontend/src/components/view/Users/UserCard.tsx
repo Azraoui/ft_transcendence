@@ -32,14 +32,15 @@ function UserCard({ data }: UserCardProps) {
       console.log(e);
     })
   }
-  const viewFriend = `http://localhost:5173/profile/${data.id}`
-
+  console.log("================>> ",data.id);
+  
   return (
 
     <div className="w-full max-w-sm h-72 bg-[#242424] border border-gray-200 mb-10 rounded-lg shadow-md">
        {/** ToastContainer required for the notification to be shown*/}
        <ToastContainer />
       {/** Friend Modal*/}
+    
       <FriendProfileModal id={data.id} />
       <div className="flex flex-col items-center py-4">
         <div className="avatar relative mb-3">
