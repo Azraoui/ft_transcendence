@@ -15,4 +15,5 @@ export class GameController {
     //   root: './gameFront'
     // })
   }
+
 }

@@ -1,5 +1,6 @@
 import { Controller, Get, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { join } from 'path';
 import { GetUserReq } from 'src/decorator';
 import { UserService } from 'src/users/user/user.service';
 import { AuthService } from './auth.service';
@@ -16,12 +17,12 @@ export class AuthController {
         private userSerivce: UserService) {}
 
     @UseGuards(FortyTwoOAuthGuard)
-    @Get() // http://localhost:5000/api/auth/
+    @Get() // http://10.11.6.11:5000/api/auth/
     async fortytwoAuth() {}
     
     @UseGuards(FortyTwoOAuthGuard)
     @UseFilters(new HttpExceptionFilter())
-    @Get('42-redirect') // http://localhost:5000/api/auth/42-redirect/ 42 redirect url
+    @Get('42-redirect') // http://10.11.6.11:5000/api/auth/42-redirect/ 42 redirect url
     async fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
         await this.authService.fortytwoLogin(req.user);
         const user = await this.authService.getUser(undefined, req.user.email);
@@ -30,9 +31,9 @@ export class AuthController {
             // const access_token = await this.authService.signToken(user.id, user.username);
             const access_token = await this.authService.getCookieWithJwtAccessToken(user.id);
             res.cookie('TwoFacAuthToken', access_token, {httpOnly: true});
-            res.redirect(301, "http://localhost:5173/profile");
+            res.redirect(301, process.env.HOST_MACHINE_URL + ':5173/profile');
         }
-        else res.redirect(301, "http://localhost:5173");
+        else res.redirect(301, process.env.HOST_MACHINE_URL + ':5173');
         res.end();
     }
 

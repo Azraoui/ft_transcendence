@@ -93,8 +93,10 @@ window.addEventListener("resize", (event)=>{
 
 })
 
+// get query string
+//console.log('url', window.location.search);
 // ==================+Connection to server+====================== 
-const socket = io('http://localhost:80', {autoConnect: false, autoReconnect:false, transports: ['websocket'], query: {role:"player"}});
+const socket = io(process.env.HOST_MACHINE_URL + ':80', {autoConnect: false, autoReconnect:false, transports: ['websocket'], query: {role:"player"}});
 // socket.on("connect_error", (error) => {console.log("Connection error occured: ", error);});
 socket.on("connect", () => {console.log("Connection to server established");});
 // socket.on("disconnect", (reason) => {console.log(`Disconnection from server: ${reason}`);
