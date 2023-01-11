@@ -32,7 +32,7 @@ function UserCard({ data }: UserCardProps) {
       console.log(e);
     })
   }
-  const viewFriend = `http://localhost:5173/profile/${data.id}`
+  const viewFriend = `http://10.11.6.11:5173/profile/${data.id}`
 
   return (
 
