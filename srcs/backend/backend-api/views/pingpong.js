@@ -142,7 +142,6 @@ function drawNet()
         rectangle(net.x, net.y + i, net.width, net.height, net.color);
 }
 
-
 /* For keyboard event */
 document.addEventListener('keydown', (event) =>
 {

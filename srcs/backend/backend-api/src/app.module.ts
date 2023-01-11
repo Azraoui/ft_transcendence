@@ -17,9 +17,16 @@ import { GameModule } from './game/game.module';
 import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { GameGateway } from './game/game.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [ AuthModule,
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'views'),
+      exclude: ['/api*'],
+    }),
+    AuthModule,
     ConfigModule.forRoot({
     isGlobal: true,  }),
     PrismaModule,

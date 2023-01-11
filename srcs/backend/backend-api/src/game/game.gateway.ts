@@ -22,4 +22,5 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect
   async handleDisconnect(client: Socket) {
     await this.gameService.handleDisconnection(this.wss, client, this.clients);
 }
+
 }
