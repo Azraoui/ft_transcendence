@@ -68,7 +68,6 @@ export class GameService {
       }
     }
 }
-  
 
   joinPlayersToGame(first: Socket, second: Socket, wss: Server, rooms: string[])
   {
@@ -144,7 +143,8 @@ export class GameService {
       // Filter queue from client
       queue.filter(clientInQueue => clientInQueue == client);
       // If client is already in game
-      if (client.data.gameIntervalId.state == "on")
+      // if (client.data.gameIntervalId && client.data.gameIntervalId.state == "on")
+      if (!client.data.gameIntervalId)
       {
           clearInterval(client.data.gameIntervalId);
           wss.to(client.data.roomname).emit("OpponentLeft");
@@ -156,6 +156,5 @@ export class GameService {
       }
     }
   }
-
 
 }
