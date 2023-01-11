@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil';
+import { ActiveTabState } from '../../model/atoms/ActiveTabState';
 import { TabMessagesLinks } from '../../model/TabsDB';
 import Channel from './Channel';
 import Chat from './Chat';
 
 function Messages() {
   const [activeTab, setActiveTab] = useState(0);
-
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
+  useEffect(()=>
+  {
+    setActiveNavItem(2)
+  })
   return (
     <div className='col-span-10 h-[100%] xl:h-[calc(100vh-88px)] px-12 pt-12 pb-6 w-full scrollbar-hide flex flex-col items-start justify-start space-y-12 '>
       <div className="flex flex-col w-full space-y-16">

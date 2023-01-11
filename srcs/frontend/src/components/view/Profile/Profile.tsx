@@ -9,9 +9,15 @@ import History from '../Utils/History'
 
 import ProfileCard from './ProfileCard'
 import { ProfileEditCard } from './ProfileEditCard'
+import { ActiveTabState } from '../../model/atoms/ActiveTabState'
 
 function Profile() {
   const [isMe, setIsMe] = useRecoilState(EditProfile);
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
+  useEffect(()=>
+  {
+    setActiveNavItem(1)
+  })
   // const [profileData, setprofileData] = useRecoilState(ProfileData);
   // useEffect(() => {
   //   retrieveProfile();

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import Service from '../../controller/services';
+import { ActiveTabState } from '../../model/atoms/ActiveTabState';
 import { ProfileData } from '../../model/atoms/ProfileData';
 import { UsersDB } from '../../model/Users'
 import UserCard from './UserCard';
 
 function Users() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
+  useEffect(()=>
+  {
+    setActiveNavItem(3)
+  })
   const [Users, setUsers] = useState([{
     firstName : "",
     id: 0,

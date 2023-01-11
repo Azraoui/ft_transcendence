@@ -28,8 +28,7 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
                 error_alert()
             setOK(res.data.status);
             setCode("");
-
-            console.log(res.data);
+            // window.location.reload()
         })
             .catch((e: Error) => {
                 error_alert()
