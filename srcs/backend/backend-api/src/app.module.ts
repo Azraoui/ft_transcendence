@@ -20,6 +20,7 @@ import { GameGateway } from './game/game.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ChatGateWay } from './chat/chat.gateway';
+import { ChatService } from './chat/chat.service';
 
 @Module({
   imports: [
@@ -49,7 +50,8 @@ import { ChatGateWay } from './chat/chat.gateway';
               FirebaseStorageProvider,
               GameService,
               GameGateway,
-              ChatGateWay
+              ChatGateWay,
+              ChatService
             ],
 })
 

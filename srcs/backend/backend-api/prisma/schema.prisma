@@ -41,3 +41,26 @@ model Friends {
 
   @@map("friends")
 }
+
+model DirecteMsg {
+  id Int @id @default(autoincrement())
+
+  senderId Int
+  roomName String @unique
+
+  text String
+
+  @@map("directMsg")
+}
+
+
+model Room {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  owner Int?
+  admins Int[]
+  members Int[]
+
+  @@map("room")
+}
