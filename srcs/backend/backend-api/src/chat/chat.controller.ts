@@ -33,5 +33,4 @@ export class ChatController {
     createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
         return this.chatService.createRoom(userId, body);
     }
-
 }

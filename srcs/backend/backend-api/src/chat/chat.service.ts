@@ -210,6 +210,32 @@ export class ChatService {
                     }
                 })
             }
+            if (room.admins.find((id) => id === userId))
+            {
+                await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        admins: {
+                            set: room.members.filter((id) => id !== userId)
+                        }
+                    }
+                })
+            }
+            if (room.owner == userId)
+            {
+                await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        owner: {
+                            set: undefined
+                        }
+                    }
+                })
+            }
         }
     }
 
