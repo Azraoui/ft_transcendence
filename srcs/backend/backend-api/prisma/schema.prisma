@@ -62,7 +62,9 @@ model Room {
   admins Int[]
   members Int[]
   blocked Int[]
-  Muteds Int[]
+  muteds Int[]
+  type String @default("private")
+  
 
   messages Messages[]
 
