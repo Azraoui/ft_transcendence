@@ -1,44 +1,37 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { GetUserReq } from 'src/decorator';
+import { RoomDto } from './dto';
+import { ChatService } from './chat.service';
 
 @Controller('chat')
 
 export class ChatController {
     constructor(
-        private readonly prismaService: PrismaService
+        private readonly chatService: ChatService
     ) { }
 
     // this route for get all old messages from room
     @UseGuards(JwtTwoFactorGuard)
     @Get('getOldMsg/:id')
-    async getOldMsg(@Param('id') id) {
-        
-        const messages = await this.prismaService.messages.findMany({
-            where: {
-                roomId: id
-            }
-        })
-        console.log(`messages => ${messages}`);
-        return messages;
+    getOldMsg(@Param('id') id) {
+        return this.chatService.findAllMsgs(id);
     }
     
     
     // This route for geting all (public, protected, private) rooms with userId
     @UseGuards(JwtTwoFactorGuard)
     @Get('getAllRooms')
-    async getAllRooms(userId: number) {
-        const rooms = await this.prismaService.room.findMany({
-            where: {
-                members: {
-                    hasEvery: [userId]
-                }
-            }
-        })
-        console.log(`rooms => ${rooms}`);
-        return rooms;
+    getAllRooms(@GetUserReq('id') userId: number) {
+        return this.chatService.getAllRooms(userId);
     }
-
-
+    
+    
+    // This route for create new room
+    @UseGuards(JwtTwoFactorGuard)
+    @Post('createRoom')
+    createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
+        return this.chatService.createRoom(userId, body);
+    }
 
 }

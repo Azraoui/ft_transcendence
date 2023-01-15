@@ -62,9 +62,9 @@ model Room {
   admins Int[]
   members Int[]
   blocked Int[]
-  muteds Int[]
+  muteds MutedUser[]
   type String @default("private")
-  
+  hash String?
 
   messages Messages[]
 
@@ -74,6 +74,7 @@ model Room {
 model MutedUser {
   id Int @id @default(autoincrement())
 
+  room Room @relation(fields: [roomId], references: [id])
   roomId Int
   userId Int
   time DateTime
