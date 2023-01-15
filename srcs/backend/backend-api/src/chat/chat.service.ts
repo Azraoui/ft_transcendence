@@ -10,7 +10,9 @@ export class ChatService {
         
     }
 
-    findAllMsgs() {
-
+    findAllMsgs(roomId: number) {
+        console.log('find all messages <findAllMsgs>');
+        return {name: 'abdellah', text: "salamo alaykom"}
+        return ['hello', 'how are you', 'my name abdellah'];
     }
 }

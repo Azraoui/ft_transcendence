@@ -10,7 +10,9 @@ import { ChatService } from "./chat.service";
 
 @WebSocketGateway({
     cors: {
-        origin: process.env.HOST_MACHINE_URL + ':5173'
+        // origin: process.env.HOST_MACHINE_URL + ':5173'
+        origin: 'http://localhost:5173'
+        // origin: '*'
     }
 })
 export class ChatGateWay {
@@ -25,5 +27,10 @@ export class ChatGateWay {
     
     }
 
+    @SubscribeMessage('findAllMessages')
+    findAll() {
+        console.log("I Was Here (;");
+        // return this.chatService.findAllMsgs(roomId);
+    }
 
 }

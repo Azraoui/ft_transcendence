@@ -54,7 +54,6 @@ model Messages {
   @@map("messages")
 }
 
-
 model Room {
   id Int @id @default(autoincrement())
 
@@ -62,8 +61,20 @@ model Room {
   owner Int?
   admins Int[]
   members Int[]
+  blocked Int[]
+  Muteds Int[]
 
   messages Messages[]
 
   @@map("room")
+}
+
+model MutedUser {
+  id Int @id @default(autoincrement())
+
+  roomId Int
+  userId Int
+  time DateTime
+
+  @@map("mutedUser")
 }
