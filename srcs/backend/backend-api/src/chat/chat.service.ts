@@ -9,8 +9,15 @@ import { MAXIMUM_TEST_PHONE_NUMBERS } from 'firebase-admin/lib/auth/auth-config'
 export class ChatService {
     constructor (private prismaService: PrismaService) {}
 
-    createMsg(msgData: ChatDto) {
-        
+    async createMsg(msgData: ChatDto, userId: number) {
+        const messages = await this.prismaService.messages.create({
+            data: {
+                senderId: userId,
+                text: msgData.text,
+                roomId: msgData.roomId
+            }
+        })
+        return messages;
     }
 
     async findAllMsgs(roomId: number) {
