@@ -26,7 +26,7 @@ export class ChatController {
         return this.chatService.getAllRooms(userId);
     }
     
-    
+
     // This route for create new room
     @UseGuards(JwtTwoFactorGuard)
     @Post('createRoom')

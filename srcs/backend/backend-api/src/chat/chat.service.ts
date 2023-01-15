@@ -1,23 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
-import { MAXIMUM_TEST_PHONE_NUMBERS } from 'firebase-admin/lib/auth/auth-config';
-
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
 export class ChatService {
     constructor (private prismaService: PrismaService) {}
 
     async createMsg(msgData: ChatDto, userId: number) {
-        const messages = await this.prismaService.messages.create({
-            data: {
-                senderId: userId,
-                text: msgData.text,
-                roomId: msgData.roomId
+        try {
+            const messages = await this.prismaService.messages.create({
+                data: {
+                    senderId: userId,
+                    text: msgData.text,
+                    roomId: msgData.roomId
+                }
+            })
+            return messages;
+        }
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
+                }
             }
-        })
-        return messages;
+            throw error
+        }
     }
 
     async findAllMsgs(roomId: number) {
@@ -67,28 +76,38 @@ export class ChatService {
         if (roomData.type == "protected")
             hash = await argon2.hash(roomData.password);
 
-        const newRoom = await this.prismaService.room.create({
-            data: {
-                name: roomData.name,
-                type: roomData.type,
-                hash: hash,
-                owner: userId,
-            }
-        })
-        if (newRoom) {
-            const room = await this.prismaService.room.update({
-                where: {
-                    id: newRoom.id,
-                },
+        try {
+            const newRoom = await this.prismaService.room.create({
                 data: {
-                    members: {
-                        push: userId
-                    }
+                    name: roomData.name,
+                    type: roomData.type,
+                    hash: hash,
+                    owner: userId,
                 }
             })
-            return room;
+            if (newRoom) {
+                const room = await this.prismaService.room.update({
+                    where: {
+                        id: newRoom.id,
+                    },
+                    data: {
+                        members: {
+                            push: userId
+                        }
+                    }
+                })
+                return room;
+            }
+            return newRoom;
         }
-        return newRoom;
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
+                }
+            }
+            throw error
+        }
     }
 
     async addAdmin(roomId: number, userId: number, newAdminId: number) {
@@ -244,6 +263,32 @@ export class ChatService {
                 })
             }
         }
+    }
+
+    async validatePermission(userId: number, roomId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: userId
+            },
+            include: {
+                muteds: true
+            }
+        })
+        if (room) {
+            if (room.members.find((id) => id === userId))
+            {
+                if (room.muteds.find((userId) => userId === userId))
+                {
+
+                }
+            }
+            throw new UnauthorizedException(
+                `You don't have right to send message in this channel`
+            )
+        }
+        throw new NotFoundException(
+            `Can't find Room with this id:${roomId}`
+        );
     }
 
 }
