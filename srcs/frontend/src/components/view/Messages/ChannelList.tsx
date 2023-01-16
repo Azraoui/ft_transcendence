@@ -24,7 +24,6 @@ function ChannelList(my_message: any) {
         {
             console.log(res.data);
             setData(res.data)
-            console.log("===> ", data[0].id);
         }).catch(()=>
         {
 
@@ -41,14 +40,16 @@ function ChannelList(my_message: any) {
                 </span>
 
             </div>
+            <div className='flex flex-col-reverse'>
 
             {
-            //    data.map((item) =>
-            //     (
-            //         <ChannelCard key={item.id} data={item} />
-
-            //     ))
-            }
+                data.map((item) =>
+                (
+                    <ChannelCard key={item.id} data={item} />
+                    
+                    ))
+                }
+            </div>
 
 
 
