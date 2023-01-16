@@ -1,16 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
-import { MAXIMUM_TEST_PHONE_NUMBERS } from 'firebase-admin/lib/auth/auth-config';
-
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import * as moment from 'moment';
 
 @Injectable()
 export class ChatService {
     constructor (private prismaService: PrismaService) {}
 
-    createMsg(msgData: ChatDto) {
-        
+    async createMsg(msgData: ChatDto, userId: number) {
+        try {
+            const messages = await this.prismaService.messages.create({
+                data: {
+                    senderId: userId,
+                    text: msgData.text,
+                    roomId: msgData.roomId
+                }
+            })
+            return messages;
+        }
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
+                }
+            }
+            throw error
+        }
     }
 
     async findAllMsgs(roomId: number) {
@@ -48,9 +65,13 @@ export class ChatService {
                         ]
                     }
                 ]
+            },
+            select: {
+                id: true,
+                name: true,
+                type: true
             }
         })
-        console.log(`rooms => ${rooms}`);
         return rooms;
     }
 
@@ -60,28 +81,38 @@ export class ChatService {
         if (roomData.type == "protected")
             hash = await argon2.hash(roomData.password);
 
-        const newRoom = await this.prismaService.room.create({
-            data: {
-                name: roomData.name,
-                type: roomData.type,
-                hash: hash,
-                owner: userId,
-            }
-        })
-        if (newRoom) {
-            const room = await this.prismaService.room.update({
-                where: {
-                    id: newRoom.id,
-                },
+        try {
+            const newRoom = await this.prismaService.room.create({
                 data: {
-                    members: {
-                        push: userId
-                    }
+                    name: roomData.name,
+                    type: roomData.type,
+                    hash: hash,
+                    owner: userId,
                 }
             })
-            return room;
+            if (newRoom) {
+                const room = await this.prismaService.room.update({
+                    where: {
+                        id: newRoom.id,
+                    },
+                    data: {
+                        members: {
+                            push: userId
+                        }
+                    }
+                })
+                return room;
+            }
+            return newRoom;
         }
-        return newRoom;
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
+                }
+            }
+            throw error
+        }
     }
 
     async addAdmin(roomId: number, userId: number, newAdminId: number) {
@@ -139,7 +170,7 @@ export class ChatService {
             },
         })
         if (findRoom) {
-            if (findRoom.owner === userId || findRoom.admins.find((id) => id === userId))
+            if (findRoom.owner === userId && userId !== memberId)
             {
                 const room = await this.prismaService.room.update({
                     where: {
@@ -156,9 +187,28 @@ export class ChatService {
                 })
                 return room;
             }
+            else if (findRoom.admins.find((id) => id === userId) && userId !== findRoom.owner && !findRoom.admins.find((id) => id === memberId)) {
+                const room = await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        blocked: {
+                            push: memberId
+                        },
+                        members: {
+                            set: findRoom.members.filter((id) => id !== memberId)
+                        }
+                    }
+                })
+                return room;
+            }
+            else
+                throw new UnauthorizedException(`You don't have the permission to block this user`);
         }
         return findRoom;
     }
+
 
     async muteMember(roomId: number, userId: number, memberId: number, muteTime) {
         const findRoom = await this.prismaService.room.findUnique({
@@ -237,6 +287,62 @@ export class ChatService {
                 })
             }
         }
+    }
+
+    // this method for validate send messages permission
+    async validatePermission(userId: number, roomId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId
+            },
+            include: {
+                muteds: true
+            }
+        })
+        if (room) {
+            if (room.members.find((id) => id === userId))
+            {
+                if (room.blocked.find((id) => id === userId)) {
+                    return false;
+                }
+                const mutedUser = room.muteds.find((userId) => userId === userId)
+                if (mutedUser)
+                {
+                    const time = moment().format('YYYY-MM-DD hh:mm:ss');
+                    if (time >= mutedUser.time)
+                    {
+                        await this.prismaService.mutedUser.delete({
+                            where: {
+                                id: userId,
+                            }
+                        })
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            throw new UnauthorizedException(
+                `You don't have right to send message in this channel`
+            )
+        }
+        throw new NotFoundException(
+            `Can't find Room with this id:${roomId}`
+        );
+    }
+
+    async getRoomData(roomId: number, userId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId
+            },
+            include: {
+                messages: true,
+                muteds: true
+            }
+        })
+        const members = room.members;
+        const messages = room.messages;
     }
 
 }

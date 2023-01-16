@@ -8,10 +8,6 @@ export class ChatDto {
 
     @IsNumber()
     @IsNotEmpty()
-    senderId: number
-
-    @IsNumber()
-    @IsNotEmpty()
     roomId: number
 
 }
