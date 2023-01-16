@@ -7,23 +7,20 @@ import junkData from '../../model/ChannelDB.json'
 import AddChannelModal from '../Modals/AddChannelModal';
 import ChannelCard from '../Utils/ChannelCard';
 import { useRecoilState } from 'recoil';
-import { Channel } from '../../model/atoms/Channels';
+import { ChannelAtom } from '../../model/atoms/ChannelsAtom';
 import Service from '../../controller/services';
 
 
-function ChannelList(my_message: any) {
-    const [data, setData] = useState([{
-        name: "",
-        id: 0,
-        type: ""   
-    },])
-
+function ChannelList() {
+    const [channel, setChannel] = useRecoilState(ChannelAtom)
+  
+    
     useEffect(()=>
     {
         Service.getChannels().then((res:any)=>
         {
             console.log(res.data);
-            setData(res.data)
+            setChannel(res.data)
         }).catch(()=>
         {
 
@@ -32,7 +29,7 @@ function ChannelList(my_message: any) {
 
 
     return (
-        <div className="col-span-1 border-r  sm:px-6 px-1 bg-[#242424] py-8 max-h-[800px] overflow-auto scrollbar-hide">
+        <div className="col-span-1 xl:border-r border-b sm:px-6 px-1 bg-[#242424] py-8 max-h-[800px] overflow-auto scrollbar-hide">
             <div className="flex items-center justify-between mb-4">
                 <span className='flex items-center justify-between w-full'>
                     <h5 className="text-xl font-bold leading-none ">Channels</h5>
@@ -43,7 +40,7 @@ function ChannelList(my_message: any) {
             <div className='flex flex-col-reverse'>
 
             {
-                data.map((item) =>
+                channel.map((item) =>
                 (
                     <ChannelCard key={item.id} data={item} />
                     

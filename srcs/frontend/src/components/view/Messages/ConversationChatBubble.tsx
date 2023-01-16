@@ -5,9 +5,10 @@ type Props =
   data :
   {
     text: string,
-    timestamp:string,
-    side: string,
-    message_id: number
+    senderImage:string,
+    nickName: string,
+    senderId: number,
+    side: string
   }
 }
 
