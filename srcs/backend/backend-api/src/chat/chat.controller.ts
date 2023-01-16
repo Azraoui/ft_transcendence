@@ -22,7 +22,7 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @Get('getAllRooms')
     getAllRooms(@GetUserReq('id') userId: number) {
-        return this.chatService.getAllRooms(userId);
+        return this.chatService.getAllRooms(+userId);
     }
 
     @UseGuards(JwtTwoFactorGuard)
@@ -31,14 +31,14 @@ export class ChatController {
         @Param('roomId') roomId: number,
         @GetUserReq('id') userId: number
         ) {
-        return this.chatService.getRoomData(roomId, userId);
+        return this.chatService.getRoomData(+roomId, +userId);
     }
 
     // This route for create new room
     @UseGuards(JwtTwoFactorGuard)
     @Post('createRoom')
     createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
-        return this.chatService.createRoom(userId, body);
+        return this.chatService.createRoom(+userId, body);
     }
 
 }
