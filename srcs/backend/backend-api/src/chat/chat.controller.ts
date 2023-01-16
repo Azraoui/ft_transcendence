@@ -38,6 +38,8 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @Post('createRoom')
     createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
+        console.log("teetetete");
+        
         return this.chatService.createRoom(userId, body);
     }
 
