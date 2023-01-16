@@ -77,7 +77,7 @@ model MutedUser {
   room Room @relation(fields: [roomId], references: [id])
   roomId Int
   userId Int
-  time DateTime
+  time String
 
   @@map("mutedUser")
 }

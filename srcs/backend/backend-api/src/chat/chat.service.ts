@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import * as moment from 'moment';
 
 @Injectable()
 export class ChatService {
@@ -64,9 +65,13 @@ export class ChatService {
                         ]
                     }
                 ]
+            },
+            select: {
+                id: true,
+                name: true,
+                type: true
             }
         })
-        console.log(`rooms => ${rooms}`);
         return rooms;
     }
 
@@ -165,7 +170,7 @@ export class ChatService {
             },
         })
         if (findRoom) {
-            if (findRoom.owner === userId || findRoom.admins.find((id) => id === userId))
+            if (findRoom.owner === userId && userId !== memberId)
             {
                 const room = await this.prismaService.room.update({
                     where: {
@@ -182,9 +187,28 @@ export class ChatService {
                 })
                 return room;
             }
+            else if (findRoom.admins.find((id) => id === userId) && userId !== findRoom.owner && !findRoom.admins.find((id) => id === memberId)) {
+                const room = await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        blocked: {
+                            push: memberId
+                        },
+                        members: {
+                            set: findRoom.members.filter((id) => id !== memberId)
+                        }
+                    }
+                })
+                return room;
+            }
+            else
+                throw new UnauthorizedException(`You don't have the permission to block this user`);
         }
         return findRoom;
     }
+
 
     async muteMember(roomId: number, userId: number, memberId: number, muteTime) {
         const findRoom = await this.prismaService.room.findUnique({
@@ -265,10 +289,11 @@ export class ChatService {
         }
     }
 
+    // this method for validate send messages permission
     async validatePermission(userId: number, roomId: number) {
         const room = await this.prismaService.room.findUnique({
             where: {
-                id: userId
+                id: roomId
             },
             include: {
                 muteds: true
@@ -277,9 +302,24 @@ export class ChatService {
         if (room) {
             if (room.members.find((id) => id === userId))
             {
-                if (room.muteds.find((userId) => userId === userId))
+                if (room.blocked.find((id) => id === userId)) {
+                    return false;
+                }
+                const mutedUser = room.muteds.find((userId) => userId === userId)
+                if (mutedUser)
                 {
-
+                    const time = moment().format('YYYY-MM-DD hh:mm:ss');
+                    if (time >= mutedUser.time)
+                    {
+                        await this.prismaService.mutedUser.delete({
+                            where: {
+                                id: userId,
+                            }
+                        })
+                        return true;
+                    }
+                    else
+                        return false;
                 }
             }
             throw new UnauthorizedException(
@@ -289,6 +329,20 @@ export class ChatService {
         throw new NotFoundException(
             `Can't find Room with this id:${roomId}`
         );
+    }
+
+    async getRoomData(roomId: number, userId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId
+            },
+            include: {
+                messages: true,
+                muteds: true
+            }
+        })
+        const members = room.members;
+        const messages = room.messages;
     }
 
 }

@@ -15,10 +15,9 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @Get('getOldMsg/:id')
     getOldMsg(@Param('id') id) {
-        return this.chatService.findAllMsgs(id);
+        return this.chatService.findAllMsgs(+id);
     }
-    
-    
+
     // This route for geting all (public, protected, private) rooms with userId
     @UseGuards(JwtTwoFactorGuard)
     @Get('getAllRooms')
@@ -26,6 +25,14 @@ export class ChatController {
         return this.chatService.getAllRooms(userId);
     }
     
+    @UseGuards(JwtTwoFactorGuard)
+    @Get('getRoomData/:roomId')
+    getMembersData(
+        @Param('roomId') roomId: number,
+        @GetUserReq('id') userId: number
+        ) {
+        return this.chatService.getRoomData(roomId, userId);
+    }
 
     // This route for create new room
     @UseGuards(JwtTwoFactorGuard)
@@ -33,4 +40,5 @@ export class ChatController {
     createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
         return this.chatService.createRoom(userId, body);
     }
+
 }
