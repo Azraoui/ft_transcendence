@@ -41,3 +41,43 @@ model Friends {
 
   @@map("friends")
 }
+
+model Messages {
+  id Int @id @default(autoincrement())
+
+  senderId Int
+  text String
+  
+  room Room @relation(fields: [roomId], references: [id])
+  roomId Int
+
+  @@map("messages")
+}
+
+model Room {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  owner Int?
+  admins Int[]
+  members Int[]
+  blocked Int[]
+  muteds MutedUser[]
+  type String @default("private")
+  hash String?
+
+  messages Messages[]
+
+  @@map("room")
+}
+
+model MutedUser {
+  id Int @id @default(autoincrement())
+
+  room Room @relation(fields: [roomId], references: [id])
+  roomId Int
+  userId Int
+  time DateTime
+
+  @@map("mutedUser")
+}

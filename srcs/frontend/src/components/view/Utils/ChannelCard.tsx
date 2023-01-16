@@ -4,58 +4,29 @@ import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
+import { Channel } from '../../model/atoms/Channels';
 
 
 type ChannelCardPorps =
     {
         data: {
             name: string
-            picture: string
-            bio: string
             id: number
-            active: string
-            type: string
-            pass?: string
-            chatlog: {
-                text: string,
-                side: string
-                message_id: number
-                timestamp: string
-            }[]
-            participants: {
-                id: number,
-                name: string,
-                picture: string
-                bio: string
-                active: string
-            }[]
-
-
+            type: string   
         }
     }
 function ChannelCard({ data }: ChannelCardPorps) {
 
 
-    let BgColour = "";
-    switch (data.active) {
-        case "on":
-            BgColour = "bg-green-500";
-            break;
-        case "in":
-            BgColour = " bg-orange-500";
-            break;
-        default:
-            BgColour = "bg-red-500"
 
-    }
-    const [activeNacItem, setActiveNavItem] = useRecoilState(ChatFriends)
-    const [chat, setChat] = useRecoilState(ChatLog)
+    const [channel, setChannel] = useRecoilState(Channel)
+    // const [chat, setChat] = useRecoilState(ChatLog)
 
     return (
         <div onClick={() => {
-            setActiveNavItem({...activeNacItem, ...data});
-            setChat(data.chatlog);
-        }} className={`flex items-center space-x-4 py-7 ${activeNacItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
+            setChannel({...channel, ...data});
+            // setChat(data.messages);
+        }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">
                 <p className="text-xl font-bold ">
                     {data.name}

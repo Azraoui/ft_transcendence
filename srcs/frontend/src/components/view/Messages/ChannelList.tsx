@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Card from '../Utils/FriendCard'
 import { PlusIcon } from '@heroicons/react/24/outline';
@@ -6,9 +6,30 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import junkData from '../../model/ChannelDB.json'
 import AddChannelModal from '../Modals/AddChannelModal';
 import ChannelCard from '../Utils/ChannelCard';
+import { useRecoilState } from 'recoil';
+import { Channel } from '../../model/atoms/Channels';
+import Service from '../../controller/services';
 
 
 function ChannelList(my_message: any) {
+    const [data, setData] = useState([{
+        name: "",
+        id: 0,
+        type: ""   
+    },])
+
+    useEffect(()=>
+    {
+        Service.getChannels().then((res:any)=>
+        {
+            console.log(res.data);
+            setData(res.data)
+            console.log("===> ", data[0].id);
+        }).catch(()=>
+        {
+
+        })
+    },[])
 
 
     return (
@@ -22,11 +43,11 @@ function ChannelList(my_message: any) {
             </div>
 
             {
-                junkData.channels.map((item) =>
-                (
-                    <ChannelCard key={item.id} data={item} />
+            //    data.map((item) =>
+            //     (
+            //         <ChannelCard key={item.id} data={item} />
 
-                ))
+            //     ))
             }
 
 

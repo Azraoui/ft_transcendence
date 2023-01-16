@@ -16,6 +16,8 @@ export const ChatFriends = atom({
     }
 })
 
+
+
 export const ChatLog = atom({
     key:"ChatLog",
     default:{}
