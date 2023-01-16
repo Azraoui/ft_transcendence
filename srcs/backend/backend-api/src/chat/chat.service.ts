@@ -352,7 +352,7 @@ export class ChatService {
             }
         })
         if (!room.members.find((id) => id === userId) || room.blocked.find((id) => id === userId))
-            return {status: false};
+            throw new UnauthorizedException("You don't have the access");
         const messages = room.messages;
         let allMessages = [];
         messages.forEach(async (message) => {
