@@ -364,11 +364,10 @@ export class ChatService {
                 }
             })
             let obj = {
-                userId: message.senderId,
+                senderId: message.senderId,
                 senderImage: user.pictureLink,
                 nickName: user.nickname,
                 text: message.text,
-                roomId: message.roomId
             }
             allMessages.push(obj);
         });
