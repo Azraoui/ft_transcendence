@@ -363,11 +363,17 @@ export class ChatService {
                     pictureLink: true,
                 }
             })
+            let side;
+            if (userId === message.senderId)
+                side = "left"
+            else
+                side = "right"
             let obj = {
                 senderId: message.senderId,
                 senderImage: user.pictureLink,
                 nickName: user.nickname,
                 text: message.text,
+                side: side,
             }
             allMessages.push(obj);
         });
