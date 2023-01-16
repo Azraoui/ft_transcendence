@@ -18,7 +18,23 @@ export const ChannelNavAtom = atom({
     }
 })
 
-export const Message = atom({
-    key:"Message",
-    default:{}
+export const ChannelMessage = atom({
+    key:"ChannelMessage",
+    default:[{
+        senderId: 0,
+        senderImage: "",
+        nickName: "",
+        text: "",
+        side: ""
+
+    }]
 })
+
+export const IsJoined = atom({
+    key:"IsJoined",
+    default:true
+})
+
+
+
+

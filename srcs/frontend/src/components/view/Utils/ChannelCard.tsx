@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
-import { ChannelNavAtom } from '../../model/atoms/ChannelsAtom';
+import { ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
+import Service from '../../controller/services';
 
 
 type ChannelCardPorps =
@@ -16,17 +17,30 @@ type ChannelCardPorps =
         }
     }
 function ChannelCard({ data }: ChannelCardPorps) {
-
-
-
+    const [channelMessage, setChannelMessage] = useRecoilState(ChannelMessage)
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
-    console.log("dsfad", channel);
+    const [isJoined, setisJoined] = useRecoilState(IsJoined)
+    
+
+
+    const getMessages = (id:number) =>
+    {
+        Service.getChannelMessages(id).then((res:any)=>{
+                console.log(res.data);
+                setChannelMessage(res.data)
+                setisJoined(true);
+        }).catch(()=>
+        {
+                setisJoined(false);
+        })
+    }
 
     // const [chat, setChat] = useRecoilState(ChatLog)
 
     return (
         <div onClick={() => {
             setChannel({ ...channel, ...data });
+            getMessages(data.id)
             // setChat(data.messages);
         }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">

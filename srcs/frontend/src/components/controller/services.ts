@@ -42,6 +42,10 @@ const getProfile = () => {
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
   };
+
+    const getChannelMessages = (id:number) => {
+    return http.get(`/chat/getRoomData/${id}`, {withCredentials:true});
+  };
 const updatePicture = async (file:FormData) => {
   try {
     
@@ -83,7 +87,8 @@ const Service = {
   addFriend,
   viewFriend,
   addChannel,
-  getChannels
+  getChannels,
+  getChannelMessages
   // get,
   // create,
   // update,

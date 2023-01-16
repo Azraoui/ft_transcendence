@@ -14,14 +14,14 @@ function Conversation() {
     <div className="col-span-4  max-h-[800px] w-full sm:px-12 px-1 bg-[#242424] py-4">
       <div className="flex items-center h-full flex-col justify-between relative mb-2 space-y-5">
         <div className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
-          {activeNavItem.chatlog.length ? activeNavItem.chatlog.map((item) => (
+          {/* {activeNavItem.chatlog.length ? activeNavItem.chatlog.map((item) => (
             <ConversationChatBubble key={item.message_id} data={item} />
           )) : <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
             <span className="bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500">
               No Message
             </span>
           </div>
-          }
+          } */}
         </div>
         <div className=' w-full  bottom-0 rounded-lg'>
           <div className="flex w-full justify-center">
