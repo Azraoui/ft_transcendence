@@ -40,6 +40,18 @@ export class ChatService {
         return messages;
     }
 
+    async getPictureLink(memberId: number) {
+        const imgUrl = await this.prismaService.user.findUnique({
+            where:{
+                id: memberId
+            },
+            select: {
+                pictureLink: true
+            }
+        })
+        return imgUrl.pictureLink;
+    }
+
     async getAllRooms(userId: number) {
         const rooms = await this.prismaService.room.findMany({
             where: {
