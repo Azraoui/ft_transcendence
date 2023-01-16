@@ -24,7 +24,7 @@ export class ChatController {
     getAllRooms(@GetUserReq('id') userId: number) {
         return this.chatService.getAllRooms(userId);
     }
-    
+
     @UseGuards(JwtTwoFactorGuard)
     @Get('getRoomData/:roomId')
     getMembersData(
@@ -38,8 +38,6 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @Post('createRoom')
     createRoom(@GetUserReq('id') userId: number, @Body() body: RoomDto) {
-        console.log("teetetete");
-        
         return this.chatService.createRoom(userId, body);
     }
 

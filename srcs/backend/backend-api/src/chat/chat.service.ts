@@ -221,7 +221,6 @@ export class ChatService {
         return findRoom;
     }
 
-
     async muteMember(roomId: number, userId: number, memberId: number, muteTime) {
         const findRoom = await this.prismaService.room.findUnique({
             where: {
@@ -349,12 +348,30 @@ export class ChatService {
                 id: roomId
             },
             include: {
-                messages: true,
-                muteds: true
+                messages: true
             }
         })
-        const members = room.members;
+        if (!room.members.find((id) => id === userId) || room.blocked.find((id) => id === userId))
+            return {status: false};
         const messages = room.messages;
+        let allMessages = [];
+        messages.forEach(async (message) => {
+            const user = await this.prismaService.user.findUnique({
+                where: {id: userId},
+                select: {
+                    nickname: true,
+                    pictureLink: true,
+                }
+            })
+            let obj = {
+                userId: message.senderId,
+                senderImage: user.pictureLink,
+                nickName: user.nickname,
+                text: message.text,
+                roomId: message.roomId
+            }
+            allMessages.push(obj);
+        });
     }
 
 }

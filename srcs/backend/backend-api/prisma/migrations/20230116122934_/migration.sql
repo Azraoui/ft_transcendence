@@ -44,7 +44,8 @@ CREATE TABLE "room" (
     "admins" INTEGER[],
     "members" INTEGER[],
     "blocked" INTEGER[],
-    "Muteds" INTEGER[],
+    "type" TEXT NOT NULL DEFAULT 'private',
+    "hash" TEXT,
 
     CONSTRAINT "room_pkey" PRIMARY KEY ("id")
 );
@@ -54,7 +55,7 @@ CREATE TABLE "mutedUser" (
     "id" SERIAL NOT NULL,
     "roomId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
-    "time" TIMESTAMP(3) NOT NULL,
+    "time" TEXT NOT NULL,
 
     CONSTRAINT "mutedUser_pkey" PRIMARY KEY ("id")
 );
@@ -78,4 +79,10 @@ CREATE UNIQUE INDEX "room_name_key" ON "room"("name");
 ALTER TABLE "friends" ADD CONSTRAINT "friends_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "friends" ADD CONSTRAINT "friends_friendId_fkey" FOREIGN KEY ("friendId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "messages" ADD CONSTRAINT "messages_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "mutedUser" ADD CONSTRAINT "mutedUser_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
