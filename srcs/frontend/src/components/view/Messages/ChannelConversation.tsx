@@ -6,7 +6,7 @@ import { ChatFriends } from '../../model/atoms/ChatFriends';
 import ConversationChatBubble from './ConversationChatBubble';
 
 
-function Conversation() {
+function ChannelConversation() {
   const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
 
 
@@ -33,10 +33,9 @@ function Conversation() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   )
 }
 
-export default Conversation
+export default ChannelConversation
