@@ -46,7 +46,7 @@ function ChannelList() {
                     
                     ))
                 }
-            </div>
+                </div>
 
 
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ToastContainer } from "react-toastify";
 import Service from "../../controller/services";
-import { success_alert } from "../Utils/Alerts";
+import { error_alert_channel, success_alert } from "../Utils/Alerts";
 
 function AddChannelModal() {
 
@@ -26,7 +26,8 @@ function AddChannelModal() {
 
         }).catch((err:Error)=>
         {
-                console.log(err);
+            error_alert_channel()
+                console.log(err.cause);
                 
         })
     }
