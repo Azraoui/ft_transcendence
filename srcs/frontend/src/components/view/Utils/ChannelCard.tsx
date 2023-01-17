@@ -7,6 +7,7 @@ import BanModal from '../Modals/BanModal';
 import { ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
 import Service from '../../controller/services';
 import { error_alert, success_alert } from './Alerts';
+import ProtectedChannelModal from '../Modals/ProtectedChannelModal';
 
 type ChannelCardPorps =
     {
@@ -30,9 +31,9 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setisJoined(false);
         })
     }
-    const JoinChannel = (id:number, type:string ) =>
+    const JoinChannel = (param : {roomId :number, type :string, password: string}) =>
     {
-        Service.joinChannel(id,type).then((res:any)=>
+        Service.joinChannel(param.roomId, param.type, param.password).then((res:any)=>
         {
             success_alert("You Joined this channel successfully");
                 setisJoined(true);
@@ -76,14 +77,22 @@ function ChannelCard({ data }: ChannelCardPorps) {
                     <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                 </div>
             </div>
-            {/* Ban Modal*/}
-            <div className="dropdown dropdown-left ">
+            {/* Protect Channel Modal*/}
+            <ProtectedChannelModal roomId={data.id} type={data.type}  />
+            <div className="dropdown dropdown-left z-40">
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li> { isJoined ?  <div onClick={ () => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
                      :
-                     <div onClick={ () => JoinChannel(data.id, data.type)} className="btn  w-full">Join</div>}</li>
+                     data.type === "public" ?
+                    <div onClick={ () => {
+                        const param = { roomId : data.id, type : data.type , password: ""}; JoinChannel(param)
+                        }} className="btn  w-full">Join
+                    </div> :
+                    <label htmlFor="my-modal-5" className="btn">Join</label>
+                    }
+                    </li>
                     <li><a className="btn my-1 w-full text-sm ">View Members</a></li>
                 </ul>
             </div>

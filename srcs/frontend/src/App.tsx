@@ -19,6 +19,7 @@ import { ProfileData } from './components/model/atoms/ProfileData'
 import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
 import TwoFA from './components/view/Login/TwoFA'
 import PageNotFound from './components/view/NotFound/PageNotFound'
+import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModal'
 
 
 

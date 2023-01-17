@@ -51,7 +51,6 @@ function FriendCard({ data }: FriendCardPorps) {
             setActiveNavItem({...activeNavItem, ...data} );
             setChat(data.chatlog);
         }} className={`flex items-center space-x-4 py-7 ${activeNavItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
-
             <div className="flex-shrink-0 relative ">
                 <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
                 <img src={data.picture} alt="avatar" className=' h-12 rounded-full ring-2 ring-offset-2  shadow-lg shadow-gray-700' />

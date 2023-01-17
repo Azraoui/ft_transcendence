@@ -152,27 +152,44 @@ export class ChatService {
     }
 
     async joinRoom(body: JoinRoomDto, userId: number) {
-        // const findRoom = await this.prismaService.room.findUnique({
-        //     where: {
-        //         id: roomId
-        //     },
-        // })
-        // if (findRoom) {
-        //     if (findRoom.members.find((id) => id === userId) === undefined) {
-        //         const room = await this.prismaService.room.update({
-        //             where: {
-        //                 id: roomId,
-        //             },
-        //             data: {
-        //                 members: {
-        //                     push: userId
-        //                 }
-        //             }
-        //         })
-        //         return room;
-        //     }
-        // }
-        // return findRoom;
+        console.log("000000--------------------->");
+        
+        console.log("-------------->", body.password, body.type, body.roomId)
+        const findRoom = await this.prismaService.room.findUnique({
+            where: {
+                id: body.roomId
+            },
+        })
+        if (body.type === "protected") {
+            try {
+                console.log("-----------------> ",findRoom.hash, body.password);
+                
+                if (await argon2.verify(findRoom.hash, body.password)) {
+                  // password match
+                  if (findRoom) {
+                      if (findRoom.members.find((id) => id === userId) === undefined) {
+                          const room = await this.prismaService.room.update({
+                              where: {
+                                  id: body.roomId,
+                              },
+                              data: {
+                                  members: {
+                                      push: userId
+                                  }
+                              }
+                          })
+                          return room;
+                      }
+                  }
+                  return findRoom;
+                } else {
+                    throw new UnauthorizedException("Wrong Password")
+                }
+              } catch (err) {
+                // internal failure
+                throw err
+              }
+        }
     }
 
     async blockMember(roomId: number, userId: number, memberId: number) {

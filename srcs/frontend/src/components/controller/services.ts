@@ -40,8 +40,10 @@ const getProfile = () => {
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
   };
-  const joinChannel = (id:number, type:string, pass?:string) => {
-    return http.post(`/chat/joinRoom`, {id,type,pass}, {withCredentials:true});
+  const joinChannel = (roomId:number, type:string, password?:string) => {
+    console.log("====>>>>>>>>>>> ",roomId, type, password);
+    
+    return http.post(`/chat/joinRoom`, {roomId,type, password}, {withCredentials:true});
   };
   const leaveChannel = (id:number) => {
     return http.delete(`/chat/leftRoom/${id}`, {withCredentials:true});
