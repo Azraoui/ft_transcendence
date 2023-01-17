@@ -54,4 +54,11 @@ export class ChatController {
         return this.chatService.leftRoom(+roomId, +userId);
     }
 
+
+    @UseGuards(JwtTwoFactorGuard)
+    @Get('viewMembers/:id')
+    viewMembers(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
+        return this.chatService.viewMembers(+roomId, +userId);
+    }
+
 }
