@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException, UnauthorizedExceptio
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, JoinRoomDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { empty, PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
 
 @Injectable()
@@ -292,7 +292,7 @@ export class ChatService {
                     },
                     data: {
                         owner: {
-                            set: undefined
+                            set: null
                         }
                     }
                 })
