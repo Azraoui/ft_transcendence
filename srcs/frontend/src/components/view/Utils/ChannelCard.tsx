@@ -6,7 +6,7 @@ import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/r
 import BanModal from '../Modals/BanModal';
 import { ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
 import Service from '../../controller/services';
-
+import { error_alert, success_alert } from './Alerts';
 
 type ChannelCardPorps =
     {
@@ -20,22 +20,40 @@ function ChannelCard({ data }: ChannelCardPorps) {
     const [channelMessage, setChannelMessage] = useRecoilState(ChannelMessage)
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
     const [isJoined, setisJoined] = useRecoilState(IsJoined)
-    
 
-
-    const getMessages = (id:number) =>
+    const getMessages = (id: number) => {
+        Service.getChannelMessages(id).then((res: any) => {
+            console.log(res.data);
+            setChannelMessage(res.data)
+            setisJoined(true);
+        }).catch(() => {
+            setisJoined(false);
+        })
+    }
+    const JoinChannel = (id:number) =>
     {
-        Service.getChannelMessages(id).then((res:any)=>{
-                console.log(res.data);
-                setChannelMessage(res.data)
+        Service.joinChannel(id).then((res:any)=>
+        {
+            success_alert("You Joined this channel successfully");
                 setisJoined(true);
         }).catch(()=>
         {
-                setisJoined(false);
+            error_alert();
+            setisJoined(false);
         })
     }
-
-    // const [chat, setChat] = useRecoilState(ChatLog)
+    const LeaveChannel = (id:number) =>
+    {
+        Service.joinChannel(id).then((res:any)=>
+        {
+            success_alert("You left this channel successfully");
+                setisJoined(true);
+        }).catch(()=>
+        {
+            error_alert();
+            setisJoined(false);
+        })
+    }
 
     return (
         <div onClick={() => {
@@ -63,8 +81,10 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal" className="btn  w-full">Join</label></li>
-                    <li><a className="btn my-1 w-full text-sm ">View Participants</a></li>
+                    <li> { isJoined ?  <div onClick={ () => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
+                     :
+                     <div onClick={ () => JoinChannel(data.id)} className="btn  w-full">Join</div>}</li>
+                    <li><a className="btn my-1 w-full text-sm ">View Members</a></li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

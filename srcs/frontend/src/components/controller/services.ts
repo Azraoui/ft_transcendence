@@ -35,12 +35,16 @@ const getProfile = () => {
     return http.post(`/user/addFriend/${id}`,{}, {withCredentials:true} );
   };
     const addChannel = (data :{name:string, type:string,password:string}) => {
-      console.log(data);
-      
     return http.post('/chat/createRoom',data, {withCredentials:true} );
   };
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
+  };
+  const joinChannel = (id:number) => {
+    return http.post(`/chat/joinRoom/${id}`, {withCredentials:true});
+  };
+  const leaveChannel = (id:number) => {
+    return http.delete(`/chat/leftRoom/${id}`, {withCredentials:true});
   };
 
     const getChannelMessages = (id:number) => {
@@ -88,7 +92,9 @@ const Service = {
   viewFriend,
   addChannel,
   getChannels,
-  getChannelMessages
+  getChannelMessages,
+  joinChannel,
+  leaveChannel,
   // get,
   // create,
   // update,

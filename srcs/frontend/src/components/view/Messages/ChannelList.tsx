@@ -35,10 +35,8 @@ function ChannelList() {
                     <h5 className="text-xl font-bold leading-none ">Channels</h5>
                     <label htmlFor="my-modal-1" ><PlusIcon className="header-icon Add channel"/></label>
                 </span>
-
             </div>
             <div className='flex flex-col-reverse'>
-
             {
                 channel.map((item) =>
                 (
@@ -47,11 +45,6 @@ function ChannelList() {
                     ))
                 }
                 </div>
-
-
-
-
-
         </div>
 
     )

@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { ChatFriends } from '../../model/atoms/ChatFriends';
 import ConversationChatBubble from './ConversationChatBubble';
 import { ChannelMessage, IsJoined } from '../../model/atoms/ChannelsAtom';
+import ConversationChannelBubble from './ConversationChannelBubble';
 
 
 function ChannelConversation() {
@@ -23,7 +24,7 @@ function ChannelConversation() {
             isJoined ?
             channelMessage.length ? 
             channelMessage.map((item) => (
-              <ConversationChatBubble key={item.senderId} data={item} />
+              <ConversationChannelBubble key={item.senderId} data={item} />
             )) 
             : 
             <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
