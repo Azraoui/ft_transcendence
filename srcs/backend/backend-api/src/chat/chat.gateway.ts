@@ -47,9 +47,9 @@ export class ChatGateWay {
     }
 
     @SubscribeMessage('findAllMessages')
-    findAll() {
-        console.log("I Was Here (;");
-        // return this.chatService.findAllMsgs(roomId);
+    findAll(@MessageBody('roomId') roomId: number) {
+        // console.log(`data ==> ${data}`);
+        return this.chatService.findAllMsgs(+roomId);
     }
 
 }

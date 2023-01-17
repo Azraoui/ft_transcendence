@@ -4,6 +4,8 @@ import { ChatDto, JoinRoomDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
+import { Room } from '@prisma/client';
+import { timeout } from 'rxjs';
 
 @Injectable()
 export class ChatService {
@@ -408,5 +410,59 @@ export class ChatService {
             allMessages.push(obj);
         });
     }
+
+    findUserStatusInRoom(roomId: number, userId: number, room: Room): string {
+
+            if (room.owner === userId)
+                return "owner";
+            else if (room.admins.find((id) => id === userId))
+                return "admin";
+            else if (room.blocked.find((id) => id === userId))
+                return "blocked";
+            else if (room.members.find((id) => id === userId))
+                return "member";
+            else
+                return "notFound";
+    }
+
+    async viewMembers(roomId: number, userId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId,
+            }
+        })
+        if (room)
+        {
+            if (!room.members.find((id) => id === userId) || room.blocked.find((id) => id === userId))
+                throw new UnauthorizedException("You Can't View This Room Members For Some Reason");
+            else
+            {
+                const membersData: Record<string, any> = {};
+                membersData.userRole = this.findUserStatusInRoom(roomId, userId, room);
+                let members = []
+                for (let i = 0; i < room.members.length; i++) {
+                    const user = await this.prismaService.user.findUnique({
+                        where: {
+                            id: room.members[i]
+                        },
+                        select: {
+                            pictureLink: true,
+                            nickname: true,
+                            id: true
+                        }
+                    })
+                    const userData: Record<string, any> = {};
+                    userData.id = user.id;
+                    userData.pictureLink = user.pictureLink,
+                    userData.nickName = user.nickname,
+                    userData.role = this.findUserStatusInRoom(roomId, user.id, room);
+                    members.push(userData);
+                }
+                membersData.members = members;
+                return membersData;
+            }
+        }
+    }
+
 
 }
