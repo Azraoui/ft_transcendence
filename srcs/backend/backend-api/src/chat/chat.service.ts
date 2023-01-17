@@ -151,14 +151,14 @@ export class ChatService {
         return findRoom;
     }
 
-    async addMember(roomId: number, userId: number) {
+    async joinRoom(roomId: number, userId: number) {
         const findRoom = await this.prismaService.room.findUnique({
             where: {
                 id: roomId
             },
         })
         if (findRoom) {
-            if (findRoom.members.find((id) => id === userId) == undefined) {
+            if (findRoom.members.find((id) => id === userId) === undefined) {
                 const room = await this.prismaService.room.update({
                     where: {
                         id: roomId,

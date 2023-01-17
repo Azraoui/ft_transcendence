@@ -41,4 +41,11 @@ export class ChatController {
         return this.chatService.createRoom(+userId, body);
     }
 
+
+    @UseGuards(JwtTwoFactorGuard)
+    @Post('joinRoom/:id')
+    joinRoom(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
+        return this.chatService.joinRoom(+roomId, +userId);
+    }
+
 }
