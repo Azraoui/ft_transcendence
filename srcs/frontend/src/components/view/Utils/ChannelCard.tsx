@@ -31,26 +31,20 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setisJoined(false);
         })
     }
-    const JoinChannel = (param : {roomId :number, type :string, password: string}) =>
-    {
-        Service.joinChannel(param.roomId, param.type, param.password).then((res:any)=>
-        {
+    const JoinChannel = (param: { roomId: number, type: string, password: string }) => {
+        Service.joinChannel(param.roomId, param.type, param.password).then((res: any) => {
             success_alert("You Joined this channel successfully");
-                setisJoined(true);
-        }).catch(()=>
-        {
+            setisJoined(true);
+        }).catch(() => {
             error_alert();
             setisJoined(false);
         })
     }
-    const LeaveChannel = (id:number) =>
-    {
-        Service.leaveChannel(id).then((res:any)=>
-        {
+    const LeaveChannel = (id: number) => {
+        Service.leaveChannel(id).then((res: any) => {
             success_alert("You left this channel successfully");
-                setisJoined(true);
-        }).catch(()=>
-        {
+            setisJoined(true);
+        }).catch(() => {
             error_alert();
             setisJoined(false);
         })
@@ -58,10 +52,12 @@ function ChannelCard({ data }: ChannelCardPorps) {
 
     return (
         <div onClick={() => {
-            setChannel({ ...channel, ...data });
+            setChannel({ ...channel, ...data});
+            console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", data.id);
+            
             getMessages(data.id)
             // setChat(data.messages);
-        }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
+             }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">
                 <div className='flex w-full items-center justify-start space-x-3'>
                     <p className="text-xl font-bold ">
@@ -78,19 +74,19 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 </div>
             </div>
             {/* Protect Channel Modal*/}
-            <ProtectedChannelModal roomId={data.id} type={data.type}  />
+           
             <div className="dropdown dropdown-left z-40">
                 {/* invisible hover:visible */}
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li> { isJoined ?  <div onClick={ () => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
-                     :
-                     data.type === "public" ?
-                    <div onClick={ () => {
-                        const param = { roomId : data.id, type : data.type , password: ""}; JoinChannel(param)
-                        }} className="btn  w-full">Join
-                    </div> :
-                    <label htmlFor="my-modal-5" className="btn">Join</label>
+                    <li> {isJoined ? <div onClick={() => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
+                        :
+                        data.type === "public" ?
+                            <div onClick={() => {
+                                const param = { roomId: data.id, type: data.type, password: "" }; JoinChannel(param)
+                            }} className="btn  w-full">Join
+                            </div> :
+                            <label htmlFor="my-modal-5" className="btn">Join</label>
                     }
                     </li>
                     <li><a className="btn my-1 w-full text-sm ">View Members</a></li>

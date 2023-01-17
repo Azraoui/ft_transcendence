@@ -19,3 +19,9 @@ export const error_alert_channel = () => {
     });
 };
 
+export const error_alert_channel_password = () => {
+    toast.error("password not correct", {
+        position: toast.POSITION.TOP_RIGHT
+    });
+};
+

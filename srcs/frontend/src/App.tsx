@@ -79,6 +79,7 @@ function App() {
             <BanModal/> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
             <BlockModal/>
             <AddChannelModal/>
+            <ProtectedChannelModal/>
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
               <Routes>

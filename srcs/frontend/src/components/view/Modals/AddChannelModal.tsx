@@ -23,12 +23,22 @@ function AddChannelModal() {
         {
                 setSubmit(false);
             success_alert("Channel created Successfuly")
+            setInputs({
+                name: "",
+                type: "public", //default
+                password:""
+              })
 
         }).catch((err:Error)=>
         {
             error_alert_channel()
                 console.log(err.cause);
                 
+                setInputs({
+                    name: "",
+                    type: "public", //default
+                    password:""
+                  })
         })
     }
 
@@ -54,7 +64,7 @@ function AddChannelModal() {
                 <form className="w-full" onSubmit={onSubmit}>
                         <label htmlFor="my-modal-1" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                         <h3 className="font-bold text-lg pb-4">Add Channel</h3>
-                        <input type="text" placeholder="name" name="name" className="input w-full m-2 text-black" required onChange={onOptionChange} />
+                        <input type="text" placeholder="name" name="name" className="input w-full m-2 text-black" value={inputs.name} required onChange={onOptionChange} />
                         <div className="form-control">
                             <label className="label cursor-pointer  px-6">
                                 <span className="label-text text-white font-bold  ">public</span>
@@ -72,7 +82,7 @@ function AddChannelModal() {
                                 <span className="label-text text-white font-bold ">protected</span>
                                 <input type="radio" name="type" checked={inputs.type === "protected"} className={`radio radio-info`} value="protected" onChange={onOptionChange} />
                             </label>
-                            {inputs.type === "protected" ? <input name="password" onChange={onOptionChange} type="password" placeholder="Channel password" className={`input w-full m-2 text-black`} /> : " "}
+                            {inputs.type === "protected" ? <input name="password" value={inputs.password} required maxLength={40}  minLength={8} onChange={onOptionChange} type="password" placeholder="Channel password" className={`input w-full m-2 text-black`} /> : " "}
                         </div>
                         <div className="modal-action">
                             {isSubmit ? <button type="submit" className="btn"> Confirm</button > : <label htmlFor="my-modal-1" className="btn">Close</label>}
