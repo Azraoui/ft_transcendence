@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
 import { GetUserReq } from 'src/decorator';
 import { RoomDto } from './dto';
@@ -46,6 +46,12 @@ export class ChatController {
     @Post('joinRoom/:id')
     joinRoom(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
         return this.chatService.joinRoom(+roomId, +userId);
+    }
+
+    @UseGuards(JwtTwoFactorGuard)
+    @Delete('leftRoom/:id')
+    leftRoom(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
+        return this.chatService.leftRoom(+roomId, +userId);
     }
 
 }
