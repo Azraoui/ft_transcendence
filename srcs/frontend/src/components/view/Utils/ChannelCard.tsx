@@ -30,9 +30,9 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setisJoined(false);
         })
     }
-    const JoinChannel = (id:number) =>
+    const JoinChannel = (id:number, type:string ) =>
     {
-        Service.joinChannel(id).then((res:any)=>
+        Service.joinChannel(id,type).then((res:any)=>
         {
             success_alert("You Joined this channel successfully");
                 setisJoined(true);
@@ -44,7 +44,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
     }
     const LeaveChannel = (id:number) =>
     {
-        Service.joinChannel(id).then((res:any)=>
+        Service.leaveChannel(id).then((res:any)=>
         {
             success_alert("You left this channel successfully");
                 setisJoined(true);
@@ -83,7 +83,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li> { isJoined ?  <div onClick={ () => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
                      :
-                     <div onClick={ () => JoinChannel(data.id)} className="btn  w-full">Join</div>}</li>
+                     <div onClick={ () => JoinChannel(data.id, data.type)} className="btn  w-full">Join</div>}</li>
                     <li><a className="btn my-1 w-full text-sm ">View Members</a></li>
                 </ul>
             </div>
