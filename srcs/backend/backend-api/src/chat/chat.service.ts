@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ChatDto, RoomDto } from './dto';
+import { ChatDto, JoinRoomDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
@@ -151,28 +151,28 @@ export class ChatService {
         return findRoom;
     }
 
-    async joinRoom(roomId: number, userId: number) {
-        const findRoom = await this.prismaService.room.findUnique({
-            where: {
-                id: roomId
-            },
-        })
-        if (findRoom) {
-            if (findRoom.members.find((id) => id === userId) === undefined) {
-                const room = await this.prismaService.room.update({
-                    where: {
-                        id: roomId,
-                    },
-                    data: {
-                        admins: {
-                            push: userId
-                        }
-                    }
-                })
-                return room;
-            }
-        }
-        return findRoom;
+    async joinRoom(body: JoinRoomDto, userId: number) {
+        // const findRoom = await this.prismaService.room.findUnique({
+        //     where: {
+        //         id: roomId
+        //     },
+        // })
+        // if (findRoom) {
+        //     if (findRoom.members.find((id) => id === userId) === undefined) {
+        //         const room = await this.prismaService.room.update({
+        //             where: {
+        //                 id: roomId,
+        //             },
+        //             data: {
+        //                 members: {
+        //                     push: userId
+        //                 }
+        //             }
+        //         })
+        //         return room;
+        //     }
+        // }
+        // return findRoom;
     }
 
     async blockMember(roomId: number, userId: number, memberId: number) {
@@ -284,7 +284,7 @@ export class ChatService {
                     }
                 })
             }
-            if (room.owner == userId)
+            if (room.owner === userId)
             {
                 await this.prismaService.room.update({
                     where: {
