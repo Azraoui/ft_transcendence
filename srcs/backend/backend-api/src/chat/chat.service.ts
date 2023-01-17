@@ -164,7 +164,7 @@ export class ChatService {
                         id: roomId,
                     },
                     data: {
-                        admins: {
+                        members: {
                             push: userId
                         }
                     }
