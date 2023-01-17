@@ -30,7 +30,6 @@ export class ChatGateWay {
 
     @WebSocketServer() server: Server;
 
-
     @UseGuards(JwtTwoFactorGuard)
     @SubscribeMessage('getAllRooms')
     getAllRooms(@GetUserReq('id') userId: number) {

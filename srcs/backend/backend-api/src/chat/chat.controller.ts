@@ -45,7 +45,6 @@ export class ChatController {
     @HttpCode(HttpStatus.OK)
     @Post('joinRoom')
     joinRoom(@Body() body: JoinRoomDto, @GetUserReq('id') userId: number) {
-        console.log("i was here ")
         return this.chatService.joinRoom(body, +userId);
     }
 

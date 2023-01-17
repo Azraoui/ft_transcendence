@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException, UnauthorizedExceptio
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, JoinRoomDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
-import { empty, PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
 
 @Injectable()
@@ -152,9 +152,6 @@ export class ChatService {
     }
 
     async joinRoom(body: JoinRoomDto, userId: number) {
-        console.log("000000--------------------->");
-        
-        console.log("-------------->", body.password, body.type, body.roomId)
         const findRoom = await this.prismaService.room.findUnique({
             where: {
                 id: body.roomId
@@ -162,8 +159,6 @@ export class ChatService {
         })
         if (body.type === "protected") {
             try {
-                console.log("-----------------> ",findRoom.hash, body.password);
-                
                 if (await argon2.verify(findRoom.hash, body.password)) {
                   // password match
                   if (findRoom) {
@@ -189,6 +184,24 @@ export class ChatService {
                 // internal failure
                 throw err
               }
+        }
+        else {
+            if (findRoom) {
+                if (findRoom.members.find((id) => id === userId) === undefined) {
+                    const room = await this.prismaService.room.update({
+                        where: {
+                            id: body.roomId,
+                        },
+                        data: {
+                            members: {
+                                push: userId
+                            }
+                        }
+                    })
+                    return room;
+                }
+            }
+            return findRoom;
         }
     }
 
