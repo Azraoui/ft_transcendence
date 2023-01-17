@@ -53,7 +53,6 @@ function ChannelCard({ data }: ChannelCardPorps) {
     return (
         <div onClick={() => {
             setChannel({ ...channel, ...data});
-            console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", data.id);
             
             getMessages(data.id)
             // setChat(data.messages);
@@ -89,7 +88,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                             <label htmlFor="my-modal-5" className="btn">Join</label>
                     }
                     </li>
-                    <li><a className="btn my-1 w-full text-sm ">View Members</a></li>
+                    <li> <label htmlFor="my-modal-6" className="btn my-1">View Members</label></li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

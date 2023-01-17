@@ -40,6 +40,9 @@ const getProfile = () => {
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
   };
+  const getChannelMembers = (id:number) => {
+    return http.get(`/chat/viewMembers/${id}`, {withCredentials:true});
+  };
   const joinChannel = (roomId:number, type:string, password?:string) => {
     console.log("====>>>>>>>>>>> ",roomId, type, password);
     
@@ -97,6 +100,8 @@ const Service = {
   getChannelMessages,
   joinChannel,
   leaveChannel,
+  getChannelMembers,
+  
   // get,
   // create,
   // update,
