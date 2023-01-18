@@ -165,6 +165,20 @@ export class ChatService {
                 })
                 return room;
             }
+            else if (findRoom.admins.find((id) => id === userId) && findRoom.members.find((id) => id === userId))
+            {
+                const room = await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        admins: {
+                            push: newAdminId
+                        }
+                    },
+                })
+                return room;
+            }
         }
         return findRoom;
     }
