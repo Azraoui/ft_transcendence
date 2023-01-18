@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
 import { GetUserReq } from 'src/decorator';
-import { JoinRoomDto, RoomDto } from './dto';
+import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, RoomDto } from './dto';
 import { ChatService } from './chat.service';
 
 @Controller('chat')
@@ -63,24 +63,23 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
     @Post('addAdmin')
-    addAdmin(@GetUserReq('id') userId: number, @Body() body: any) {
+    addAdmin(@GetUserReq('id') userId: number, @Body() body: AddAdminDto) {
         return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
     }
 
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
     @Post('muteMember')
-    muteMember(@GetUserReq('id') userId: number, @Body() body: any) {
+    muteMember(@GetUserReq('id') userId: number, @Body() body: MuteDto) {
         return this.chatService.muteMember(body.roomId, userId, body.muterId, body.duration);
     }
 
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
     @Post('blockMember')
-    blockMember(@GetUserReq('id') userId: number, @Body() body: any) {
+    blockMember(@GetUserReq('id') userId: number, @Body() body: BlockDto) {
+        console.log(`body.roomId = ${body.roomId}, body.memberId = ${body.memberId}`)
         return this.chatService.blockMember(body.roomId, userId, body.memberId);
     }
-
-
 
 }
