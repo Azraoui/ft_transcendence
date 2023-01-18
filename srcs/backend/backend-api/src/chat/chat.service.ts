@@ -189,6 +189,8 @@ export class ChatService {
                 id: body.roomId
             },
         })
+        if (findRoom.blocked.find((id) => id === userId))
+            throw new UnauthorizedException();
         if (body.type === "protected") {
             try {
                 if (await argon2.verify(findRoom.hash, body.password)) {
