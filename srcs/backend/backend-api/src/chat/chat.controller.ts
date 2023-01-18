@@ -61,4 +61,11 @@ export class ChatController {
         return this.chatService.viewMembers(+roomId, +userId);
     }
 
+
+    @UseGuards(JwtTwoFactorGuard)
+    @Post('addAdmin')
+    addAdmin(@GetUserReq('id') userId: number, @Body() body: any) {
+        return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
+    }
+
 }
