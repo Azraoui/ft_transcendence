@@ -53,7 +53,6 @@ function ChannelCard({ data }: ChannelCardPorps) {
     return (
         <div onClick={() => {
             setChannel({ ...channel, ...data});
-            
             getMessages(data.id)
             // setChat(data.messages);
              }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
@@ -88,7 +87,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                             <label htmlFor="my-modal-5" className="btn">Join</label>
                     }
                     </li>
-                    <li> <label htmlFor="my-modal-6" className="btn my-1">View Members</label></li>
+                    <li> {isJoined  ? <label  htmlFor="my-modal-6" className={`btn my-1`}>View Members</label> : ""}</li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">
