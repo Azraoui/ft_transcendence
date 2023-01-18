@@ -3,6 +3,7 @@ import { atom } from "recoil";
 export const ChannelAtom = atom({
     key:"ChannelAtom",
     default:[{
+        images: [""],
         id:-1,
         name:"",
         type: "",
@@ -12,6 +13,7 @@ export const ChannelAtom = atom({
 export const ChannelNavAtom = atom({
     key:"ChannelNavAtom",
     default:{
+        images: [""],
         id:-1,
         name:"",
         type: "",

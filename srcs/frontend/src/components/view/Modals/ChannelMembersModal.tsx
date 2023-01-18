@@ -6,13 +6,15 @@ import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import Service from '../../controller/services'
 import { ChannelNavAtom, ChannelsMember } from '../../model/atoms/ChannelsAtom'
+import { ProfileData } from '../../model/atoms/ProfileData'
 import { error_alert } from '../Utils/Alerts'
 
 function ChannelMembersModal() {
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
+    const [profileData, setprofileData] = useRecoilState(ProfileData);
     const [data, setData] = useRecoilState(ChannelsMember)
 
-    useEffect(() => {
+    useEffect(() => { 
 
         Service.getChannelMembers(channel.id).then((res: any) => {
             setData(res.data);
@@ -28,7 +30,7 @@ function ChannelMembersModal() {
                     <h3 className="font-bold text-lg">Members ({data.members?.length})</h3>
                     <div className='px-4 py-6 rounded-lg mt-6 flex flex-col space-y-4  overflow-auto h-[500px] w-full'>
                         {data.members?.map((item) => (
-                            <MemberCard key={item.id} params={item} userRole={{ userRole: data.userRole }} />
+                            <MemberCard key={item.id} params={item} userRole={{ userRole: data.userRole, userId:profileData.id }} />
                         ))}
                     </div>
                 </div>
@@ -40,7 +42,8 @@ function ChannelMembersModal() {
 type MemberCardProps = {
     userRole:
     {
-        userRole: string
+        userRole: string,
+        userId:number
     }
     params:
     {
@@ -52,7 +55,14 @@ type MemberCardProps = {
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
     console.log(userRole.userRole);
+    const makeAdmin = () =>
+    {
 
+    }
+    const Ban = () =>
+    {
+        
+    }
     return (
         <div className="flex items-center   justify-start px-4 py-6 rounded-lg relative space-x-3 bg-[#242424]">
 
@@ -64,18 +74,18 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
 
             </div>
             <div>
-                <div className=" truncate text-sm">{params.nickName}</div>
+                <div className=" truncate text-sm">{userRole.userId === params.id ? "You" :params.nickName}</div>
                 <div className="font-bold truncate text-xs">{params.role}</div>
             </div>
             {
-                (userRole.userRole === "owner" ) && ( params.role !== "owner") ?
+                (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner") ?
                     <div className="dropdown dropdown-left absolute  right-3 ">
                         {/* invisible hover:visible */}
                         <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                         <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                            <li> {params.role === "admin" || params.role === "owner" ? <label htmlFor="my-modal-6" className={`btn my-1`}>Block</label> : ""}
-                            </li>
-                            <li> {true ? <label htmlFor="my-modal-6" className={`btn my-1`}>View Members</label> : ""}</li>
+                            <li> {params.role !== "admin" ? <button onClick={makeAdmin} className={`btn my-1`}>Make admin</button> : ""}</li>
+                            <li> {params.role !== "admin" ? <button onClick={Ban} className={`btn my-1`}>ban</button> : ""}</li>
+                            <li> {params.role !== "admin" ? <label htmlFor="my-modal-6" className={`btn my-1`}>Mute</label> : ""} </li>
                         </ul>
                     </div> : ""
             }
