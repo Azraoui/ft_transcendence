@@ -8,7 +8,7 @@ export class MuteDto {
     
     @IsNumber()
     @IsNotEmpty()
-    muterId: number
+    memberId: number
 
     @IsNumber()
     @IsNotEmpty()

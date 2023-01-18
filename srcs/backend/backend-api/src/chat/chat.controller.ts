@@ -64,14 +64,14 @@ export class ChatController {
     @HttpCode(HttpStatus.OK)
     @Post('addAdmin')
     addAdmin(@GetUserReq('id') userId: number, @Body() body: AddAdminDto) {
-        return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
+        return this.chatService.addAdmin(body.roomId, userId, body.memberId);
     }
 
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
     @Post('muteMember')
     muteMember(@GetUserReq('id') userId: number, @Body() body: MuteDto) {
-        return this.chatService.muteMember(body.roomId, userId, body.muterId, body.duration);
+        return this.chatService.muteMember(body.roomId, userId, body.memberId, body.duration);
     }
 
     @UseGuards(JwtTwoFactorGuard)

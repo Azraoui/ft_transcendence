@@ -8,6 +8,6 @@ export class AddAdminDto {
     
     @IsNumber()
     @IsNotEmpty()
-    newAdminId: number
+    memberId: number
 
 }
