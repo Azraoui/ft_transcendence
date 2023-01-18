@@ -38,10 +38,10 @@ const getProfile = () => {
     return http.post('/chat/createRoom',data, {withCredentials:true} );
   };
 
-  const makeNewChannelAdmin = (data :{roomId:number, newAdminId:number}) => {
+  const makeNewChannelAdmin = (data :{roomId:number, memberId:number}) => {
     return http.post('/chat/addAdmin',data, {withCredentials:true} );
   };
-    const banChannelMember = (data :{roomId:number, newAdminId:number}) => {
+    const banChannelMember = (data :{roomId:number, memberId:number}) => {
     return http.post('/chat/blockMember',data, {withCredentials:true} );
   };
   const getChannels = () => {
