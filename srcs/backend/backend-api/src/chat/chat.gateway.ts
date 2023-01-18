@@ -10,6 +10,7 @@ import { Server } from "socket.io";
 import JwtTwoFactorGuard from "src/auth/guard/jwt-two-factor.guard";
 import { GetUserReq } from "src/decorator";
 import { ChatService } from "./chat.service";
+import { ChatDto } from "./dto";
 
 @WebSocketGateway(
     1337,
@@ -36,14 +37,11 @@ export class ChatGateWay {
         return this.chatService.getAllRooms(userId);
     }
 
-    @SubscribeMessage('test')
-    testGateway() {
-        return "Yes it's work"
-    }
-
-    @SubscribeMessage('send-msg')
-    recieveMsg(@MessageBody() msgBody: string) {
-        console.log(`new message msgBody = ${msgBody}`);
+    @SubscribeMessage('createMessage')
+    create(@MessageBody() msg: ChatDto) {
+        const newMsg = this.chatService.createMsg(msg, 1);
+        this.server.emit('message', msg);
+        return newMsg;
     }
 
     @SubscribeMessage('findAllMessages')
