@@ -47,25 +47,33 @@ export class ChatController {
     joinRoom(@Body() body: JoinRoomDto, @GetUserReq('id') userId: number) {
         return this.chatService.joinRoom(body, +userId);
     }
-
+    
     @UseGuards(JwtTwoFactorGuard)
     @Delete('leftRoom/:id')
     leftRoom(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
         return this.chatService.leftRoom(+roomId, +userId);
     }
-
-
+    
     @UseGuards(JwtTwoFactorGuard)
     @Get('viewMembers/:id')
     viewMembers(@Param('id') roomId: number, @GetUserReq('id') userId: number) {
         return this.chatService.viewMembers(+roomId, +userId);
     }
 
-
     @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
     @Post('addAdmin')
     addAdmin(@GetUserReq('id') userId: number, @Body() body: any) {
         return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
     }
+
+    // @UseGuards(JwtTwoFactorGuard)
+    // @HttpCode(HttpStatus.OK)
+    // @Post('muteMember')
+    // muteAdmin(@GetUserReq('id') userId: number, @Body() body: any) {
+    //     return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
+    // }
+
+
 
 }

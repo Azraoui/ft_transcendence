@@ -161,7 +161,7 @@ export class ChatService {
                         admins: {
                             push: newAdminId
                         }
-                    }
+                    },
                 })
                 return room;
             }
