@@ -67,12 +67,19 @@ export class ChatController {
         return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
     }
 
-    // @UseGuards(JwtTwoFactorGuard)
-    // @HttpCode(HttpStatus.OK)
-    // @Post('muteMember')
-    // muteAdmin(@GetUserReq('id') userId: number, @Body() body: any) {
-    //     return this.chatService.addAdmin(body.roomId, userId, body.newAdminId);
-    // }
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('muteMember')
+    muteMember(@GetUserReq('id') userId: number, @Body() body: any) {
+        return this.chatService.muteMember(body.roomId, userId, body.muterId, body.duration);
+    }
+
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('blockMember')
+    blockMember(@GetUserReq('id') userId: number, @Body() body: any) {
+        return this.chatService.blockMember(body.roomId, userId, body.memberId);
+    }
 
 
 
