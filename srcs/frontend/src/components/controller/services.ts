@@ -55,6 +55,10 @@ const getProfile = () => {
     
     return http.post(`/chat/joinRoom`, {roomId,type, password}, {withCredentials:true});
   };
+  const muteMember = (data :{roomId:number, memberId:number, duration:number}) => {
+    
+    return http.post(`/chat/muteMember`, data, {withCredentials:true});
+  };
   const leaveChannel = (id:number) => {
     return http.delete(`/chat/leftRoom/${id}`, {withCredentials:true});
   };
@@ -110,6 +114,7 @@ const Service = {
   getChannelMembers,
   makeNewChannelAdmin,
   banChannelMember,
+  muteMember,
   // get,
   // create,
   // update,

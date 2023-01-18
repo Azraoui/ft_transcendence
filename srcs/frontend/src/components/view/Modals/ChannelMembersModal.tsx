@@ -8,13 +8,14 @@ import Service from '../../controller/services'
 import { ChannelNavAtom, ChannelsMember } from '../../model/atoms/ChannelsAtom'
 import { ProfileData } from '../../model/atoms/ProfileData'
 import { error_alert, success_alert } from '../Utils/Alerts'
+import MuteChannelMemberModal from './MuteChannelMemberModal'
 
 function ChannelMembersModal() {
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
     const [profileData, setprofileData] = useRecoilState(ProfileData);
     const [data, setData] = useRecoilState(ChannelsMember)
 
-    useEffect(() => { 
+    useEffect(() => {
 
         Service.getChannelMembers(channel.id).then((res: any) => {
             setData(res.data);
@@ -30,7 +31,7 @@ function ChannelMembersModal() {
                     <h3 className="font-bold text-lg">Members ({data.members?.length})</h3>
                     <div className='px-4 py-6 rounded-lg mt-6 flex flex-col space-y-4  overflow-auto h-[500px] w-full'>
                         {data.members?.map((item) => (
-                            <MemberCard key={item.id} params={item} userRole={{ userRole: data.userRole, userId:profileData.id, roomId:channel.id }} />
+                            <MemberCard key={item.id} params={item} userRole={{ userRole: data.userRole, userId: profileData.id, roomId: channel.id }} />
                         ))}
                     </div>
                 </div>
@@ -43,8 +44,8 @@ type MemberCardProps = {
     userRole:
     {
         userRole: string,
-        userId:number,
-        roomId:number
+        userId: number,
+        roomId: number
     }
     params:
     {
@@ -56,31 +57,23 @@ type MemberCardProps = {
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
     console.log(userRole.userRole);
-    const data = 
+    const data =
     {
-        roomId:userRole.roomId,
-        memberId:params.id
+        roomId: userRole.roomId,
+        memberId: params.id
     }
-    const makeAdmin = () =>
-    {
-            Service.makeNewChannelAdmin(data).then((res:any)=>
-            {
-                    success_alert(`${params.nickName} is now an dmin`)
-            }).catch(()=>
-            {
-                    error_alert()
-            })
+    const makeAdmin = () => {
+        Service.makeNewChannelAdmin(data).then((res: any) => {
+            success_alert(`${params.nickName} is now an dmin`)
+        }).catch(() => {
+            error_alert()
+        })
     }
-    const Ban = () =>
-    {
-        console.log("=============>>",params);
-        
-        Service.banChannelMember(data).then((res:any)=>
-        {
-                success_alert(`${params.nickName} is no longer a member`)
-        }).catch(()=>
-        {
-                error_alert()
+    const Ban = () => {
+        Service.banChannelMember(data).then((res: any) => {
+            success_alert(`${params.nickName} is no longer a member`)
+        }).catch(() => {
+            error_alert()
         })
     }
     return (
@@ -94,9 +87,10 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
 
             </div>
             <div>
-                <div className=" truncate text-sm">{userRole.userId === params.id ? "You" :params.nickName}</div>
+                <div className=" truncate text-sm">{userRole.userId === params.id ? "You" : params.nickName}</div>
                 <div className="font-bold truncate text-xs">{params.role}</div>
             </div>
+            <MuteChannelMemberModal roomId={userRole.roomId} memberId={params.id} />
             {
                 (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner" && userRole.userId !== params.id) ?
                     <div className="dropdown dropdown-left absolute  right-3 ">
@@ -105,7 +99,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                         <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                             <li> {params.role !== "admin" ? <button onClick={makeAdmin} className={`btn my-1`}>Make admin</button> : ""}</li>
                             <li> {params.role !== "admin" || userRole.userRole === "owner" ? <button onClick={Ban} className={`btn my-1`}>ban</button> : ""}</li>
-                            <li> {params.role !== "admin" || userRole.userRole === "owner"? <label htmlFor="my-modal-6" className={`btn my-1`}>Mute</label> : ""} </li>
+                            <li> {params.role !== "admin" || userRole.userRole === "owner" ? <label htmlFor="my-modal-7" className={`btn my-1`}>Mute</label> : ""} </li>
                         </ul>
                     </div> : ""
             }
