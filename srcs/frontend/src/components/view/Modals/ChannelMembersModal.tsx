@@ -96,7 +96,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                 <div className="font-bold truncate text-xs">{params.role}</div>
             </div>
             {
-                (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner" && params.role !== "admin") ?
+                (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner" && userRole.userId !== params.id) ?
                     <div className="dropdown dropdown-left absolute  right-3 ">
                         {/* invisible hover:visible */}
                         <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
