@@ -5,7 +5,6 @@ import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
 import { Room } from '@prisma/client';
-import { timeout } from 'rxjs';
 
 @Injectable()
 export class ChatService {
@@ -36,9 +35,8 @@ export class ChatService {
         const messages = await this.prismaService.messages.findMany({
             where: {
                 roomId: roomId
-            }
+            },
         })
-        console.log(`messages => ${messages}`);
         return messages;
     }
 
@@ -83,10 +81,28 @@ export class ChatService {
             select: {
                 id: true,
                 name: true,
-                type: true
+                type: true,
+                members: true
             }
         })
-        return rooms;
+        // return rooms;
+        let roomDataArr = []
+        let roomData: Record<string, any> = {};
+        let images = []
+        for (let i = 0; i < rooms.length; i++)
+        {
+            for (let j = 0; j < 5 && j < rooms[i].members.length; j++) {
+                images[j] = (await this.getPictureLink(rooms[i].members[j])).toString();
+            }
+            roomData.id = rooms[i].id;
+            roomData.name = rooms[i].name;
+            roomData.type = rooms[i].type;
+            roomData.images = images;
+            roomDataArr.push(roomData)
+            images = [];
+            roomData = {};
+        }
+        return roomDataArr;
     }
 
     async createRoom(userId: number, roomData: RoomDto) {
