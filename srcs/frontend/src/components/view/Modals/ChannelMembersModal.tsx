@@ -56,13 +56,13 @@ type MemberCardProps = {
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
     console.log(userRole.userRole);
+    const data = 
+    {
+        roomId:userRole.roomId,
+        newAdminId:params.id
+    }
     const makeAdmin = () =>
     {
-        const data = 
-        {
-            roomId:userRole.roomId,
-            newAdminId:params.id
-        }
             Service.makeNewChannelAdmin(data).then((res:any)=>
             {
                     success_alert(`${params.nickName} is now an dmin`)
@@ -73,7 +73,13 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     }
     const Ban = () =>
     {
-        
+        Service.banChannelMember(data).then((res:any)=>
+        {
+                success_alert(`${params.nickName} is no longer a member`)
+        }).catch(()=>
+        {
+                error_alert()
+        })
     }
     return (
         <div className="flex items-center   justify-start px-4 py-6 rounded-lg relative space-x-3 bg-[#242424]">

@@ -41,6 +41,9 @@ const getProfile = () => {
   const makeNewChannelAdmin = (data :{roomId:number, newAdminId:number}) => {
     return http.post('/chat/addAdmin',data, {withCredentials:true} );
   };
+    const banChannelMember = (data :{roomId:number, newAdminId:number}) => {
+    return http.post('/chat/blockMember',data, {withCredentials:true} );
+  };
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
   };
@@ -106,7 +109,7 @@ const Service = {
   leaveChannel,
   getChannelMembers,
   makeNewChannelAdmin,
-  
+  banChannelMember,
   // get,
   // create,
   // update,
