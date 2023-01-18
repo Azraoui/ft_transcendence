@@ -56,7 +56,6 @@ type MemberCardProps = {
     }
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
-    console.log(userRole.userRole);
     const data =
     {
         roomId: userRole.roomId,
@@ -78,19 +77,17 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     }
     return (
         <div className="flex items-center   justify-start px-4 py-6 rounded-lg relative space-x-3 bg-[#242424]">
-
             <div className="avatar relative ">
                 <div className="mask mask-squircle w-12 h-12">
                     <img src={params.pictureLink} alt="Avatar Tailwind CSS Component" />
                 </div>
                 <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
-
             </div>
             <div>
                 <div className=" truncate text-sm">{userRole.userId === params.id ? "You" : params.nickName}</div>
                 <div className="font-bold truncate text-xs">{params.role}</div>
             </div>
-            <MuteChannelMemberModal roomId={userRole.roomId} memberId={params.id} />
+            <MuteChannelMemberModal roomId={data.roomId} memberId={data.memberId} />
             {
                 (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner" && userRole.userId !== params.id) ?
                     <div className="dropdown dropdown-left absolute  right-3 ">

@@ -9,36 +9,32 @@ import { error_alert, error_alert_channel, success_alert } from "../Utils/Alerts
 function MuteChannelMemberModal({ roomId, memberId }: { roomId: number, memberId: number }) {
 
     const [isSubmit, setSubmit] = useState(false);
-    const [inputs, setInputs] = useState({
-        roomId: roomId,
-        duration: 1, //default
-        memberId: memberId
-    })
-
+    const [duration, setDuration] = useState('1')
+    console.log(roomId, " ******* ", memberId);
+    
     const onSubmit = (e: any) => {
         e.preventDefault();
-
-        Service.muteMember(inputs).then(() => {
+      const data = {
+            roomId: roomId,
+            duration: +duration, //default
+            memberId: memberId
+        }
+        console.log(data.duration," duration +++++++++++++++++++++++");
+        
+        Service.muteMember(data).then(() => {
             success_alert("member muted successfuly")
             setSubmit(false);
 
         }).catch((err: Error) => {
         setSubmit(false);
-        error_alert()
+            error_alert()
         })
     }
 
     const onOptionChange = (e: any) => {
-
-        console.log(e.target.value);
         const value = e.target.value;
         setSubmit(true);
-        setInputs({
-            ...inputs,
-            [e.target.name]: +value,
-        })
-        console.log("=======>", inputs);
-
+        setDuration(value)
     }
 
     return (
@@ -54,19 +50,19 @@ function MuteChannelMemberModal({ roomId, memberId }: { roomId: number, memberId
                         <div className="form-control">
                             <label className="label cursor-pointer  px-6">
                                 <span className="label-text text-white font-bold  ">1 min</span>
-                                <input type="radio" name="duration" checked={inputs.duration == 1} className="radio   radio-info" value={1} onChange={onOptionChange} />
+                                <input type="radio" name="duration" checked={duration == '1'} className="radio   radio-info" value='1' onChange={onOptionChange} />
                             </label>
                         </div>
                         <div className="form-control">
                             <label className="label cursor-pointer  px-6" >
                                 <span className="label-text text-white font-bold">2 min</span>
-                                <input type="radio" name="duration" checked={inputs.duration == 2} className="radio radio-info" value={2} onChange={onOptionChange} />
+                                <input type="radio" name="duration" checked={duration == '2'} className="radio radio-info" value='2' onChange={onOptionChange} />
                             </label>
                         </div>
                         <div className="form-control">
                             <label className="label cursor-pointer  px-6" >
                                 <span className="label-text text-white font-bold ">3 min</span>
-                                <input type="radio" name="duration" checked={inputs.duration == 3} className={`radio radio-info`} value={3} onChange={onOptionChange} />
+                                <input type="radio" name="duration" checked={duration == '3'} className={`radio radio-info`} value='3' onChange={onOptionChange} />
                             </label>
                         </div>
                         <div className="modal-action">
