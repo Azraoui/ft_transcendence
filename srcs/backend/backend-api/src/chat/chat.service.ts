@@ -161,7 +161,7 @@ export class ChatService {
                         admins: {
                             push: newAdminId
                         }
-                    }
+                    },
                 })
                 return room;
             }
@@ -269,7 +269,8 @@ export class ChatService {
         return findRoom;
     }
 
-    async muteMember(roomId: number, userId: number, memberId: number, muteTime) {
+    async muteMember(roomId: number, userId: number, memberId: number, muteTime: number) {
+        const time = moment().add(muteTime, "m").format('YYYY-MM-DD hh:mm:ss');
         const findRoom = await this.prismaService.room.findUnique({
             where: {
                 id: roomId
@@ -288,7 +289,7 @@ export class ChatService {
                     data: {
                         muteds: {
                             create: [
-                                {time: muteTime, userId: memberId},
+                                {time: time, userId: memberId},
                             ]
                         }
                     }
