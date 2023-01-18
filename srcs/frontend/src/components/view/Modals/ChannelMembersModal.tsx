@@ -59,7 +59,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     const data = 
     {
         roomId:userRole.roomId,
-        newAdminId:params.id
+        memberId:params.id
     }
     const makeAdmin = () =>
     {
@@ -73,6 +73,8 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     }
     const Ban = () =>
     {
+        console.log("=============>>",params);
+        
         Service.banChannelMember(data).then((res:any)=>
         {
                 success_alert(`${params.nickName} is no longer a member`)
