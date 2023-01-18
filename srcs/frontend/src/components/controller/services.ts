@@ -38,8 +38,8 @@ const getProfile = () => {
     return http.post('/chat/createRoom',data, {withCredentials:true} );
   };
 
-  const makeNewChannelAdmin = (data :{name:string, type:string,password:string}) => {
-    return http.post('/chat/createRoom',data, {withCredentials:true} );
+  const makeNewChannelAdmin = (data :{roomId:number, newAdminId:number}) => {
+    return http.post('/chat/addAdmin',data, {withCredentials:true} );
   };
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
@@ -105,6 +105,7 @@ const Service = {
   joinChannel,
   leaveChannel,
   getChannelMembers,
+  makeNewChannelAdmin,
   
   // get,
   // create,
