@@ -13,7 +13,6 @@ function ProtectedChannelModal() {
 
     const Activate = (evt: FormEvent) => {
         evt.preventDefault();
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@",channel.id, channel.type);
         
         Service.joinChannel(channel.id, channel.type, code).then((res: any) => {
             console.log(res.data);
@@ -27,6 +26,7 @@ function ProtectedChannelModal() {
                 error_alert_channel_password()
                 setOK(false)
                 console.log(e);
+                setCode("");
             })
 
     }

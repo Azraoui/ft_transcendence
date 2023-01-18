@@ -20,6 +20,7 @@ import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
 import TwoFA from './components/view/Login/TwoFA'
 import PageNotFound from './components/view/NotFound/PageNotFound'
 import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModal'
+import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 
 
 
@@ -80,6 +81,7 @@ function App() {
             <BlockModal/>
             <AddChannelModal/>
             <ProtectedChannelModal/>
+            <ChannelMembersModal/>
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
               <Routes>

@@ -35,6 +35,22 @@ export const IsJoined = atom({
     default:true
 })
 
+export const ChannelsMember = atom({
+    key:"ChannelsMember",
+    default:{
+        userRole: "",
+        members: [{
+            id: 1,
+            nickName: "",
+            pictureLink: "",
+            role: ""
+        }]
+    }
+
+
+
+})
+
 
 
 
