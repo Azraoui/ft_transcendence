@@ -362,6 +362,14 @@ export class ChatService {
                     }
                 })
             }
+            if (room.members.length === 0)
+            {
+                await this.prismaService.room.delete({
+                    where: {
+                        id: roomId
+                    }
+                })
+            }
         }
     }
 
@@ -496,6 +504,5 @@ export class ChatService {
             }
         }
     }
-
 
 }

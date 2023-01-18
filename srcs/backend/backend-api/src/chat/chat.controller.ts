@@ -78,7 +78,6 @@ export class ChatController {
     @HttpCode(HttpStatus.OK)
     @Post('blockMember')
     blockMember(@GetUserReq('id') userId: number, @Body() body: BlockDto) {
-        console.log(`body.roomId = ${body.roomId}, body.memberId = ${body.memberId}`)
         return this.chatService.blockMember(body.roomId, userId, body.memberId);
     }
 
