@@ -467,28 +467,28 @@ export class ChatService {
     }
 
     async findMutedStatus(userId: number, roomId: number): Promise<boolean> {
-        const room = await this.prismaService.room.findUnique({
+        const mutedUser = await this.prismaService.mutedUser.findMany({
             where: {
-                id: roomId,
-            },
-            select: {
-                muteds: true
+                userId: userId,
+                roomId: roomId
             }
         })
-        const length = room.muteds.length - 1;
-        const time = moment().format('YYYY-MM-DD hh:mm:ss');
-        if (room.muteds.length >= 0 && room.muteds[length]?.id === userId) {
-            if (room.muteds[length].time >= time) {
-                await this.prismaService.mutedUser.delete({
-                    where: {
-                        id: userId,
-                    }
-                })
-                return false
+        if (mutedUser) {
+            const time = moment().format('YYYY-MM-DD hh:mm:ss');
+            for (let i = 0; i < mutedUser.length; i++) {
+                if (mutedUser[i].time >= time)
+                {
+                    await this.prismaService.mutedUser.delete({
+                        where: {
+                            id : mutedUser[i].id
+                        }
+                    })
+                    return false
+                }
+                return true;
             }
-            return true
         }
-        return false
+        return false;
     }
 
     async viewMembers(roomId: number, userId: number) {
