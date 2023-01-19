@@ -31,7 +31,7 @@ function ChannelMembersModal() {
                 <div className="modal-box relative bg-black">
                     <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="font-bold text-lg">Members ({data.members?.length})</h3>
-                    <div className='px-4 py-6 rounded-lg mt-6 flex flex-col space-y-4  overflow-auto h-[500px] w-full'>
+                    <div className='px-4 py-6 rounded-lg mt-6 flex flex-col space-y-4  overflow-auto scrollbar-hide h-[500px] w-full'>
                         {data.members?.map((item) => (
                             <MemberCard key={item.id} params={item} userRole={{ userRole: data.userRole, userId: profileData.id, roomId: channel.id }} />
                         ))}
