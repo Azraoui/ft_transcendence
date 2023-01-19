@@ -561,4 +561,40 @@ export class ChatService {
         }
     }
 
+    async unMuteMember(roomId: number, userId:number, memberId: number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId
+            },
+            include: {
+                muteds: true
+            }
+        })
+        if (room.owner === userId) {
+            await this.prismaService.room.update({
+                where: {
+                    id: roomId,
+                },
+                data: {
+                    muteds: {
+                        set: room.muteds.filter((n) => n.id !== memberId)
+                    }
+                }
+            })
+        }
+        else if (room.admins.find((id) => id === userId)
+        && !room.admins.find((id) => id === memberId) && memberId != room.owner )  {
+            await this.prismaService.room.update({
+                where: {
+                    id: roomId,
+                },
+                data: {
+                    muteds: {
+                        set: room.muteds.filter((n) => n.id !== memberId)
+                    }
+                }
+            })
+        }
+    }
+
 }
