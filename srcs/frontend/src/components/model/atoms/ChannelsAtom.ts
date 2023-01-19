@@ -25,7 +25,8 @@ export const ChannelMemberData = atom({
     default:{
         memberId:-1,
         roomId:-1,
-        role:""
+        role:"",
+        isMuted:false
     }
 })
 
@@ -54,7 +55,9 @@ export const ChannelsMember = atom({
             id: 1,
             nickName: "",
             pictureLink: "",
-            role: ""
+            role: "",
+            isMuted:false
+
         }]
     }
 

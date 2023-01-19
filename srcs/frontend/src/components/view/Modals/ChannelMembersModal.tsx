@@ -54,7 +54,8 @@ type MemberCardProps = {
         id: number,
         nickName: string
         pictureLink: string,
-        role: string
+        role: string,
+        isMuted:boolean
     }
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
@@ -81,10 +82,10 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     }
     return (
         <div onClick={() => {
-            setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role })
+            setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role, isMuted:params.isMuted })
             // console.log("memberdata: ", params.id, memberData.memberId);
 
-        }} className={`flex items-center  ${memberData.memberId == params.id && "bg-login-gradient"} hover:bg-login-gradient justify-start px-4 py-6 rounded-lg relative space-x-3 `}>
+        }} className={`flex items-center bg-[#242424]   ${memberData.memberId == params.id && "bg-login-gradient"} hover:bg-login-gradient justify-start px-4 py-6 rounded-lg relative space-x-3 `}>
             <div className="avatar relative ">
                 <div className="mask mask-squircle w-12 h-12">
                     <img src={params.pictureLink} alt="Avatar Tailwind CSS Component" />

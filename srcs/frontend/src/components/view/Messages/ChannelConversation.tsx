@@ -43,7 +43,7 @@ function ChannelConversation() {
           }
         </div>
         {
-          isJoined ?
+          isJoined && !memberData.isMuted ?
             <div className=' w-full  bottom-0 rounded-lg'>
               <div className="flex w-full justify-center">
                 <div className="mb-3 max-w-6xl  w-full relative">
