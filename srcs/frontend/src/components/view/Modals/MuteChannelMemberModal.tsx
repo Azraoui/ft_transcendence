@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react"
 import { ToastContainer } from "react-toastify";
+import { useRecoilState } from "recoil";
 import Service from "../../controller/services";
+import { ChannelMemberData } from "../../model/atoms/ChannelsAtom";
 import { error_alert, error_alert_channel, success_alert } from "../Utils/Alerts";
 
 
 
 
-function MuteChannelMemberModal({ roomId, memberId }: { roomId: number, memberId: number }) {
+function MuteChannelMemberModal() {
+
+
+    const [memberData, setMemberData] = useRecoilState(ChannelMemberData)
 
     const [isSubmit, setSubmit] = useState(false);
-    const [duration, setDuration] = useState('1')
-    console.log(roomId, " ******* ", memberId);
+    const [duration, setDuration] = useState('0')
+    console.log(memberData.roomId, " ******* ", memberData.memberId);
     
     const onSubmit = (e: any) => {
         e.preventDefault();
       const data = {
-            roomId: roomId,
+            roomId: memberData.roomId,
             duration: +duration, //default
-            memberId: memberId
+            memberId: memberData.memberId
         }
         console.log(data.duration," duration +++++++++++++++++++++++");
         

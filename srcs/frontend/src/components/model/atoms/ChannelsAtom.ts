@@ -20,6 +20,14 @@ export const ChannelNavAtom = atom({
     }
 })
 
+export const ChannelMemberData = atom({
+    key:"ChannelMemberData",
+    default:{
+        memberId:-1,
+        roomId:-1,
+    }
+})
+
 export const ChannelMessage = atom({
     key:"ChannelMessage",
     default:[{

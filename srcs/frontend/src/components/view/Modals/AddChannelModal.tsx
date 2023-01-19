@@ -8,7 +8,7 @@ function AddChannelModal() {
     const [isSubmit, setSubmit] = useState(false);
     const [inputs, setInputs] = useState({
         name: "",
-        type: "public", //default
+        type: "default", //default
         password:""
       })
 
@@ -25,7 +25,7 @@ function AddChannelModal() {
             success_alert("Channel created Successfuly")
             setInputs({
                 name: "",
-                type: "public", //default
+                type: "default", //default
                 password:""
               })
 
@@ -36,7 +36,7 @@ function AddChannelModal() {
                 
                 setInputs({
                     name: "",
-                    type: "public", //default
+                    type: "default", //default
                     password:""
                   })
         })

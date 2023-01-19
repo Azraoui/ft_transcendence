@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
 import Service from '../../controller/services'
-import { ChannelNavAtom, ChannelsMember } from '../../model/atoms/ChannelsAtom'
+import { ChannelMemberData, ChannelNavAtom, ChannelsMember } from '../../model/atoms/ChannelsAtom'
 import { ProfileData } from '../../model/atoms/ProfileData'
 import { error_alert, success_alert } from '../Utils/Alerts'
 import MuteChannelMemberModal from './MuteChannelMemberModal'
@@ -56,6 +56,8 @@ type MemberCardProps = {
     }
 }
 const MemberCard = ({ params, userRole }: MemberCardProps) => {
+    const [memberData, setMemberData] = useRecoilState(ChannelMemberData)
+
     const data =
     {
         roomId: userRole.roomId,
@@ -63,7 +65,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
     }
     const makeAdmin = () => {
         Service.makeNewChannelAdmin(data).then((res: any) => {
-            success_alert(`${params.nickName} is now an dmin`)
+            success_alert(`${params.nickName} is now an admin`)
         }).catch(() => {
             error_alert()
         })
@@ -76,7 +78,12 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
         })
     }
     return (
-        <div className="flex items-center   justify-start px-4 py-6 rounded-lg relative space-x-3 bg-[#242424]">
+        <div onClick={()=>
+        {
+                setMemberData({...memberData, roomId:userRole.roomId, memberId:params.id})
+                // console.log("memberdata: ", params.id, memberData.memberId);
+                
+        }} className={`flex items-center  ${memberData.memberId == params.id && "bg-login-gradient"} hover:bg-login-gradient justify-start px-4 py-6 rounded-lg relative space-x-3 `}>
             <div className="avatar relative ">
                 <div className="mask mask-squircle w-12 h-12">
                     <img src={params.pictureLink} alt="Avatar Tailwind CSS Component" />
@@ -87,7 +94,6 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                 <div className=" truncate text-sm">{userRole.userId === params.id ? "You" : params.nickName}</div>
                 <div className="font-bold truncate text-xs">{params.role}</div>
             </div>
-            <MuteChannelMemberModal roomId={data.roomId} memberId={data.memberId} />
             {
                 (userRole.userRole === "owner" || userRole.userRole === "admin") && (params.role !== "owner" && userRole.userId !== params.id) ?
                     <div className="dropdown dropdown-left absolute  right-3 ">

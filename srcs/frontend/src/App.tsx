@@ -21,6 +21,7 @@ import TwoFA from './components/view/Login/TwoFA'
 import PageNotFound from './components/view/NotFound/PageNotFound'
 import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModal'
 import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
+import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 
 
 
@@ -82,6 +83,7 @@ function App() {
             <AddChannelModal/>
             <ProtectedChannelModal/>
             <ChannelMembersModal/>
+            <MuteChannelMemberModal/>
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
               <Routes>
