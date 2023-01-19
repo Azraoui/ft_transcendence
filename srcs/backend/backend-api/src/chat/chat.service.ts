@@ -450,6 +450,10 @@ export class ChatService {
             }
             allMessages.push(obj);
         });
+        return {
+            status: this.findMutedStatus(userId, roomId),
+            allMessages: allMessages
+        }
     }
 
     findUserStatusInRoom(userId: number, room: Room): string {
