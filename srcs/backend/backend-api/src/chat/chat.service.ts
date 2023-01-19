@@ -452,7 +452,7 @@ export class ChatService {
         });
     }
 
-    findUserStatusInRoom(roomId: number, userId: number, room: Room): string {
+    findUserStatusInRoom(userId: number, room: Room): string {
 
             if (room.owner === userId)
                 return "owner";
@@ -464,6 +464,30 @@ export class ChatService {
                 return "member";
             else
                 return "notFound";
+    }
+
+    async findMutedStatus(userId: number, roomId: number): Promise<boolean> {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId,
+            },
+            select: {
+                muteds: true
+            }
+        })
+        const length = room.muteds.length - 1;
+        const time = moment().format('YYYY-MM-DD hh:mm:ss');
+        if (room.muteds[length].id === userId) {
+            if (room.muteds[length].time >= time) {
+                await this.prismaService.mutedUser.delete({
+                    where: {
+                        id: userId,
+                    }
+                })
+                return false
+            }
+            return true
+        }
     }
 
     async viewMembers(roomId: number, userId: number) {
@@ -479,7 +503,7 @@ export class ChatService {
             else
             {
                 const membersData: Record<string, any> = {};
-                membersData.userRole = this.findUserStatusInRoom(roomId, userId, room);
+                membersData.userRole = this.findUserStatusInRoom(userId, room);
                 let members = []
                 for (let i = 0; i < room.members.length; i++) {
                     const user = await this.prismaService.user.findUnique({
@@ -496,7 +520,8 @@ export class ChatService {
                     userData.id = user.id;
                     userData.pictureLink = user.pictureLink,
                     userData.nickName = user.nickname,
-                    userData.role = this.findUserStatusInRoom(roomId, user.id, room);
+                    userData.role = this.findUserStatusInRoom(user.id, room);
+                    userData.isMuted = this.findMutedStatus(user.id, roomId);
                     members.push(userData);
                 }
                 membersData.members = members;
