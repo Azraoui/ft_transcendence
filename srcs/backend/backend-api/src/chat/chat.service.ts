@@ -513,12 +513,12 @@ export class ChatService {
                             id : mutedUser[i].id
                         }
                     })
-                    return 0
+                    return "0"
                 }
                 return mutedUser[i].time;
             }
         }
-        return 0;
+        return "0";
     }
 
     async viewMembers(roomId: number, userId: number) {
