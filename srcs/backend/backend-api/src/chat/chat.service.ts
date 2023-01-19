@@ -472,27 +472,26 @@ export class ChatService {
     }
 
     async findMutedStatus(userId: number, roomId: number): Promise<boolean> {
-        const mutedUser = await this.prismaService.mutedUser.findMany({
+        const mutedUser = await this.prismaService.room.findUnique({
             where: {
-                userId: userId,
-                roomId: roomId
+                id: roomId
+            },
+            select: {
+                muteds: true
             }
         })
-        if (mutedUser) {
+        if (mutedUser.muteds) {
             const time = moment().format('YYYY-MM-DD hh:mm:ss');
-            for (let i = 0; i < mutedUser.length; i++) {
-                if (mutedUser[i].time >= time)
+            for (let i = 0; i < mutedUser.muteds.length; i++) {
+                if (mutedUser.muteds[i].time != null && mutedUser.muteds[i].id === userId && mutedUser.muteds[i].time > time)
                 {
-                    await this.prismaService.mutedUser.delete({
-                        where: {
-                            id : mutedUser[i].id
-                        }
-                    })
-                    return false
+                    console.log("------------- here")
+                    return true
                 }
-                return true;
+                return false;
             }
         }
+        console.log("here -----")
         return false;
     }
 
@@ -552,7 +551,8 @@ export class ChatService {
                     userData.pictureLink = user.pictureLink,
                     userData.nickName = user.nickname,
                     userData.role = this.findUserStatusInRoom(user.id, room);
-                    userData.isMuted = (await this.findMutedStatus(user.id, roomId)).valueOf();
+                    userData.isMuted = await this.findMutedStatus(user.id, roomId).valueOf();
+                    console.log(`isMuted = ${userData.isMuted}, roomId = ${roomId}, memberId = ${user.id}`)
                     members.push(userData);
                 }
                 membersData.members = members;
