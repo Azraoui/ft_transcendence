@@ -521,7 +521,7 @@ export class ChatService {
                     userData.pictureLink = user.pictureLink,
                     userData.nickName = user.nickname,
                     userData.role = this.findUserStatusInRoom(user.id, room);
-                    userData.isMuted = this.findMutedStatus(user.id, roomId);
+                    userData.isMuted = (await this.findMutedStatus(user.id, roomId)).valueOf();
                     members.push(userData);
                 }
                 membersData.members = members;
