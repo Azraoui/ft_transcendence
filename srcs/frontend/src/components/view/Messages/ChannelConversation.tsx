@@ -55,8 +55,8 @@ function ChannelConversation() {
                 </div>
               </div>
               :
-              <span className="countdown font-mono text-6xl">
-                   { channelMessage.duration}
+              <span className=" font-bold text-md">
+                 you'll be muted till  <span className=' className="bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500"'> {channelMessage.duration}</span> 
               </span>
             :
             ""
