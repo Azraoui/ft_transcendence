@@ -12,7 +12,6 @@ function ChannelConversation() {
   // const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
   const [channelMessage, setChannelMessage] = useRecoilState(ChannelMessage)
   const [isJoined, setisJoined] = useRecoilState(IsJoined)
-  const [memberData, setMemberData] = useRecoilState(ChannelMemberData)
 
 
 
@@ -24,18 +23,18 @@ function ChannelConversation() {
         <div className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
           {
             isJoined ?
-            channelMessage.length ? 
-            channelMessage.map((item) => (
-              <ConversationChannelBubble key={item.senderId} data={item} />
-            )) 
-            : 
-            <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500">
-                No Message
-              </span>
-            </div>
-            : 
-            <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
+              channelMessage.allMessages.length ?
+                channelMessage.allMessages.map((item) => (
+                  <ConversationChannelBubble key={item.senderId} data={item} />
+                ))
+                :
+                <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500">
+                    No Message
+                  </span>
+                </div>
+              :
+              <div className="text-2xl flex items-center justify-center font-extrabold w-full h-[500px]">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500">
                   Join this Channel To view it's messages
                 </span>
@@ -43,17 +42,23 @@ function ChannelConversation() {
           }
         </div>
         {
-          isJoined && !memberData.isMuted ?
-            <div className=' w-full  bottom-0 rounded-lg'>
-              <div className="flex w-full justify-center">
-                <div className="mb-3 max-w-6xl  w-full relative">
-                  <div className='right-0 -top-1 rounded-full absolute h-14 w-14 bg-login-gradient flex items-center justify-center '>
-                    <PaperAirplaneIcon className='header-icon text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110' />
+          isJoined ?
+            !channelMessage.isMuted ?
+              <div className=' w-full  bottom-0 rounded-lg'>
+                <div className="flex w-full justify-center">
+                  <div className="mb-3 max-w-6xl  w-full relative">
+                    <div className='right-0 -top-1 rounded-full absolute h-14 w-14 bg-login-gradient flex items-center justify-center '>
+                      <PaperAirplaneIcon className='header-icon text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110' />
+                    </div>
+                    <input type="text" placeholder="Type here" className="input input-bordered text-gray-700 rounded-full input-primary w-full " />
                   </div>
-                  <input type="text" placeholder="Type here" className="input input-bordered text-gray-700 rounded-full input-primary w-full " />
                 </div>
               </div>
-            </div> :
+              :
+              <span className="countdown font-mono text-6xl">
+                   { channelMessage.duration}
+              </span>
+            :
             ""
         }
       </div>

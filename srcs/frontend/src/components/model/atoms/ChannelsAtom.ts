@@ -1,62 +1,67 @@
 import { atom } from "recoil";
 
 export const ChannelAtom = atom({
-    key:"ChannelAtom",
-    default:[{
+    key: "ChannelAtom",
+    default: [{
         images: [""],
-        id:-1,
-        name:"",
+        id: -1,
+        name: "",
         type: "",
     }]
 })
 
 export const ChannelNavAtom = atom({
-    key:"ChannelNavAtom",
-    default:{
+    key: "ChannelNavAtom",
+    default: {
         images: [""],
-        id:-1,
-        name:"",
+        id: -1,
+        name: "",
         type: "",
     }
 })
 
 export const ChannelMemberData = atom({
-    key:"ChannelMemberData",
-    default:{
-        memberId:-1,
-        roomId:-1,
-        role:"",
-        isMuted:false
+    key: "ChannelMemberData",
+    default: {
+        memberId: -1,
+        roomId: -1,
+        role: "",
+        isMuted: false
     }
 })
 
 export const ChannelMessage = atom({
-    key:"ChannelMessage",
-    default:[{
-        senderId: 0,
-        senderImage: "",
-        nickName: "",
-        text: "",
-        side: ""
+    key: "ChannelMessage",
+    default:
+    {
+        isMuted: false,
+        duration: "false",
+        allMessages: [{
+            senderId: 0,
+            senderImage: "",
+            nickName: "",
+            text: "",
+            side: ""
 
-    }]
+        }]
+    }
 })
 
 export const IsJoined = atom({
-    key:"IsJoined",
-    default:true
+    key: "IsJoined",
+    default: true
 })
 
 export const ChannelsMember = atom({
-    key:"ChannelsMember",
-    default:{
+    key: "ChannelsMember",
+    default: {
         userRole: "",
         members: [{
             id: 1,
             nickName: "",
             pictureLink: "",
             role: "",
-            isMuted:false
+            isMuted: false
 
         }]
     }

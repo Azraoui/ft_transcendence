@@ -104,7 +104,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                         <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                             <li> {params.role !== "admin" ? <button onClick={makeAdmin} className={`btn my-1`}>Make admin</button> : ""}</li>
                             <li> {params.role !== "admin" || userRole.userRole === "owner" ? <button onClick={Ban} className={`btn my-1`}>ban</button> : ""}</li>
-                            <li> {params.role !== "admin" || userRole.userRole === "owner" ? <label htmlFor="my-modal-7" className={`btn my-1`}>Mute</label> : ""} </li>
+                            <li> {params.role !== "admin" || userRole.userRole === "owner" ?  params.isMuted ? <button className={`btn my-1`}>Unmute</button> : <label htmlFor="my-modal-7" className={`btn my-1`}>Mute</label> : ""} </li>
                         </ul>
                     </div> : ""
             }

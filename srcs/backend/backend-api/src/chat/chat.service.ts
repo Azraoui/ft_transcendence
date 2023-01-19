@@ -451,7 +451,7 @@ export class ChatService {
             allMessages.push(obj);
         });
         return {
-            status: this.findMutedStatus(userId, roomId).valueOf(),
+            isMuted: await this.findMutedStatus(userId, roomId).valueOf(),
             allMessages: allMessages
         }
     }
