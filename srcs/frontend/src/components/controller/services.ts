@@ -44,6 +44,9 @@ const getProfile = () => {
     const banChannelMember = (data :{roomId:number, memberId:number}) => {
     return http.post('/chat/blockMember',data, {withCredentials:true} );
   };
+    const unmuteChannelMember = (data :{roomId:number, memberId:number}) => {
+    return http.post('/chat/unMuteMember',data, {withCredentials:true} );
+  };
   const getChannels = () => {
     return http.get('/chat/getAllRooms', {withCredentials:true});
   };
@@ -115,6 +118,8 @@ const Service = {
   makeNewChannelAdmin,
   banChannelMember,
   muteMember,
+  unmuteChannelMember,
+
   // get,
   // create,
   // update,

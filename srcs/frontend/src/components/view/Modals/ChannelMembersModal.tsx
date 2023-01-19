@@ -80,9 +80,16 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
             error_alert()
         })
     }
+    const Unmute = () => {
+        Service.unmuteChannelMember(data).then((res: any) => {
+            success_alert(`${params.nickName} unmuted successfuly`)
+        }).catch(() => {
+            error_alert()
+        })
+    }
     return (
         <div onClick={() => {
-            setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role, isMuted:params.isMuted })
+            setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role, isMuted:params.isMuted, nickName:params.nickName })
             // console.log("memberdata: ", params.id, memberData.memberId);
 
         }} className={`flex items-center bg-[#242424]   ${memberData.memberId == params.id && "bg-login-gradient"} hover:bg-login-gradient justify-start px-4 py-6 rounded-lg relative space-x-3 `}>
@@ -104,7 +111,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                         <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                             <li> {params.role !== "admin" ? <button onClick={makeAdmin} className={`btn my-1`}>Make admin</button> : ""}</li>
                             <li> {params.role !== "admin" || userRole.userRole === "owner" ? <button onClick={Ban} className={`btn my-1`}>ban</button> : ""}</li>
-                            <li> {params.role !== "admin" || userRole.userRole === "owner" ?  params.isMuted ? <button className={`btn my-1`}>Unmute</button> : <label htmlFor="my-modal-7" className={`btn my-1`}>Mute</label> : ""} </li>
+                            <li> {params.role !== "admin" || userRole.userRole === "owner" ?  params.isMuted ? <button onClick={Unmute} className={`btn my-1`}>Unmute</button> : <label htmlFor="my-modal-7" className={`btn my-1`}>Mute</label> : ""} </li>
                         </ul>
                     </div> : ""
             }

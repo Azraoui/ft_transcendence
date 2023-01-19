@@ -26,7 +26,8 @@ export const ChannelMemberData = atom({
         memberId: -1,
         roomId: -1,
         role: "",
-        isMuted: false
+        isMuted: false,
+        nickName: ""
     }
 })
 
