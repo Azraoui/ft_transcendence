@@ -477,7 +477,7 @@ export class ChatService {
         })
         const length = room.muteds.length - 1;
         const time = moment().format('YYYY-MM-DD hh:mm:ss');
-        if (room.muteds[length].id === userId) {
+        if (room.muteds.length >= 0 && room.muteds[length].id === userId) {
             if (room.muteds[length].time >= time) {
                 await this.prismaService.mutedUser.delete({
                     where: {
@@ -488,6 +488,7 @@ export class ChatService {
             }
             return true
         }
+        return false
     }
 
     async viewMembers(roomId: number, userId: number) {
