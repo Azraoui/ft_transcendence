@@ -83,7 +83,7 @@ export class ChatController {
 
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
-    @Post('unMute')
+    @Post('unMuteMember')
     unmute(@GetUserReq('id') userId: number, @Body() body: UnMuteDto) {
         return this.chatService.unMuteMember(body.roomId, userId, body.memberId);
     }
