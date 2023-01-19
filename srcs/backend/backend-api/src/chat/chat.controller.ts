@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
 import { GetUserReq } from 'src/decorator';
-import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, RoomDto } from './dto';
+import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, RoomDto, UnMuteDto } from './dto';
 import { ChatService } from './chat.service';
 
 @Controller('chat')
@@ -81,13 +81,11 @@ export class ChatController {
         return this.chatService.blockMember(body.roomId, userId, body.memberId);
     }
 
-    // @UseGuards(JwtTwoFactorGuard)
-    // @HttpCode(HttpStatus.OK)
-    // @Post('unMute')
-    // unmute(@GetUserReq('id') userId: number, @Body() body: UnMuteDto) {
-    //     return this.chatService.blockMember(body.roomId, userId, body.memberId);
-    // }
-
-
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('unMuteMember')
+    unmute(@GetUserReq('id') userId: number, @Body() body: UnMuteDto) {
+        return this.chatService.unMuteMember(body.roomId, userId, body.memberId);
+    }
 
 }
