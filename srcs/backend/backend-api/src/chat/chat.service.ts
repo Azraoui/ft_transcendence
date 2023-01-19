@@ -488,6 +488,7 @@ export class ChatService {
             }
             return true
         }
+        return false
     }
 
     async viewMembers(roomId: number, userId: number) {
