@@ -81,4 +81,13 @@ export class ChatController {
         return this.chatService.blockMember(body.roomId, userId, body.memberId);
     }
 
+    // @UseGuards(JwtTwoFactorGuard)
+    // @HttpCode(HttpStatus.OK)
+    // @Post('unMute')
+    // unmute(@GetUserReq('id') userId: number, @Body() body: UnMuteDto) {
+    //     return this.chatService.blockMember(body.roomId, userId, body.memberId);
+    // }
+
+
+
 }

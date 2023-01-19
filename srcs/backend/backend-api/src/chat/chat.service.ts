@@ -451,7 +451,8 @@ export class ChatService {
             allMessages.push(obj);
         });
         return {
-            status: this.findMutedStatus(userId, roomId).valueOf(),
+            isMuted: await this.findMutedStatus(userId, roomId).valueOf(),
+            duration: await this.getRestTime(userId, roomId).valueOf(),
             allMessages: allMessages
         }
     }
@@ -493,6 +494,31 @@ export class ChatService {
             }
         }
         return false;
+    }
+
+    async getRestTime(userId: number, roomId: number) {
+        const mutedUser = await this.prismaService.mutedUser.findMany({
+            where: {
+                userId: userId,
+                roomId: roomId
+            }
+        })
+        if (mutedUser) {
+            const time = moment().format('YYYY-MM-DD hh:mm:ss');
+            for (let i = 0; i < mutedUser.length; i++) {
+                if (mutedUser[i].time >= time)
+                {
+                    await this.prismaService.mutedUser.delete({
+                        where: {
+                            id : mutedUser[i].id
+                        }
+                    })
+                    return 0
+                }
+                return mutedUser[i].time;
+            }
+        }
+        return 0;
     }
 
     async viewMembers(roomId: number, userId: number) {
