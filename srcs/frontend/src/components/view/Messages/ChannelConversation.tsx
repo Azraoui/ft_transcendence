@@ -4,7 +4,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRecoilState } from 'recoil';
 import { ChatFriends } from '../../model/atoms/ChatFriends';
 import ConversationChatBubble from './ConversationChatBubble';
-import { ChannelMessage, IsJoined } from '../../model/atoms/ChannelsAtom';
+import { ChannelMemberData, ChannelMessage, IsJoined } from '../../model/atoms/ChannelsAtom';
 import ConversationChannelBubble from './ConversationChannelBubble';
 
 
@@ -12,6 +12,8 @@ function ChannelConversation() {
   // const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
   const [channelMessage, setChannelMessage] = useRecoilState(ChannelMessage)
   const [isJoined, setisJoined] = useRecoilState(IsJoined)
+  const [memberData, setMemberData] = useRecoilState(ChannelMemberData)
+
 
 
 

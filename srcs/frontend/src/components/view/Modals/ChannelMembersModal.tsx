@@ -18,6 +18,8 @@ function ChannelMembersModal() {
     useEffect(() => {
 
         Service.getChannelMembers(channel.id).then((res: any) => {
+            console.log(res.data);
+            
             setData(res.data);
         }).catch(() => {
         })
@@ -78,11 +80,10 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
         })
     }
     return (
-        <div onClick={()=>
-        {
-                setMemberData({...memberData, roomId:userRole.roomId, memberId:params.id})
-                // console.log("memberdata: ", params.id, memberData.memberId);
-                
+        <div onClick={() => {
+            setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role })
+            // console.log("memberdata: ", params.id, memberData.memberId);
+
         }} className={`flex items-center  ${memberData.memberId == params.id && "bg-login-gradient"} hover:bg-login-gradient justify-start px-4 py-6 rounded-lg relative space-x-3 `}>
             <div className="avatar relative ">
                 <div className="mask mask-squircle w-12 h-12">
