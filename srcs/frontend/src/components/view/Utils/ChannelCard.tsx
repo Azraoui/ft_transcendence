@@ -66,7 +66,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 </div>
                 <div className="mt-2  p-4 flex -space-x-2 overflow-hidden">
                     {data.images.map((src) => (
-                        <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={src} alt="member image" />
+                        <img key={src} className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={src} alt="member image" />
                     ))}
                 </div>
             </div>
@@ -81,7 +81,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                         data.type === "public" ?
                             <div onClick={() => {
                                 const param = { roomId: data.id, type: data.type, password: "" }; JoinChannel(param)
-                            }} className="btn  w-full">Join
+                            }} className="btn w-full">Join
                             </div> :
                             <label htmlFor="my-modal-5" className="btn">Join</label>
                     }
