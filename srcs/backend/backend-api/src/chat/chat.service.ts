@@ -300,7 +300,7 @@ export class ChatService {
             if (findRoom.owner === userId || findRoom.admins.find((id) => id === userId)) {
                 const room = await this.prismaService.room.update({
                     where: {
-                        id: userId
+                        id: roomId
                     },
                     data: {
                         muteds: {
