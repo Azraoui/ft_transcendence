@@ -2,11 +2,13 @@ import { UseGuards } from "@nestjs/common";
 import {
     ConnectedSocket,
     MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
     SubscribeMessage,
     WebSocketGateway,
     WebSocketServer
 } from "@nestjs/websockets";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import JwtTwoFactorGuard from "src/auth/guard/jwt-two-factor.guard";
 import { GetUserReq } from "src/decorator";
 import { ChatService } from "./chat.service";
@@ -23,7 +25,7 @@ import { ChatDto } from "./dto";
         }
     }
 )
-export class ChatGateWay {
+export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
     constructor(
         private readonly chatService: ChatService
@@ -31,21 +33,31 @@ export class ChatGateWay {
 
     @WebSocketServer() server: Server;
 
+
+    handleConnection(client: Socket) {
+        console.log('connected ', client.id);
+    }
+    handleDisconnect(client: Socket) {
+        console.log('Decconected');
+    }
+
     @UseGuards(JwtTwoFactorGuard)
     @SubscribeMessage('getAllRooms')
     getAllRooms(@GetUserReq('id') userId: number) {
         return this.chatService.getAllRooms(userId);
     }
-
+    
     @SubscribeMessage('createMessage')
     create(@MessageBody() msg: ChatDto) {
+        console.log(`-----> createMessage <-----`);
         const newMsg = this.chatService.createMsg(msg, 1);
         this.server.emit('message', msg);
         return newMsg;
     }
-
+    
     @SubscribeMessage('findAllMessages')
     findAll(@MessageBody('roomId') roomId: number) {
+        console.log(`-----> findAllMessages <-----=`);
         // console.log(`data ==> ${data}`);
         return this.chatService.findAllMsgs(+roomId);
     }

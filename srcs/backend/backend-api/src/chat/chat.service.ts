@@ -296,6 +296,22 @@ export class ChatService {
             }
         })
 
+        if (findRoom.muteds.find((n) => n.userId === userId)) {
+            if (time >= findRoom.muteds.find((n) => n.userId === userId).time) {
+                await this.prismaService.room.update({
+                    where: {
+                        id: roomId,
+                    },
+                    data: {
+                        muteds: {
+                            set: findRoom.muteds.filter((n) => n.userId !== memberId)
+                        }
+                    }
+                })
+            }
+        }
+
+
         if (findRoom) {
             if (findRoom.owner === userId || findRoom.admins.find((id) => id === userId)) {
                 const room = await this.prismaService.room.update({
@@ -480,18 +496,15 @@ export class ChatService {
                 muteds: true
             }
         })
-        if (mutedUser.muteds) {
+        if (mutedUser.muteds.find((n) => n.userId === userId)) {
             const time = moment().format('YYYY-MM-DD hh:mm:ss');
-            for (let i = 0; i < mutedUser.muteds.length; i++) {
-                if (mutedUser.muteds[i].time != null && mutedUser.muteds[i].id === userId && mutedUser.muteds[i].time > time)
-                {
-                    console.log("------------- here")
-                    return true
-                }
-                return false;
+            if (mutedUser.muteds.find((n) => n.userId === userId).time != null 
+                && mutedUser.muteds.find((n) => n.userId === userId).time <= time)
+            {
+                return false
             }
+            return true;
         }
-        console.log("here -----")
         return false;
     }
 
@@ -552,7 +565,6 @@ export class ChatService {
                     userData.nickName = user.nickname,
                     userData.role = this.findUserStatusInRoom(user.id, room);
                     userData.isMuted = await this.findMutedStatus(user.id, roomId).valueOf();
-                    console.log(`isMuted = ${userData.isMuted}, roomId = ${roomId}, memberId = ${user.id}`)
                     members.push(userData);
                 }
                 membersData.members = members;
@@ -571,28 +583,18 @@ export class ChatService {
             }
         })
         if (room.owner === userId) {
-            await this.prismaService.room.update({
+            await this.prismaService.mutedUser.delete({
                 where: {
-                    id: roomId,
+                    id: room.muteds.find((n) => n.userId === memberId).id,
                 },
-                data: {
-                    muteds: {
-                        set: room.muteds.filter((n) => n.id !== memberId)
-                    }
-                }
             })
         }
         else if (room.admins.find((id) => id === userId)
-        && !room.admins.find((id) => id === memberId) && memberId != room.owner )  {
-            await this.prismaService.room.update({
+        && !room.admins.find((id) => id === memberId) && memberId != room.owner ){
+            await this.prismaService.mutedUser.delete({
                 where: {
-                    id: roomId,
+                    id: room.muteds.find((n) => n.userId === memberId).id,
                 },
-                data: {
-                    muteds: {
-                        set: room.muteds.filter((n) => n.id !== memberId)
-                    }
-                }
             })
         }
     }
