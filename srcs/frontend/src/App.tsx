@@ -22,6 +22,8 @@ import PageNotFound from './components/view/NotFound/PageNotFound'
 import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModal'
 import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
+import { io } from 'socket.io-client'
+import { chatSocket } from './components/controller/socket'
 
 
 
@@ -33,7 +35,7 @@ function App() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
-    console.log(import.meta.env.VITE_IP) 
+    chatSocket
     retrieveToken();
     // retrieveProfile();
   }, [status]);
