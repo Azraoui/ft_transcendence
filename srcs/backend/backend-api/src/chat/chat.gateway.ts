@@ -34,11 +34,11 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
 
 
-    handleConnection(client: Socket) {
+    handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
     }
-    handleDisconnect(client: Socket) {
-        console.log('Decconected');
+    handleDisconnect(@ConnectedSocket() client: Socket) {
+        console.log('Decconected', client.id);
     }
 
     @UseGuards(JwtTwoFactorGuard)
@@ -60,6 +60,16 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
         console.log(`-----> findAllMessages <-----=`);
         // console.log(`data ==> ${data}`);
         return this.chatService.findAllMsgs(+roomId);
+    }
+
+    @SubscribeMessage('join')
+    joinRoom(@MessageBody() msg, @ConnectedSocket() client: Socket) {
+        console.log("join")
+    }
+
+    @SubscribeMessage('typing')
+    async typing(@MessageBody() msg, @ConnectedSocket() client: Socket) {
+        console.log("typing")
     }
 
 }
