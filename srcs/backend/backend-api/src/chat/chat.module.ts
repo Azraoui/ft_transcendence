@@ -5,10 +5,9 @@ import { ChatGateWay } from './chat.gateway';
 import { ChatService } from './chat.service';
 
 @Module({
-  controllers: [ChatController],
+  controllers: [],
   providers: [
                 ChatService,
-                ChatGateWay,
                 PrismaService
               ]
 })
