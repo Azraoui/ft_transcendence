@@ -32,12 +32,12 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer() server: Server;
 
-
-    handleConnection(@ConnectedSocket() client: Socket) {
+    async handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
-        this.chatService.getUserFromSocket(client);
+        const user = await this.chatService.getUserFromSocket(client);
+        console.log(user);
     }
-    
+
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
     }

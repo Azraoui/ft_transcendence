@@ -6,21 +6,21 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
 import { Room } from '@prisma/client';
 import { Socket } from 'socket.io'
-import { parse } from 'cookie';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class ChatService {
-    constructor (private prismaService: PrismaService) {}
+    constructor (
+        private prismaService: PrismaService,
+        private authService: AuthService
+        ) {}
 
     // Authenticating users
-    async getUserFromSocket(socket: Socket) {
-        const cookie = socket.handshake.headers.cookie;
-        console.log(cookie);
+    getUserFromSocket(socket: Socket) {
         const jwtToken = socket.handshake.auth.token;
-        console.log('client token', jwtToken);
-        // console.log(socket);
-        // const res = parse(cookie);
-        // console.log(token);
+        if (jwtToken) {
+            return this.authService.getUserFromAuthenticationToken(jwtToken);
+        }
     }
 
     async createMsg(msgData: ChatDto, userId: number) {
