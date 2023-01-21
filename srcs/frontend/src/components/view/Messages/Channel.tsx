@@ -14,10 +14,15 @@ function Channel() {
       
       <ChannelList  />
       {
+        channel[0].id === -1 ?
+        
         channel.length ? 
         <ChannelConversation />
         :
         <div className='flex items-center  justify-center w-full bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500 text-xl font-extrabold'>No channel found </div>
+        :
+        <div className='flex items-center  justify-center w-full bg-clip-text text-transparent bg-gradient-to-r  from-pink-500 to-violet-500 text-xl font-extrabold'>Click to join a channel</div>
+
       }
      
 
