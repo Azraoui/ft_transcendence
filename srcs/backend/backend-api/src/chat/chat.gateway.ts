@@ -1,4 +1,3 @@
-import { UseGuards } from "@nestjs/common";
 import {
     ConnectedSocket,
     MessageBody,
@@ -9,8 +8,6 @@ import {
     WebSocketServer
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import JwtTwoFactorGuard from "src/auth/guard/jwt-two-factor.guard";
-import { GetUserReq } from "src/decorator";
 import { ChatService } from "./chat.service";
 import { ChatDto } from "./dto";
 
@@ -26,6 +23,7 @@ import { ChatDto } from "./dto";
 )
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
+    onlineUser: Socket[] = [];
     constructor(
         private readonly chatService: ChatService
     ) { }
@@ -35,16 +33,21 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     async handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
         const user = await this.chatService.getUserFromSocket(client);
+        this.onlineUser.push(client);
     }
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
+        if (this.onlineUser.find((x) => x === client))
+        {
+            const index = this.onlineUser.indexOf(client);
+            this.onlineUser.splice(index, 1);
+        }
     }
 
     @SubscribeMessage('msgToServer')
     create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
-        
+        client.broadcast.emit('msgToClients', {msg: "Salam"})
     }
-
 
 }
