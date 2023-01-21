@@ -42,8 +42,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('msgToServer')
-    create(@MessageBody() msg: ChatDto) {
-
+    create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
+        
     }
 
 
