@@ -1,7 +1,4 @@
 # 1337
-
-
-
 all:
 	#backend
 	# sed '/HOST_MACHINE_URL/d' ./srcs/backend/backend-api/.env > ./srcs/backend/backend-api/.env.example

@@ -22,8 +22,10 @@ export class ChatGateWay {
     @SubscribeMessage('send-msg')
     recieveMsg(@MessageBody() msgBody: string) {
         console.log(`new message msgBody = ${msgBody}`);
+        
     
     }
+    
 
-
+ 
 }

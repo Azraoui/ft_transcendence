@@ -10,7 +10,9 @@ export class ChatService {
         
     }
 
-    findAllMsgs() {
-
+    findAllMsgs(id: number) {
+        this.prismaService.messages.findMany({
+            
+        })
     }
 }
