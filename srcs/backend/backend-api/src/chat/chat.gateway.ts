@@ -35,43 +35,16 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     async handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
         const user = await this.chatService.getUserFromSocket(client);
-        console.log(user);
     }
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
     }
 
-    @UseGuards(JwtTwoFactorGuard)
-    @SubscribeMessage('getAllRooms')
-    getAllRooms(@GetUserReq('id') userId: number) {
-        return this.chatService.getAllRooms(userId);
-    }
-
-    @SubscribeMessage('createMessage')
+    @SubscribeMessage('msgToServer')
     create(@MessageBody() msg: ChatDto) {
-        console.log(`-----> createMessage <-----`);
-        const newMsg = this.chatService.createMsg(msg, 1);
-        this.server.emit('message', msg);
-        return newMsg;
-    }
-    
-    @SubscribeMessage('findAllMessages')
-    findAll(@MessageBody('roomId') roomId: number) {
-        console.log(`-----> findAllMessages <-----=`);
-        // console.log(`data ==> ${data}`);
-        return this.chatService.findAllMsgs(+roomId);
+
     }
 
-    @SubscribeMessage('join')
-    joinRoom(@MessageBody() msg, @ConnectedSocket() client: Socket) {
-        console.log("join")
-    }
-
-    @SubscribeMessage('typing')
-    async typing(@MessageBody() msg, @ConnectedSocket() client: Socket) {
-        console.log("typing")
-        client.broadcast.emit('typing', {name: "abdellah", isTyping: true})
-    }
 
 }

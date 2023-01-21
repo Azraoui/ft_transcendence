@@ -21,7 +21,6 @@ export class AuthService {
         const payload = await this.jwt.verify(token, {
             secret: this.config.get("JWT_SECRET"),
         })
-        console.log("payload", payload)
         if (payload.userId) {
             const user =  await this.prisma.user.findUnique({
                 where: {
@@ -34,7 +33,6 @@ export class AuthService {
                     username: true
                 }
             });
-            console.log("user ==>", user)
             return user;
         }
     }
