@@ -5,10 +5,23 @@ import * as argon2 from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as moment from 'moment';
 import { Room } from '@prisma/client';
+import { Socket } from 'socket.io'
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class ChatService {
-    constructor (private prismaService: PrismaService) {}
+    constructor (
+        private prismaService: PrismaService,
+        private authService: AuthService
+        ) {}
+
+    // Authenticating users
+    getUserFromSocket(socket: Socket) {
+        const jwtToken = socket.handshake.auth.token;
+        if (jwtToken) {
+            return this.authService.getUserFromAuthenticationToken(jwtToken);
+        }
+    }
 
     async createMsg(msgData: ChatDto, userId: number) {
         try {

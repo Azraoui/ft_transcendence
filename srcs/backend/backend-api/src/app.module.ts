@@ -21,6 +21,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ChatGateWay } from './chat/chat.gateway';
 import { ChatService } from './chat/chat.service';
+import { ChatController } from './chat/chat.controller';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -39,7 +41,9 @@ import { ChatService } from './chat/chat.service';
   ],
   controllers: [ UserController,
                 TwoFactorAuthController,
-                GameController
+                GameController,
+                ChatController,
+                AuthController
               ],
   providers: [ PrismaService,
               JwtService,

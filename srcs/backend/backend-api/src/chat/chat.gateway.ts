@@ -15,14 +15,13 @@ import { ChatService } from "./chat.service";
 import { ChatDto } from "./dto";
 
 @WebSocketGateway(
-    1337,
     {
         namespace: 'chat',
         cors: {
             // origin: process.env.HOST_MACHINE_URL + ':5173'
             // origin: 'http://localhost:5173'
             origin: '*'
-        }
+        },
     }
 )
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
@@ -33,10 +32,12 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer() server: Server;
 
-
-    handleConnection(@ConnectedSocket() client: Socket) {
+    async handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
+        const user = await this.chatService.getUserFromSocket(client);
+        console.log(user);
     }
+
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
     }
@@ -46,7 +47,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     getAllRooms(@GetUserReq('id') userId: number) {
         return this.chatService.getAllRooms(userId);
     }
-    
+
     @SubscribeMessage('createMessage')
     create(@MessageBody() msg: ChatDto) {
         console.log(`-----> createMessage <-----`);
@@ -70,6 +71,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     @SubscribeMessage('typing')
     async typing(@MessageBody() msg, @ConnectedSocket() client: Socket) {
         console.log("typing")
+        client.broadcast.emit('typing', {name: "abdellah", isTyping: true})
     }
 
 }

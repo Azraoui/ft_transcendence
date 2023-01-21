@@ -17,6 +17,28 @@ export class AuthService {
 
 }
 
+    public async getUserFromAuthenticationToken(token: string) {
+        const payload = await this.jwt.verify(token, {
+            secret: this.config.get("JWT_SECRET"),
+        })
+        console.log("payload", payload)
+        if (payload.userId) {
+            const user =  await this.prisma.user.findUnique({
+                where: {
+                    id: payload.userId
+                },
+                select: {
+                    id: true,
+                    nickname: true,
+                    pictureLink: true,
+                    username: true
+                }
+            });
+            console.log("user ==>", user)
+            return user;
+        }
+    }
+
     async fortytwoLogin(apiData: AuthDto) {
 
         const user = await this.prisma.user.findUnique({
