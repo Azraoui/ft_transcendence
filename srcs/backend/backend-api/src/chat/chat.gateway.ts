@@ -1,3 +1,4 @@
+import { Injectable } from "@nestjs/common";
 import {
     ConnectedSocket,
     MessageBody,
@@ -11,6 +12,7 @@ import { Server, Socket } from "socket.io";
 import { ChatService } from "./chat.service";
 import { ChatDto } from "./dto";
 
+@Injectable()
 @WebSocketGateway(
     {
         namespace: 'chat',
@@ -23,7 +25,7 @@ import { ChatDto } from "./dto";
 )
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
-    onlineUser: Socket[] = [];
+    onlineUser: Record<string, any> = [];
     constructor(
         private readonly chatService: ChatService
     ) { }
@@ -33,7 +35,15 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     async handleConnection(@ConnectedSocket() client: Socket) {
         console.log('connected ', client.id);
         const user = await this.chatService.getUserFromSocket(client);
-        this.onlineUser.push(client);
+        if (user) {
+            const membersData: Record<string, any> = {};
+            membersData.client = client;
+            membersData.user = user;
+            this.onlineUser.push(membersData);
+            this.onlineUser.forEach(member => {
+                console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
+            });
+        }
     }
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
@@ -48,6 +58,9 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     @SubscribeMessage('msgToServer')
     create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
         client.broadcast.emit('msgToClients', {msg: "Salam"})
+        this.onlineUser.forEach(member => {
+            console.log(`nickName= ${member.user.nickName}, sockerId=${member.client.id}`)
+        });
     }
 
 }

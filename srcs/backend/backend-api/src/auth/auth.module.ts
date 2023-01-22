@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { ChatService } from 'src/chat/chat.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/users/user/user.service';
@@ -17,7 +18,8 @@ import { JwtTwoFactorStrategy } from './strategy/jwt-twofactor.strategy';
     AuthService, FortyTwoStrategy,
     PrismaService, ConfigService, JwtService,
     JwtTwoFactorStrategy, UserService, FirebaseStorageProvider,
-    HttpExceptionFilter
+    HttpExceptionFilter,
+    ChatService
   ]
 })
 
