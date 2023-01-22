@@ -16,7 +16,7 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
 
     const [code, setCode] = useState("");
     const [isOK, setOK] = useState(false);
-  
+
 
     const Activate = (evt: FormEvent) => {
         evt.preventDefault();
@@ -35,10 +35,7 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
                 setOK(false)
                 console.log(e);
             })
-
     }
-
-
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;

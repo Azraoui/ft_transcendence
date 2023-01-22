@@ -122,7 +122,7 @@ export function ProfileEditCard() {
           <div className="flex w-full justify-center">
             <div className="mb-1 w-full">
               <label className="form-label inline-block mb-3 ">About You</label>
-              <textarea name='bio' className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
+              <textarea name='bio' maxLength={80}  minLength={8}  className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
             </div>
           </div>
 

@@ -19,6 +19,11 @@ import { ProfileData } from './components/model/atoms/ProfileData'
 import { TwoFAEnabled } from './components/model/atoms/TwoFAEnabled'
 import TwoFA from './components/view/Login/TwoFA'
 import PageNotFound from './components/view/NotFound/PageNotFound'
+import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModal'
+import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
+import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
+import { io } from 'socket.io-client'
+import { chatSocket } from './components/controller/socket'
 
 
 
@@ -30,7 +35,7 @@ function App() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
-    console.log(import.meta.env.VITE_IP) 
+    chatSocket
     retrieveToken();
     // retrieveProfile();
   }, [status]);
@@ -78,6 +83,9 @@ function App() {
             <BanModal/> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
             <BlockModal/>
             <AddChannelModal/>
+            <ProtectedChannelModal/>
+            <ChannelMembersModal/>
+            <MuteChannelMemberModal/>
             <div className='w-full bg-black  grid grid-cols-12'>
               <Navbar />
               <Routes>

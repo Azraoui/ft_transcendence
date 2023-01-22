@@ -178,6 +178,15 @@ export class UserService {
                 allFriend.push(await this.prismaService.user.findUnique({
                     where: {
                         id: friends[i].friendId
+                    },
+                    select: {
+                        firstName: true,
+                        lastName: true,
+                        bio: true,
+                        email: true,
+                        nickname: true,
+                        pictureLink: true,
+                        username: true,
                     }
                 }))
             }
@@ -185,6 +194,15 @@ export class UserService {
                 allFriend.push(await this.prismaService.user.findUnique({
                     where: {
                         id: friends[i].userId
+                    },
+                    select: {
+                        firstName: true,
+                        lastName: true,
+                        bio: true,
+                        email: true,
+                        nickname: true,
+                        pictureLink: true,
+                        username: true,
                     }
                 }))
             }
@@ -193,17 +211,33 @@ export class UserService {
     }
 
     async getAllUserWithoutFriends(userId: number) {
-        console.log(`userId = ${userId}`)
-        const notFriends = await this.prismaService.user.findMany({
+        const noFriends = await this.prismaService.user.findMany({
             where: {
-                friends: {
-                    
-                }
+                AND: [
+                    {friends: {
+                        every: {
+                            NOT:
+                            {
+                                friendId: userId,
+                            }
+                        },
+                    }},
+                    {friendOf: {
+                        every: {
+                            NOT:{
+                                userId: userId,
+                            }
+                        }
+                    }}
+                ]
+            },
+            skip: userId,
+            include: {
+                friends: true,
+                friendOf: true
             }
         })
-        
-        return notFriends;
-
+        return noFriends;
     }
 
 } // End Of UserServices Class

@@ -9,7 +9,7 @@ import { TwoFactorAuthController } from './two-factor-auth.controller';
 import { TwoFactorAuthService } from './two-factor-auth.service';
 
 @Module({
-    controllers: [TwoFactorAuthController],
+    controllers: [],
     providers: [TwoFactorAuthService, UserService,
                 JwtService, JwtStrategy, AuthService,
                  JwtTwoFactorStrategy,

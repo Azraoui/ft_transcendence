@@ -26,7 +26,7 @@ function TableRow({ params }: TableRowProps) {
                         <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
 
                     </div>
-                        <div className="font-bold"> {params.opponent}</div>
+                    <div className="font-bold"> {params.opponent}</div>
                 </div>
             </th>
             <td className="py-4 px-6 uppercase">

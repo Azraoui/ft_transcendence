@@ -1,31 +1,67 @@
+import { Injectable } from "@nestjs/common";
 import {
     ConnectedSocket,
-        MessageBody,
-        SubscribeMessage,
-        WebSocketGateway,
-        WebSocketServer
-    } from "@nestjs/websockets";
-import { Server } from "socket.io";
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer
+} from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
 import { ChatService } from "./chat.service";
+import { ChatDto } from "./dto";
 
-@WebSocketGateway({
-    cors: {
-        origin: process.env.HOST_MACHINE_URL + ':5173'
+@Injectable()
+@WebSocketGateway(
+    {
+        namespace: 'chat',
+        cors: {
+            // origin: process.env.HOST_MACHINE_URL + ':5173'
+            // origin: 'http://localhost:5173'
+            origin: '*'
+        },
     }
-})
-export class ChatGateWay {
+)
+export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
-    constructor (private readonly chatService: ChatService) {}
+    onlineUser: Record<string, any> = [];
+    constructor(
+        private readonly chatService: ChatService
+    ) { }
 
     @WebSocketServer() server: Server;
 
-    @SubscribeMessage('send-msg')
-    recieveMsg(@MessageBody() msgBody: string) {
-        console.log(`new message msgBody = ${msgBody}`);
-        
-    
+    async handleConnection(@ConnectedSocket() client: Socket) {
+        console.log('connected ', client.id);
+        const user = await this.chatService.getUserFromSocket(client);
+        if (user) {
+            const membersData: Record<string, any> = {};
+            membersData.client = client;
+            membersData.user = user;
+            this.onlineUser.push(membersData);
+            this.onlineUser.forEach(member => {
+                console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
+            });
+        }
     }
     
 
- 
+    handleDisconnect(@ConnectedSocket() client: Socket) {
+        console.log('Decconected', client.id);
+        if (this.onlineUser.find((x) => x === client))
+        {
+            const index = this.onlineUser.indexOf(client);
+            this.onlineUser.splice(index, 1);
+        }
+    }
+
+    @SubscribeMessage('msgToServer')
+    create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
+        client.broadcast.emit('msgToClients', {msg: "Salam"})
+        this.onlineUser.forEach(member => {
+            console.log(`nickName= ${member.user.nickName}, sockerId=${member.client.id}`)
+        });
+    }
+
 }

@@ -34,6 +34,41 @@ const getProfile = () => {
   const addFriend = (id:number) => {
     return http.post(`/user/addFriend/${id}`,{}, {withCredentials:true} );
   };
+    const addChannel = (data :{name:string, type:string,password:string}) => {
+    return http.post('/chat/createRoom',data, {withCredentials:true} );
+  };
+
+  const makeNewChannelAdmin = (data :{roomId:number, memberId:number}) => {
+    return http.post('/chat/addAdmin',data, {withCredentials:true} );
+  };
+    const banChannelMember = (data :{roomId:number, memberId:number}) => {
+    return http.post('/chat/blockMember',data, {withCredentials:true} );
+  };
+    const unmuteChannelMember = (data :{roomId:number, memberId:number}) => {
+    return http.post('/chat/unMuteMember',data, {withCredentials:true} );
+  };
+  const getChannels = () => {
+    return http.get('/chat/getAllRooms', {withCredentials:true});
+  };
+  const getChannelMembers = (id:number) => {
+    return http.get(`/chat/viewMembers/${id}`, {withCredentials:true});
+  };
+  const joinChannel = (roomId:number, type:string, password?:string) => {
+    console.log("====>>>>>>>>>>> ",roomId, type, password);
+    
+    return http.post(`/chat/joinRoom`, {roomId,type, password}, {withCredentials:true});
+  };
+  const muteMember = (data :{roomId:number, memberId:number, duration:number}) => {
+    
+    return http.post(`/chat/muteMember`, data, {withCredentials:true});
+  };
+  const leaveChannel = (id:number) => {
+    return http.delete(`/chat/leftRoom/${id}`, {withCredentials:true});
+  };
+
+    const getChannelMessages = (id:number) => {
+    return http.get(`/chat/getRoomData/${id}`, {withCredentials:true});
+  };
 const updatePicture = async (file:FormData) => {
   try {
     
@@ -73,7 +108,18 @@ const Service = {
   updateUserInfo,
   getAllUsers,
   addFriend,
-  viewFriend
+  viewFriend,
+  addChannel,
+  getChannels,
+  getChannelMessages,
+  joinChannel,
+  leaveChannel,
+  getChannelMembers,
+  makeNewChannelAdmin,
+  banChannelMember,
+  muteMember,
+  unmuteChannelMember,
+
   // get,
   // create,
   // update,
