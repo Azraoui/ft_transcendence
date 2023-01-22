@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { join } from 'path';
+import { ChatGateWay } from 'src/chat/chat.gateway';
 import { GetUserReq } from 'src/decorator';
 import { UserService } from 'src/users/user/user.service';
 import { AuthService } from './auth.service';
@@ -14,7 +15,9 @@ import { JwtAuthGuard } from './guard/jwt.guard';
 export class AuthController {
 
     constructor (private authService: AuthService,
-        private userSerivce: UserService) {}
+        private userSerivce: UserService,
+        private chatGateway: ChatGateWay,
+        ) {}
 
     @UseGuards(FortyTwoOAuthGuard)
     @Get() // http://10.11.6.11:5000/api/auth/
@@ -43,6 +46,7 @@ export class AuthController {
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {
+            
             res.clearCookie('TwoFacAuthToken')
             this.userSerivce.update2FAValidationStatus(user.id, false);
             res.json({
