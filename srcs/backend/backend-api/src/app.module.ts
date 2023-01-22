@@ -55,7 +55,7 @@ import { AuthController } from './auth/auth.controller';
               GameService,
               GameGateway,
               ChatGateWay,
-              ChatService
+              ChatService,
             ],
 })
 
