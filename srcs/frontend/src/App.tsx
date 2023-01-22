@@ -35,7 +35,7 @@ function App() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
-    chatSocket
+    // chatSocket
     retrieveToken();
     // retrieveProfile();
   }, [status]);
@@ -60,9 +60,9 @@ function App() {
     Service.getToken()
       .then((response: any) => {
         setprofileData({...profileData, ...response.data})
-        console.log(response.data);
-        
+        console.log("----------------> ",response.data);
         setStatus(false);
+        chatSocket
       })
       .catch((e: Error) => {
         console.log(`error === > ${e}`);

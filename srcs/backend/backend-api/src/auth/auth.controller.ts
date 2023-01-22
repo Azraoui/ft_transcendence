@@ -46,7 +46,7 @@ export class AuthController {
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {
-            
+            // this.chatGateway.handleDisconnect(this.chatGateway.onlineUser[0].client)
             res.clearCookie('TwoFacAuthToken')
             this.userSerivce.update2FAValidationStatus(user.id, false);
             res.json({
@@ -62,5 +62,5 @@ export class AuthController {
         // const user =  await this.authService.getUser(userId);
         return await this.userSerivce.getUserProfile(userId);
     }
-
+ 
 }
