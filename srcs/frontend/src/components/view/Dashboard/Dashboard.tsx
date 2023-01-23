@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useRecoilState } from 'recoil';
 import coq from "../../../assets/coq.png"
 import table from "../../../assets/table.png"
+import { chatSocket } from '../../controller/socket';
 import { ActiveTabState } from '../../model/atoms/ActiveTabState';
 import { ProfileData } from '../../model/atoms/ProfileData';
 import Tabs from './Tabs'
@@ -15,7 +16,7 @@ function Dashboard() {
   useEffect(()=>
   {
     setActiveNavItem(0)
-  })
+  },[])
 
   return (
     <main className='col-span-10 h-[100%] xl:h-[calc(100vh-88px)]   sm:px-12  px-8 w-full  flex flex-col items-start justify-start space-y-12 pt-10'>

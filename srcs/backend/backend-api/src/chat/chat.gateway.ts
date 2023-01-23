@@ -44,15 +44,22 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
                 console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
             });
         }
+        else {
+            client.disconnect();
+        }
     }
     
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
-        if (this.onlineUser.find((x) => x === client))
+        if (this.onlineUser.find((x) => x.client === client))
         {
-            const index = this.onlineUser.indexOf(client);
-            this.onlineUser.splice(index, 1);
+            const index = this.onlineUser.indexOf("client", client);
+            if (index > -1) {
+                console.log(`index = ${index}`);
+                console.log(this.onlineUser);
+                this.onlineUser.splice(index, 1);
+            }
         }
     }
 

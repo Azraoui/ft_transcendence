@@ -38,7 +38,7 @@ export class AuthController {
         }
         else res.redirect(301, process.env.HOST_MACHINE_URL + ':5173');
         res.end();
-    }
+    } 
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('log-out')
@@ -46,7 +46,7 @@ export class AuthController {
         const user = await this.authService.getUser(undefined, req.user.email);
         if (user)
         {
-            
+            // this.chatGateway.handleDisconnect(this.chatGateway.onlineUser[0].client)
             res.clearCookie('TwoFacAuthToken')
             this.userSerivce.update2FAValidationStatus(user.id, false);
             res.json({
@@ -62,5 +62,5 @@ export class AuthController {
         // const user =  await this.authService.getUser(userId);
         return await this.userSerivce.getUserProfile(userId);
     }
-
+ 
 }
