@@ -25,7 +25,7 @@ import { ChatDto } from "./dto";
 )
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
-    onlineUser: any [];
+    onlineUser: any[] = [];
     constructor(
         private readonly chatService: ChatService
     ) { }
