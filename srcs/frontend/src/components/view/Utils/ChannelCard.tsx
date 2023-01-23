@@ -4,7 +4,7 @@ import avtar from '../../../assets/avatar.jpeg'
 import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
-import { ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
+import { ChannelClickedAtom, ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
 import Service from '../../controller/services';
 import { error_alert, success_alert } from './Alerts';
 import ProtectedChannelModal from '../Modals/ProtectedChannelModal';
@@ -21,6 +21,7 @@ type ChannelCardPorps =
 function ChannelCard({ data }: ChannelCardPorps) {
     const [channelMessage, setChannelMessage] = useRecoilState(ChannelMessage)
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
+    const [isChannelClicked, setChannelClicked] = useRecoilState(ChannelClickedAtom)
     const [isJoined, setisJoined] = useRecoilState(IsJoined)
 
     const getMessages = (id: number) => {
@@ -55,6 +56,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
         <div onClick={() => {
             setChannel({ ...channel, ...data });
             getMessages(data.id)
+            setChannelClicked(true)
             // setChat(data.messages);
         }} className={`flex items-center space-x-4 py-7 ${channel.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-1 min-w-0">

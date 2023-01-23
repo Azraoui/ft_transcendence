@@ -46,6 +46,7 @@ CREATE TABLE "room" (
     "blocked" INTEGER[],
     "type" TEXT NOT NULL DEFAULT 'private',
     "hash" TEXT,
+    "active" TEXT NOT NULL DEFAULT 'off',
 
     CONSTRAINT "room_pkey" PRIMARY KEY ("id")
 );

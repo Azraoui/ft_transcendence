@@ -19,7 +19,10 @@ export const ChannelNavAtom = atom({
         type: "",
     }
 })
-
+export const ChannelClickedAtom = atom({
+    key: "ChannelClickedAtom",
+    default: false
+})
 export const ChannelMemberData = atom({
     key: "ChannelMemberData",
     default: {

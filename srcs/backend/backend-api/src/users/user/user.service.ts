@@ -29,6 +29,7 @@ export class UserService {
                 email: user.email,
                 picture: user.pictureLink,
                 bio: user.bio,
+                active: user.active,
                 isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
                 isTwoFacAuthVerified: user.isTwoFacAuthVerified,
             }
@@ -120,7 +121,8 @@ export class UserService {
                 nickName: element.nickname,
                 username: element.username,
                 firstName: element.firstName,
-                lastName: element.lastName
+                lastName: element.lastName,
+                active: element.active,
             }
             allUsers.push(obj);
         });
@@ -187,6 +189,7 @@ export class UserService {
                         nickname: true,
                         pictureLink: true,
                         username: true,
+                        active: true,
                     }
                 }))
             }
@@ -203,6 +206,7 @@ export class UserService {
                         nickname: true,
                         pictureLink: true,
                         username: true,
+                        active: true,
                     }
                 }))
             }
