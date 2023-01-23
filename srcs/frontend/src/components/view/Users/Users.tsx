@@ -28,7 +28,7 @@ function Users() {
   }, []);
 
   const retrieveProfile = () => {
-    Service.getAllUsers()
+    Service.getNoFriends()
       .then((response: any) => {
     
         console.log(response.data);
@@ -40,7 +40,7 @@ function Users() {
   };
   return (
     <div className='col-span-10 h-[100%] xl:h-[calc(100vh-88px)] sm:px-12 flex items-start justify-center flex-col px-12  w-full scrollbar-hide  space-y-12 pt-10'>
-      <h1 className='font-extrabold w-full px-12'>All Users <code>({Users.length - 1})</code> </h1>
+      <h1 className='font-extrabold w-full px-12'>All Users <code>({Users.length})</code> </h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 h-[1000px] overflow-auto px-12 scrollbar-hide  w-full '>
       {Users.filter((it) => it.username !== profileData.username).map((item) => (
          <UserCard data={item} key={item.id} /> 

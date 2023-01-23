@@ -10,8 +10,8 @@ const getToken = () => {
 const getProfile = () => {
     return http.get("/user/profile", {withCredentials:true});
   };
-  const getAllUsers = () => {
-    return http.get("/user/getAllUsers", {withCredentials:true});
+  const getNoFriends = () => {
+    return http.get("/user/getNoFriends", {withCredentials:true});
   };
   const get2FQRCode = () => {
     return http.get("/2fa/generate", {withCredentials:true,responseType: "arraybuffer",} ,);
@@ -106,7 +106,7 @@ const Service = {
   Logout,
   updatePicture,
   updateUserInfo,
-  getAllUsers,
+  getNoFriends,
   addFriend,
   viewFriend,
   addChannel,

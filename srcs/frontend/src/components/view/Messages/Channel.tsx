@@ -14,7 +14,7 @@ function Channel() {
       
       <ChannelList  />
       {
-        channel[0].id === -1 ?
+        channel[0]?.id !== -1 ?
         
         channel.length ? 
         <ChannelConversation />
