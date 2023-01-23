@@ -25,23 +25,24 @@ import { ChatDto } from "./dto";
 )
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
-    onlineUser: Record<string, any> = [];
+    onlineUser: any[] = [];
     constructor(
         private readonly chatService: ChatService
     ) { }
 
     @WebSocketServer() server: Server;
 
-    async handleConnection(@ConnectedSocket() client: Socket) {
+    async handleConnection(@ConnectedSocket() client: any) {
         console.log('connected ', client.id);
         const user = await this.chatService.getUserFromSocket(client);
         if (user) {
-            const membersData: Record<string, any> = {};
-            membersData.client = client;
-            membersData.user = user;
-            this.onlineUser.push(membersData);
+            // const membersData: Record<string, any> = {};
+            // membersData.client = client;
+            // membersData.user = user;
+            client.user = user;
+            this.onlineUser.push(client);
             this.onlineUser.forEach(member => {
-                console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
+                console.log(`nickName= ${member.user.nickname}, sockerId=${member.id}`)
             });
         }
         else {
@@ -52,11 +53,11 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
-        if (this.onlineUser.find((x) => x.client === client))
+        if (this.onlineUser.find((x) => x === client))
         {
-            const index = this.onlineUser.indexOf("client", client);
+            const index = this.onlineUser.indexOf(client);
+            console.log(`index = ${index}`);
             if (index > -1) {
-                console.log(`index = ${index}`);
                 console.log(this.onlineUser);
                 this.onlineUser.splice(index, 1);
             }

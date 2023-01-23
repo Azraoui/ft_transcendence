@@ -12,7 +12,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
             clientID: process.env.FORTYTWO_CLIENT_ID,
             clientSecret: process.env.FORTYTWO_CLIENT_SECRET,
             callbackURL: process.env.HOST_MACHINE_URL + ':5000/api/auth/42-redirect',
-            
         });
     }
 
@@ -27,7 +26,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
                 email: emails[0].value,
                 firstName: name.givenName,
                 lastName: name.familyName,
-                pictureLink: _json.image.link,
+                pictureLink: _json?.image?.link,
                 accessToken,
                 refreshToken,
             }
