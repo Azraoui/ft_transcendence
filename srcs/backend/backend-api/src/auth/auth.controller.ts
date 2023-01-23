@@ -38,7 +38,7 @@ export class AuthController {
         }
         else res.redirect(301, process.env.HOST_MACHINE_URL + ':5173');
         res.end();
-    }
+    } 
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('log-out')

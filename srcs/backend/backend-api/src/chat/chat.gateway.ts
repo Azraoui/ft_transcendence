@@ -53,8 +53,12 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
         console.log('Decconected', client.id);
         if (this.onlineUser.find((x) => x.client === client))
         {
-            const index = this.onlineUser.indexOf(client);
-            this.onlineUser.splice(index, 1);
+            const index = this.onlineUser.indexOf("client", client);
+            if (index > -1) {
+                console.log(`index = ${index}`);
+                console.log(this.onlineUser);
+                this.onlineUser.splice(index, 1);
+            }
         }
     }
 
