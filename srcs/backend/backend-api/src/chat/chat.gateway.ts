@@ -41,24 +41,23 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
             // membersData.user = user;
             client.user = user;
             this.onlineUser.push(client);
-            this.onlineUser.forEach(member => {
-                console.log(`nickName= ${member.user.nickname}, sockerId=${member.id}`)
-            });
+            // this.onlineUser.forEach(member => {
+            //     console.log(`nickName= ${member.user.nickname}, sockerId=${member.id}`)
+            // });
         }
         else {
             client.disconnect();
         }
     }
-    
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
         if (this.onlineUser.find((x) => x === client))
         {
             const index = this.onlineUser.indexOf(client);
-            console.log(`index = ${index}`);
+            // console.log(`index = ${index}`);
             if (index > -1) {
-                console.log(this.onlineUser);
+                // console.log(this.onlineUser);
                 this.onlineUser.splice(index, 1);
             }
         }
