@@ -49,6 +49,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
             client.disconnect();
         }
     }
+    
 
     handleDisconnect(@ConnectedSocket() client: Socket) {
         console.log('Decconected', client.id);
