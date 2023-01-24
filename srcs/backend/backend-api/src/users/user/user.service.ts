@@ -227,24 +227,55 @@ export class UserService {
     async getAllUserWithoutFriends(userId: number) {
         console.log(`userId = ${userId}`)
         const noFriends = await this.prismaService.user.findMany({
-            where: {
-                NOT: {
-                    id: userId
-                },
-            },
-            skip: userId,
             select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 bio: true,
-                email: true,
                 nickname: true,
                 pictureLink: true,
                 username: true,
                 active: true,
-            }
+            },
+            skip: userId,
         })
-        return noFriends;
+        let allUsers = [];
+        noFriends.forEach(element => {
+            let obj = {
+                id: element.id,
+                picture: element.pictureLink,
+                nickName: element.nickname,
+                username: element.username,
+                firstName: element.firstName,
+                lastName: element.lastName,
+                active: element.active,
+                bio: element.bio,
+            }
+            allUsers.push(obj);
+        });
+        return allUsers;
     }
 
 } // End Of UserServices Class
+
+
+// AND: [
+//     {
+//         friends: {
+//             some: {
+//                 NOT: {
+//                     friendId: userId,
+//                 }
+//             }
+//         }
+//     },
+//     {
+//         friendOf: {
+//             some: {
+//                 NOT: {
+//                     userId: userId,
+//                 }
+//             }
+//         }
+//     },
+// ]

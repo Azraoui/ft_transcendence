@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
-import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
+import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { GetUserReq } from 'src/decorator';
 import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, RoomDto, UnMuteDto } from './dto';
 import { ChatService } from './chat.service';
