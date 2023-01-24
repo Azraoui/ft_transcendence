@@ -59,25 +59,35 @@ export class UserService {
     }
 
     async updateProfile(userId: number, { bio, nickname }: { bio: string, nickname: string }) {
-        if (nickname) {
-            await this.prismaService.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    nickname: nickname,
-                }
-            })
+        try {
+            if (nickname) {
+                await this.prismaService.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        nickname: nickname,
+                    }
+                })
+            }
+            if (bio) {
+                await this.prismaService.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        bio: bio,
+                    }
+                })
+            }
         }
-        if (bio) {
-            await this.prismaService.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    bio: bio,
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
                 }
-            })
+            }
+            throw error
         }
     }
 
@@ -215,26 +225,26 @@ export class UserService {
     }
 
     async getAllUserWithoutFriends(userId: number) {
-        // console.log(`userId = ${userId}`)
-        // const noFriends = await this.prismaService.user.findMany({
-        //     where: {
-        //         NOT: {
-
-        //         }
-        //     },
-        //     skip: userId,
-        //     select: {
-        //         firstName: true,
-        //         lastName: true,
-        //         bio: true,
-        //         email: true,
-        //         nickname: true,
-        //         pictureLink: true,
-        //         username: true,
-        //         active: true,
-        //     }
-        // })
-        // return noFriends;
+        console.log(`userId = ${userId}`)
+        const noFriends = await this.prismaService.user.findMany({
+            where: {
+                NOT: {
+                    id: userId
+                },
+            },
+            skip: userId,
+            select: {
+                firstName: true,
+                lastName: true,
+                bio: true,
+                email: true,
+                nickname: true,
+                pictureLink: true,
+                username: true,
+                active: true,
+            }
+        })
+        return noFriends;
     }
 
 } // End Of UserServices Class
