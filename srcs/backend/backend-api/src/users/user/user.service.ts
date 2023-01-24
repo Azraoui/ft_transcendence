@@ -225,7 +225,6 @@ export class UserService {
     }
 
     async getAllUserWithoutFriends(userId: number) {
-        console.log(`userId = ${userId}`)
         const noFriends = await this.prismaService.user.findMany({
             where: {
                 NOT: {
@@ -271,25 +270,3 @@ export class UserService {
     }
 
 } // End Of UserServices Class
-
-
-// AND: [
-//     {
-//         friends: {
-//             some: {
-//                 NOT: {
-//                     friendId: userId,
-//                 }
-//             }
-//         }
-//     },
-//     {
-//         friendOf: {
-//             some: {
-//                 NOT: {
-//                     userId: userId,
-//                 }
-//             }
-//         }
-//     },
-// ]
