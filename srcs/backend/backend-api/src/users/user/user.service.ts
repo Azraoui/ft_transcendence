@@ -271,7 +271,7 @@ export class UserService {
 
     async updateUserStatus(userId: number, newStatus: string = "off") {
         try {
-            const user = this.prismaService.user.update({
+            const user = await this.prismaService.user.update({
                 where: {
                     id: userId
                 },
@@ -279,10 +279,10 @@ export class UserService {
                     active: newStatus
                 },
                 select: {
-                    active: true
+                    active: true,
                 }
             });
-            return user;
+            return (user);
         }
         catch (error) {
             throw error;

@@ -39,6 +39,11 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
+			if (user.active === "off") {
+				// update user status
+				this.userService.updateUserStatus(user.id, "on");
+				client.user.active = "on";
+			}
 			this.onlineUser.push(client);
 		}
 		else {
@@ -48,12 +53,13 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
 	handleDisconnect(@ConnectedSocket() client: Socket) {
 		console.log('Decconected', client.id);
-		if (this.onlineUser.find((x) => x === client))
+		if (this.onlineUser.find((x) => x.id === client.id))
 		{
 			const index = this.onlineUser.indexOf(client);
 			if (index > -1) {
 				this.onlineUser.splice(index, 1);
 			}
+			// if (this.onlineUser.find((x) => x.user.id === ))
 		}
 	}
 
