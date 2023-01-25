@@ -269,4 +269,24 @@ export class UserService {
         return allUsers;
     }
 
+    async updateUserStatus(userId: number, newStatus: string = "off") {
+        try {
+            const user = this.prismaService.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    active: newStatus
+                },
+                select: {
+                    active: true
+                }
+            });
+            return user;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
 } // End Of UserServices Class
