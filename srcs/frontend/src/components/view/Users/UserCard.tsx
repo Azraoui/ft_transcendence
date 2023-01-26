@@ -32,8 +32,19 @@ function UserCard({ data }: UserCardProps) {
       console.log(e);
     })
   }
-  console.log("================>> ",data.id);
   
+  let BgColour = "";
+  switch (data.active) {
+      case "on":
+          BgColour = "bg-green-500";
+          break;
+      case "in":
+          BgColour = " bg-orange-500";
+          break;
+      default:
+          BgColour = "bg-red-500"
+
+  }
   return (
 
     <div className="w-full max-w-sm h-72 bg-[#242424] border border-gray-200 mb-10 rounded-lg shadow-md">
@@ -47,7 +58,7 @@ function UserCard({ data }: UserCardProps) {
           <div className="mask mask-squircle w-12 h-12 sm:w-24 sm:h-24 ">
             <img src={data.picture} alt="Avatar Tailwind CSS Component" />
           </div>
-          <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-1 ring-white ring-4 rounded-full`}></div>
+          <div className={` h-2 w-2 ${BgColour} absolute bottom-1  right-1 ring-white ring-4 rounded-full`}></div>
         </div>
         <h5 className="mb-1 lg:text-xl text-sm text-center font-medium ">{data.firstName} {data.lastName}</h5>
         <span className="mb-1 lg:text-lg  text-xs text-center font-extralight ">{data.nickName}</span>

@@ -86,7 +86,7 @@ function App() {
             <ProtectedChannelModal/>
             <ChannelMembersModal/>
             <MuteChannelMemberModal/>
-            <div className='w-full bg-black  grid grid-cols-12'>
+            <div className='w-full bg-black   grid grid-cols-12'>
               <Navbar />
               <Routes>
                 <Route path='/' element={<Dashboard />} />

@@ -13,7 +13,7 @@ function Messages() {
     setActiveNavItem(2)
   })
   return (
-    <div className='col-span-10 h-[100%] xl:h-[calc(100vh-88px)] px-12 pt-12 pb-6 w-full scrollbar-hide flex flex-col items-start justify-start space-y-12 '>
+    <div className='col-span-10 h-[100%]  px-12 pt-12 pb-6 w-full scrollbar-hide flex flex-col items-start justify-start space-y-12 '>
       <div className="flex flex-col w-full space-y-16">
         <div className="flex items-start  justify-start sm:space-x-8 sm:flex-row flex-col  px-12 sm:space-y-0 space-y-3 ">
           {TabMessagesLinks.map((item) => (
