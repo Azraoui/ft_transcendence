@@ -27,11 +27,11 @@ export class ChatController {
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('getRoomData/:roomId')
-    async getMembersData(
+    getMembersData(
         @Param('roomId') roomId: number,
         @GetUserReq('id') userId: number
         ) {
-        return await this.chatService.getRoomData(+roomId, +userId).valueOf();
+        return this.chatService.getRoomData(+roomId, +userId);
     }
 
     // This route for create new room

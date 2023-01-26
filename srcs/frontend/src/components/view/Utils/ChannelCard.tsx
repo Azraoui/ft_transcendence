@@ -27,7 +27,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
 
     const getMessages = (id: number) => {
         Service.getChannelMessages(id).then((res: any) => {
-            console.log("+++++++++++++++++++++",res.data);
+            // console.log("+++++++++++++++++++++",res.data);
             setChannelMessage(res.data)
             setisJoined(true);
         }).catch(() => {
@@ -53,17 +53,15 @@ function ChannelCard({ data }: ChannelCardPorps) {
         })
     }
 
-    // useEffect(()=>
-    // {
-    //   chatSocket.on("msgToClients", (data) => {
-    //     // setChannelMessage(channelMessage.allMessages : data);
-    //     console.log("=============>>",channel.id);
-        
-    //     getMessages(data.id)
-    //     // console.log("=============>>",channelMessage);
-  
-    //   });
-    // },[chatSocket])
+    // useEffect(() => {
+    //     chatSocket.on("msgToClients", (data) => {
+    //         setChannelMessage({ ...channelMessage, ...data });
+
+    //     });
+    // console.log("}}}}}}}}}}}}}}}}}}}}}",channelMessage);
+
+    // }, [chatSocket])
+    
 
     return (
         <div onClick={() => {

@@ -54,19 +54,26 @@ function ChannelConversation() {
     }
   }
 
+
   useEffect(() => {
-
     setMessageList(channelMessage)
-  },[])
+  }, [channelMessage])
 
-  console.log("====  ", messageList);
-  console.log("==== === ", channelMessage);
-
+  useEffect(()=>
+  {
+    chatSocket.on("msgToClients", (data) => {
+      console.log(data, "893718");
+      setMessageList((list => [...list, data] ));
+    });
+  },[chatSocket])
 
   const getMessage = (e: any) => {
     const val = e.target.value;
     setCurrentMessage(val)
   }
+
+  // console.log(messageList.length, "99999999999");
+
 
 
   return (

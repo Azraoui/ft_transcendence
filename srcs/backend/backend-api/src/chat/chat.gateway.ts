@@ -64,23 +64,26 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	@SubscribeMessage('msgToServer')
-	create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
+	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
 		console.log(`msg  =  ${msg.text}`)
-		let obj = {
-			senderId: 1,
-			senderImage: "https://letsenhance.io/static/334225cab5be263aad8e3894809594ce/75c5a/MainAfter.jpg",
-			nickName: "waloMayDi3",
-			text: msg.text,
-			side: "left",
-			messageId: 99,
-		}
 		const user  =  this.onlineUser.find((x) => x.id === client.id);
 		if (user)
-			this.chatService.createMsg(msg, user.user.id);
+		{
+			const  msgData = await this.chatService.createMsg(msg, user.user.id);
+			let obj = {
+				senderId: 1,
+				senderImage: "https://letsenhance.io/static/334225cab5be263aad8e3894809594ce/75c5a/MainAfter.jpg",
+				nickName: "waloMayDi3",
+				text: msg.text,
+				side: "left",
+				messageId: msgData.id,
+			}
+			this.server.emit('msgToClients', obj);
+			this.onlineUser.forEach(member => {
+				console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
+			});
+
+		}
 		// client.emit('msgToClients', obj)
-		this.server.emit('msgToClients', obj);
-		this.onlineUser.forEach(member => {
-			console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
-		});
 	}
 }

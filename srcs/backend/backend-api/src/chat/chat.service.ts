@@ -445,7 +445,7 @@ export class ChatService {
         );
     }
 
-    async getRoomData(roomId: number, userId: number) : Promise<any[]> {
+    async getRoomData(roomId: number, userId: number) {
         if (!roomId)
             return;
         const room = await this.prismaService.room.findUnique({
@@ -460,29 +460,29 @@ export class ChatService {
             throw new UnauthorizedException("You don't have the access");
         const messages = room.messages;
         let allMessages = [];
-        messages.forEach(async (message) => {
+        for (let i = 0; i < messages.length; i++) {
             const user = await this.prismaService.user.findUnique({
-                where: {id: message.senderId},
+                where: {id: messages[i].senderId},
                 select: {
                     nickname: true,
                     pictureLink: true,
                 }
             })
             let side;
-            if (userId === message.senderId)
+            if (userId === messages[i].senderId)
                 side = "left"
             else
                 side = "right"
             let obj = {
-                senderId: message.senderId,
+                senderId: messages[i].senderId,
                 senderImage: user.pictureLink,
                 nickName: user.nickname,
-                text: message.text,
+                text: messages[i].text,
                 side: side,
-                messageId: message.id,
+                messageId: messages[i].id,
             }
             allMessages.push(obj);
-        });
+        }
         return allMessages;
         // return {
         //     isMuted: await this.findMutedStatus(userId, roomId).valueOf(),
