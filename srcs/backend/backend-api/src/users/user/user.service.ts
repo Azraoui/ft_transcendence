@@ -59,25 +59,35 @@ export class UserService {
     }
 
     async updateProfile(userId: number, { bio, nickname }: { bio: string, nickname: string }) {
-        if (nickname) {
-            await this.prismaService.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    nickname: nickname,
-                }
-            })
+        try {
+            if (nickname) {
+                await this.prismaService.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        nickname: nickname,
+                    }
+                })
+            }
+            if (bio) {
+                await this.prismaService.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        bio: bio,
+                    }
+                })
+            }
         }
-        if (bio) {
-            await this.prismaService.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    bio: bio,
+        catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Credentials Taken');
                 }
-            })
+            }
+            throw error
         }
     }
 
@@ -217,31 +227,66 @@ export class UserService {
     async getAllUserWithoutFriends(userId: number) {
         const noFriends = await this.prismaService.user.findMany({
             where: {
-                AND: [
-                    {friends: {
-                        every: {
-                            NOT:
-                            {
-                                friendId: userId,
-                            }
-                        },
-                    }},
-                    {friendOf: {
-                        every: {
-                            NOT:{
-                                userId: userId,
-                            }
-                        }
-                    }}
-                ]
+                NOT: {
+                    id: userId,
+                },
+                friends: {
+                    none: {
+                        friendId: userId
+                    }
+                },
+                friendOf: {
+                    none: {
+                        userId: userId
+                    }
+                }
             },
-            skip: userId,
-            include: {
-                friends: true,
-                friendOf: true
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                bio: true,
+                nickname: true,
+                pictureLink: true,
+                username: true,
+                active: true,
+            },
+        });
+        let allUsers = [];
+        noFriends.forEach(element => {
+            let obj = {
+                id: element.id,
+                picture: element.pictureLink,
+                nickName: element.nickname,
+                username: element.username,
+                firstName: element.firstName,
+                lastName: element.lastName,
+                active: element.active,
+                bio: element.bio,
             }
-        })
-        return noFriends;
+            allUsers.push(obj);
+        });
+        return allUsers;
+    }
+
+    async updateUserStatus(userId: number, newStatus: string = "off") {
+        try {
+            const user = await this.prismaService.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    active: newStatus
+                },
+                select: {
+                    active: true,
+                }
+            });
+            return (user);
+        }
+        catch (error) {
+            throw error;
+        }
     }
 
 } // End Of UserServices Class

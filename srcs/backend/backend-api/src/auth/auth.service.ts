@@ -30,7 +30,8 @@ export class AuthService {
                     id: true,
                     nickname: true,
                     pictureLink: true,
-                    username: true
+                    username: true,
+                    active: true
                 }
             });
             return user;

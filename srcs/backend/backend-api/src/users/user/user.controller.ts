@@ -1,5 +1,5 @@
 import { Body, Controller, Get, NotFoundException, Param, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import JwtTwoFactorGuard from 'src/auth/guard/jwt-two-factor.guard';
+import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { Express } from 'express'
 import { GetUserReq } from 'src/decorator';
 import { UserService } from './user.service';
@@ -47,6 +47,7 @@ export class UserController {
     @UseGuards(JwtTwoFactorGuard)
     @Get('getNoFriends')
     async getNoFriends(@GetUserReq('id') userId: number) {
+        // return await this.userService.getAllUsers();
         return this.userService.getAllUserWithoutFriends(userId);
     }
 

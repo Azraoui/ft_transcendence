@@ -7,7 +7,7 @@ import { UserService } from 'src/users/user/user.service';
 import { AuthService } from './auth.service';
 import { HttpExceptionFilter } from './filters';
 import { FortyTwoOAuthGuard } from './guard/fortytwo-oauth.guard';
-import JwtTwoFactorGuard from './guard/jwt-two-factor.guard';
+import {JwtTwoFactorGuard} from './guard/jwt-two-factor.guard';
 import { JwtAuthGuard } from './guard/jwt.guard';
 
 @Controller('auth')
@@ -20,11 +20,12 @@ export class AuthController {
         ) {}
 
     @UseGuards(FortyTwoOAuthGuard)
+    @UseFilters(new HttpExceptionFilter())
     @Get() // http://10.11.6.11:5000/api/auth/
     async fortytwoAuth() {}
     
     @UseGuards(FortyTwoOAuthGuard)
-    @UseFilters(new HttpExceptionFilter())
+    // @UseFilters(new HttpExceptionFilter())
     @Get('42-redirect') // http://10.11.6.11:5000/api/auth/42-redirect/ 42 redirect url
     async fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
         await this.authService.fortytwoLogin(req.user);
