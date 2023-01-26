@@ -14,7 +14,7 @@ type Props =
 
 function ConversationChatBubble({data} : Props) {
   return (
-    <div className={`chat ${ data.side === "left" ? "chat-start" : "chat-end"}`}>
+    <div className={`chat ${ data.side === "left" ? "chat-end"  : "chat-start" }`}>
     <div className={`chat-bubble ${ data.side === "left" ? "chat-bubble-info" : "chat-bubble-accent"}`}>{data.text}</div>
   </div>
   )

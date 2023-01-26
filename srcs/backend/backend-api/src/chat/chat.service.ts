@@ -44,12 +44,13 @@ export class ChatService {
         }
     }
 
-    async findAllMsgs(roomId: number) {
+    async findAllMsgs(roomId: number, userId: number) {
         const messages = await this.prismaService.messages.findMany({
             where: {
                 roomId: roomId
             },
         })
+        // let 
         return messages;
     }
 
@@ -444,7 +445,9 @@ export class ChatService {
         );
     }
 
-    async getRoomData(roomId: number, userId: number) {
+    async getRoomData(roomId: number, userId: number) : Promise<any[]> {
+        if (!roomId)
+            return;
         const room = await this.prismaService.room.findUnique({
             where: {
                 id: roomId
@@ -459,7 +462,7 @@ export class ChatService {
         let allMessages = [];
         messages.forEach(async (message) => {
             const user = await this.prismaService.user.findUnique({
-                where: {id: userId},
+                where: {id: message.senderId},
                 select: {
                     nickname: true,
                     pictureLink: true,
@@ -476,14 +479,16 @@ export class ChatService {
                 nickName: user.nickname,
                 text: message.text,
                 side: side,
+                messageId: message.id,
             }
             allMessages.push(obj);
         });
-        return {
-            isMuted: await this.findMutedStatus(userId, roomId).valueOf(),
-            duration: await this.getRestTime(userId, roomId).valueOf(),
-            allMessages: allMessages
-        }
+        return allMessages;
+        // return {
+        //     isMuted: await this.findMutedStatus(userId, roomId).valueOf(),
+        //     duration: await this.getRestTime(userId, roomId).valueOf(),
+        //     allMessages: allMessages
+        // }
     }
 
     findUserStatusInRoom(userId: number, room: Room): string {

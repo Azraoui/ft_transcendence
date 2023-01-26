@@ -45,9 +45,7 @@ function Users() {
       <div className='grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 h-[1000px] overflow-auto px-12 scrollbar-hide  w-full '>
       {
         
-      Users.length === 1 && Users[0]?.id !== -1 ?
-      ""
-      :
+   
       Users.map((item) => (
          <UserCard data={item} key={item.id} /> 
         ))

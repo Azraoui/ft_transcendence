@@ -37,18 +37,17 @@ export const ChannelMemberData = atom({
 export const ChannelMessage = atom({
     key: "ChannelMessage",
     default:
-    {
-        isMuted: false,
-        duration: "false",
-        allMessages: [{
+        [
+            {
             senderId: 0,
             senderImage: "",
             nickName: "",
             text: "",
-            side: ""
+            side: "",
+            messageId: 0
 
-        }]
-    }
+        }
+    ]
 })
 
 export const IsJoined = atom({

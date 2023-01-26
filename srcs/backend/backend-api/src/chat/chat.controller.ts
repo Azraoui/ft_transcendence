@@ -14,8 +14,8 @@ export class ChatController {
     // this route for get all old messages from room
     @UseGuards(JwtTwoFactorGuard)
     @Get('getOldMsg/:id')
-    getOldMsg(@Param('id') id) {
-        return this.chatService.findAllMsgs(+id);
+    getOldMsg(@Param('id') id, @GetUserReq('id') userId:number) {
+        return this.chatService.findAllMsgs(+id, +userId);
     }
 
     // This route for geting all (public, protected, private) rooms with userId
@@ -27,11 +27,11 @@ export class ChatController {
 
     @UseGuards(JwtTwoFactorGuard)
     @Get('getRoomData/:roomId')
-    getMembersData(
+    async getMembersData(
         @Param('roomId') roomId: number,
         @GetUserReq('id') userId: number
         ) {
-        return this.chatService.getRoomData(+roomId, +userId);
+        return await this.chatService.getRoomData(+roomId, +userId).valueOf();
     }
 
     // This route for create new room

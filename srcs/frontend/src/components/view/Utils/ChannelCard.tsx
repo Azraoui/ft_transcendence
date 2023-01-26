@@ -8,6 +8,7 @@ import { ChannelClickedAtom, ChannelMessage, ChannelNavAtom, IsJoined } from '..
 import Service from '../../controller/services';
 import { error_alert, success_alert } from './Alerts';
 import ProtectedChannelModal from '../Modals/ProtectedChannelModal';
+import { chatSocket } from '../../controller/socket';
 
 type ChannelCardPorps =
     {
@@ -26,7 +27,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
 
     const getMessages = (id: number) => {
         Service.getChannelMessages(id).then((res: any) => {
-            console.log(res.data);
+            console.log("+++++++++++++++++++++",res.data);
             setChannelMessage(res.data)
             setisJoined(true);
         }).catch(() => {
@@ -51,6 +52,18 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setisJoined(false);
         })
     }
+
+    // useEffect(()=>
+    // {
+    //   chatSocket.on("msgToClients", (data) => {
+    //     // setChannelMessage(channelMessage.allMessages : data);
+    //     console.log("=============>>",channel.id);
+        
+    //     getMessages(data.id)
+    //     // console.log("=============>>",channelMessage);
+  
+    //   });
+    // },[chatSocket])
 
     return (
         <div onClick={() => {
