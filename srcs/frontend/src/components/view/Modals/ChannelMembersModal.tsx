@@ -17,9 +17,7 @@ function ChannelMembersModal() {
 
     useEffect(() => {
 
-        Service.getChannelMembers(channel.id).then((res: any) => {
-            console.log(res.data);
-            
+        Service.getChannelMembers(channel.id).then((res: any) => {            
             setData(res.data);
         }).catch(() => {
         })
@@ -55,6 +53,7 @@ type MemberCardProps = {
         nickName: string
         pictureLink: string,
         role: string,
+        active:string,
         isMuted:boolean
     }
 }
@@ -87,6 +86,20 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
             error_alert()
         })
     }
+
+
+    let BgColour = "";
+    switch (params.active) {
+        case "on":
+            BgColour = "bg-green-500";
+            break;
+        case "in":
+            BgColour = " bg-orange-500";
+            break;
+        default:
+            BgColour = "bg-red-500"
+
+    }
     return (
         <div onClick={() => {
             setMemberData({ ...memberData, roomId: userRole.roomId, memberId: params.id, role:params.role, isMuted:params.isMuted, nickName:params.nickName })
@@ -97,7 +110,7 @@ const MemberCard = ({ params, userRole }: MemberCardProps) => {
                 <div className="mask mask-squircle w-12 h-12">
                     <img src={params.pictureLink} alt="Avatar Tailwind CSS Component" />
                 </div>
-                <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
+                <div className={` h-2 w-2 ${BgColour} absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
             </div>
             <div>
                 <div className=" truncate text-sm">{userRole.userId === params.id ? "You" : params.nickName}</div>
