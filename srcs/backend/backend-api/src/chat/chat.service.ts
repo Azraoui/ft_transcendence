@@ -71,9 +71,20 @@ export class ChatService {
 			where: {
 				OR: [
 					{
-						members: {
-							hasEvery: [userId]
-						}
+						AND: [
+							{
+								members: {
+									hasEvery: [userId]
+								}
+							},
+							{
+								NOT: {
+									owner: {
+										equals: null,
+									}
+								}
+							}
+						]
 					},
 					{
 						OR: [
