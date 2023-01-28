@@ -15,7 +15,6 @@ function MuteChannelMemberModal() {
 
     const [isSubmit, setSubmit] = useState(false);
     const [duration, setDuration] = useState('0')
-    console.log(memberData.roomId, " ******* ", memberData.memberId);
     
     const onSubmit = (e: any) => {
         e.preventDefault();

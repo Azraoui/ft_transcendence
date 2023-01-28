@@ -60,7 +60,6 @@ function App() {
     Service.getToken()
       .then((response: any) => {
         setprofileData({...profileData, ...response.data})
-        console.log("----------------> ",response.data);
         setStatus(false);
         chatSocket
       })

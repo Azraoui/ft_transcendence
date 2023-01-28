@@ -11,6 +11,9 @@ import Service from '../../controller/services';
 import { success_alert } from '../Utils/Alerts';
 import { ProfileData } from '../../model/atoms/ProfileData';
 
+import ScrollToBottom from 'react-scroll-to-bottom';
+
+
 
 type Props =
   {
@@ -56,18 +59,17 @@ function ChannelConversation() {
       };
       await chatSocket.emit("msgToServer", messageData);
       setSendClicked(false)
+      if (messageEl) {
+        messageEl.current?.addEventListener('DOMNodeInserted', event => {
+          const {target} = event;
+          (target  as HTMLDivElement ).scroll({ top: (target  as HTMLDivElement ).scrollHeight, behavior: 'smooth' });
+        });
+      }
       setCurrentMessage("");
     }
   }
 
-  useEffect(() => {
-    if (messageEl) {
-      messageEl.current?.addEventListener('DOMNodeInserted', event => {
-        const {target} = event;
-        (target  as HTMLDivElement ).scroll({ top: (target  as HTMLDivElement ).scrollHeight, behavior: 'smooth' });
-      });
-    }
-  }, [])
+
   useEffect(() => {
     setMessageList(channelMessage)
   }, [channelMessage])
@@ -95,7 +97,7 @@ function ChannelConversation() {
   return (
     <div className="col-span-4  max-h-[800px] w-full sm:px-12 px-1 bg-[#242424] py-4">
       <div className="flex items-center h-full flex-col justify-between relative mb-2 space-y-5">
-        <div ref={messageEl}  className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
+        <ScrollToBottom   className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
           {
             isJoined ?
               messageList.length ?
@@ -116,7 +118,7 @@ function ChannelConversation() {
                 </span>
               </div>
           }
-        </div>
+        </ScrollToBottom>
         {
           isJoined ?
             // !channelMessage.isMuted ?
