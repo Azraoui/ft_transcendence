@@ -82,7 +82,6 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 			this.onlineUser.forEach(member => {
 				console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
 			});
-
 		}
 		// client.emit('msgToClients', obj)
 	}
