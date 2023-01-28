@@ -22,11 +22,9 @@ export class GameInfo
 
     constructor()
     {
-        this.ball = new Ball(this.canvasWidth/2, this.canvasHeight/2, this.canvasHeight/50, "YELLOW");
-        this.leftPaddle = new Paddle(this.canvasHeight/24/4, this.canvasHeight/2 - this.canvasHeight/4, this.canvasHeight/24, this.canvasHeight/4, "WHITE", this.canvasHeight/4 * .2);
-        this.rightPaddle = new  Paddle(this.canvasWidth - 5*(this.canvasHeight/24/4), this.canvasHeight/2 - this.canvasHeight/4, this.canvasHeight/24, this.canvasHeight/4, "WHITE", this.canvasHeight/4 * .2);
-
-        // console.log(this.ball);
+        this.ball = new Ball(this.canvasWidth/2, this.canvasHeight/2, this.canvasHeight/70, "YELLOW");
+        this.leftPaddle = new Paddle(this.canvasHeight/24/4, this.canvasHeight/2 - this.canvasHeight/12, this.canvasHeight/24, this.canvasHeight/6, "WHITE", this.canvasHeight/4 * .2);
+        this.rightPaddle = new  Paddle(this.canvasWidth - 5*(this.canvasHeight/24/4), this.canvasHeight/2 - this.canvasHeight/12, this.canvasHeight/24, this.canvasHeight/6, "WHITE", this.canvasHeight/4 * .2);
     }
     // Updating ball, score
     update() : boolean
@@ -41,6 +39,7 @@ export class GameInfo
         {
             this.leftPaddle.score++;
             this.ball.directionX *= -1;
+            this.ball.directionY *= -1;
             this.ball.resetBall(this.canvasWidth/2, this.canvasHeight/2);
         }
         if (this.leftPaddle.score == this.winScore || this.rightPaddle.score == this.winScore)

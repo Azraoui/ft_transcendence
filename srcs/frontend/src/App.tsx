@@ -24,6 +24,7 @@ import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 import { io } from 'socket.io-client'
 import { chatSocket } from './components/controller/socket'
+import GameView  from './components/view/game/GameView'
 
 
 
@@ -74,9 +75,9 @@ function App() {
     <div className='text-white  '>
       {
       
-        status ? <Login />
-          :
-          profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
+        // status ? <Login />
+        //   :
+        //   profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}
@@ -90,6 +91,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
+                <Route path='/game' element={<GameView />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />

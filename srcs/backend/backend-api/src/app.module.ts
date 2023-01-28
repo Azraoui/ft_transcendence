@@ -14,7 +14,6 @@ import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
 import { ChatModule } from './chat/chat.module';
 import { FirebaseStorageProvider } from './utils/firebase-storage.provider';
 import { GameModule } from './game/game.module';
-import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { GameGateway } from './game/game.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -41,7 +40,6 @@ import { AuthController } from './auth/auth.controller';
   ],
   controllers: [ UserController,
                 TwoFactorAuthController,
-                GameController,
                 ChatController,
                 AuthController
               ],

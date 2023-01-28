@@ -1,78 +1,146 @@
 import { Injectable } from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Server, Socket } from 'socket.io';
 import { clearInterval } from 'timers';
 import { GameInfo } from './utils/gameinfo';
 
+class user{
+  id : string;
+  piclink : string;
+  side : string;
+}
+
 @Injectable()
 export class GameService {
   constructor() {}
-  handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[]): void 
+  handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[]): void 
   {
-    client.data.gameIntervalIdState = "off";
-    let clientId : string;
-    // Check client's token and get client Id
+    client.data.manageDisconnection = "Checking user";
+    // Get token
     /*
-
     */
-    clientId = client.id;
+    // AbdeLah=============================================
+    try {
+       // need a function that takes token, and throw if not validated, otherwise return ({id:string,piclink:string})
+    }
+    catch
+    {
+      return ;
+    } 
+      /* need to fill these :{
+        client.data.user.id
+        client.data.user.piclink
+      }
+    */
+    client.data.user = new user();
+    client.data.user.id = client.id;
+    client.data.user.piclink = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg";
     if (client.handshake.query.role == "player")
-    // Add client to game database if it is their first time
-    /*
-    */
-    this.handlePlayerConnection(client, players, wss, rooms);
+      this.handlePlayerConnection(client, players, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
-      this.handleSpectatorConnection(client, rooms);
+      this.handleSpectatorConnection(client, rooms, ongameclients, waitingSpectators);
   }
 
   //  Spectator mode
-  async handleSpectatorConnection(client: Socket, rooms: string[])
+  async handleSpectatorConnection(client: Socket, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {
-    if (client.handshake.query.roomname != "none")
+    if (client.connected) // Proceed if the client hasn't disconnected
     {
-      if (client.handshake.query.roomname)
+        client.data.manageDisconnection = "Yes";
+        client.data.room = "none";
+        client.data.last_time = ((new Date()).getTime());
+      // Set events
+      client.on("next", ()=>
       {
-        const found = rooms.find(room => room == client.handshake.query.roomname);
-        if (found) {
-          client.join(client.handshake.query.roomname);
-        } 
+        const time = ((new Date()).getTime());
+        if (time - client.data.last_time > 500)
+          this.findGame(client, rooms, ongameclients, waitingSpectators)});
+
+       this.findGame(client, rooms, ongameclients, waitingSpectators);
+    }
+  }
+  findGame(client: Socket, rooms:string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  {    
+    if (client.data.room != "none")
+    {
+      if (rooms.length !=  1)
+      {
+        const index = rooms.findIndex((r)=>{
+        return(r == client.data.room);
+        })
+        client.leave(client.data.room)
+        if (rooms.length > index + 1)
+          this.WatchGame(client, rooms[index+1], ongameclients);
         else
-          client.emit("roomnotfound");
+          this.WatchGame(client, rooms[0], ongameclients);
       }
     }
-    else{
-    console.log ("emitted")
-      client.emit("ongoinggames", rooms);}
+    else if (rooms.length == 0)
+    {
+      client.emit("noGames");
+      client.data.room = "waiting";
+      waitingSpectators.push(client);
+    }
+    else
+    {
+      /*
+        Change state of client to "Spectating"
+      */
+      this.WatchGame(client, rooms[0], ongameclients);
+    }
+  }
+  WatchGame(client: Socket, room:string, ongameclients:Socket[])
+  {
+    let id:string[];
+
+    // Get playersInfo and send them  
+    id = room.split("+");
+
+    let player:Socket = ongameclients.find((cl)=>{if(cl.data.user.id == id[0])return 1;return 0;});
+    // console.log(player);
+    client.emit("playerInfo", player.data.user);
+    player = ongameclients.find((cl)=>{if(cl.data.user.id == id[1])return 1;return 0;});
+    client.emit("playerInfo", player.data.user);
+    client.data.room = room;
+    // Join client to room
+    client.join(room);
   }
 
   // Function handles when player is connected to the firstGateway
-  async handlePlayerConnection (client: Socket, players: Socket[], wss: Server, rooms: string[])
+  async handlePlayerConnection (client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {
     if (client.connected) // Proceed if the client hasn't disconnected
     {
       // If no one is waiting, add client to queue
       if (players.length == 0)
       {
+        client.data.manageDisconnection = "In queue";
         players.push(client);
         client.emit("queue");
-        client.data.side = 'left';
-        client.data.role = 'player';
+        client.data.user.side = 'left';
+        client.emit("playerInfo", client.data.user);
+      //AbdLah=============================================================
+      /*
+        change client.data.user.id  state to "in queue" in database
+      */
       }
       else // If someone already in queue join him in a game with client
       {
-        client.data.side = 'right';
-        client.data.role = 'player';
+        client.data.user.side = 'right';
+        client.emit("playerInfo", client.data.user);
         const second = client;
         const first = players.pop();
+        ongameclients.push(first, second);
         // Join them
-        this.joinPlayersToGame(first, second, wss, rooms);
+        this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
       }
     }
 }
 
-  joinPlayersToGame(first: Socket, second: Socket, wss: Server, rooms: string[])
-  {
-    const roomname = first.id + '+' + second.id;
 
+  joinPlayersToGame(first: Socket, second: Socket, wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  {
+    const roomname = first.data.user.id + '+' + second.data.user.id;
     // Join players to room
     first.join(roomname);
     second.join(roomname);
@@ -83,16 +151,29 @@ export class GameService {
     first.data.opponent = second;
     second.data.opponent = first;
 
-
-
     // Create a GameInfo for players
     const gameinfo = new GameInfo();
-  
+    first.data.gameinfo = gameinfo;
+    // first.data.gameinfo = gameinfo;
+    second.data.gameinfo = first.data.gameinfo;
+    // const gameinfo = first.data.gameinfo;
+
     // Set Key events for both clients
     first.on("keyUp", () => {gameinfo.updatePaddles("left", "up");});
     first.on("keyDown", () => {gameinfo.updatePaddles("left", "down");});
     second.on("keyUp", () => {gameinfo.updatePaddles("right", "up");});
     second.on("keyDown", () => {gameinfo.updatePaddles("right", "down");});
+
+    // AbdeLah ===============================
+    /*
+      Set both clients state in database to "in game"
+        first.data.user.id && second.data.user.id
+    */
+    // Send opponent info
+    first.emit("playerInfo", second.data.user);
+    second.emit("playerInfo", first.data.user);
+
+    // Starting game
     const intervalId = setInterval(() => {
       if (gameinfo.update() == false) 
       {
@@ -105,53 +186,150 @@ export class GameService {
       {
         if (gameinfo.winner() == "left")
         {
-          first.emit("uWon");
-          second.emit("uLost");
+          first.emit("uWon", "left");
+          second.emit("uLost", "right");
         }
         else
         {
-          first.emit("uLost");
-          second.emit("uWon");
+          first.emit("uLost", "left");
+          second.emit("uWon", "right");
         }
-        this.gameFinished(first, second, wss, rooms);
+        this.gameFinished(first, second, wss, rooms, ongameclients);
       }
     }, 1000/60);
     first.data.gameIntervalId = intervalId;
     second.data.gameIntervalId = intervalId;
-    first.data.gameIntervalIdState = "on";
-    second.data.gameIntervalIdState= "on";
+    first.data.manageDisconnection = "In game";
+    second.data.manageDisconnection = "In game";
+    // Join Waiting spectators to room
+    waitingSpectators.forEach((cli)=>{
+      /*
+      Change state of cli to "Spectating"
+      */
+      this.WatchGame(cli, first.data.roomname, ongameclients);
+    })
+    waitingSpectators.length = 0;
   }
 
-  async gameFinished(first: Socket, second: Socket, wss: Server, rooms: string[]) 
+  async gameFinished(first: Socket, second: Socket, wss: Server, rooms: string[], ongameclients:Socket[])
   {
     clearInterval(first.data.gameIntervalId);
-    first.data.gameIntervalIdState = "off";
-    second.data.gameIntervalIdState = "off";
-    first.disconnect();
-    second.disconnect();
-    wss.to(first.data.roomname).emit("game has ended");
-    wss.disconnectSockets(true);
-    rooms.filter(room => first.data.roomname == room)
-    // Add game to users history
+    first.data.manageDisconnection = "After game";
+    second.data.manageDisconnection = "After game";
+    
+    ongameclients.splice(ongameclients.findIndex((client)=>{return client == first}), 1);
+    ongameclients.splice(ongameclients.findIndex((client)=>{return client == second}), 1);
+
+    // Setting result for both users
+    if (first.data.gameinfo.leftPaddle.score == first.data.gameinfo.winScore)
+    {
+      first.data.result = "win";
+      second.data.result = "loss";
+      first.leave(first.data.roomname);
+      second.leave(second.data.roomname);
+      wss.to(first.data.roomname).emit("Winner", "left");
+    }
+    else
+    {
+      first.data.result = "loss";
+      second.data.result = "win";
+      first.leave(first.data.roomname);
+      second.leave(second.data.roomname);
+      wss.to(first.data.roomname).emit("Winner", "right");
+    }
+    // Kick spectators out of room and Setting  them as not in room anymore
+    const sockets = await wss.in(first.data.roomname).fetchSockets();
+    for (const socket of sockets)
+    {
+      /*
+        Change state of client to "Online"
+      */
+      socket.data.room = "none";
+      socket.leave(first.data.roomname);
+    }
+    // Remove this room
+    rooms.splice(rooms.findIndex(room => {return first.data.roomname == room}), 1);
+
+    // AbdeLah ============================================
+          /*    Add game to users history and their state to "online"
+              user 1:{
+                id : first.data.user.id
+                opponent : second.data.user.id
+                result : first.data.result
+                score : first.data.gameinfo.leftPaddleScore
+              }
+              user 2:{
+                id : second.data.user.id
+                opponent : first.data.user.id
+                result : second.data.result
+                score : second.data.gameinfo.rightPaddleScore
+              }
+          */
   }
 
-  async handleDisconnection(wss: Server, client: Socket, queue: Socket[])
+  async handleDisconnection(wss: Server, client: Socket, queue: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {
+
+    // If client has a spectator role
+    if (client.handshake.query.role == "spectator" && client.data.manageDisconnection != "Checking user")
+    {
+      if (client.data.room == "waiting")
+        waitingSpectators.splice(waitingSpectators.findIndex((s)=> {return s == client}), 1);
+    }
+
     // If client has a player role
-    if (client.handshake.query.role == "player")
+    if (client.handshake.query.role == "player" && client.data.manageDisconnection != "Checking user")
     {
       // Filter queue from client
-      queue.filter(clientInQueue => clientInQueue == client);
+      if (client.data.manageDisconnection == "In queue")
+        queue.splice(queue.findIndex(clientInQueue => {return clientInQueue == client}), 1);
+
       // If client is already in game
-      // if (client.data.gameIntervalId && client.data.gameIntervalId.state == "on")
-      if (!client.data.gameIntervalId)
+      else if (client.data.manageDisconnection == "In game")
       {
+          client.data.opponent.data.manageDisconnection = "After game";
           clearInterval(client.data.gameIntervalId);
-          wss.to(client.data.roomname).emit("OpponentLeft");
-          //Add game to clients history in database
-          /*
-            database.clientId.games(loss, opponentId, clientScore, opponentScore);
-            database.client.opponentId.games(win. clientId, OpponentScore, ClientScore);
+          
+          client.data.opponent.emit("OpponentLeft");
+          client.data.opponent.leave(client.data.roomname);
+          client.leave(client.data.roomname);
+
+          ongameclients.splice(ongameclients.findIndex((cl)=>{return cl == client}, 1));
+          ongameclients.splice(ongameclients.findIndex((cl)=>{return cl == client.data.opponent}, 1));
+
+          // For spectators
+          if (client.data.user.side == "left")
+            wss.to(client.data.roomname).emit("Winner", "right");
+          else
+            wss.to(client.data.roomname).emit("Winner", "left");
+          // Kick spectators out of room and Setting  them as not in room anymore
+          const sockets = await wss.in(client.data.roomname).fetchSockets();
+          for (const socket of sockets)
+          {
+            /*
+              Change state of client to "Online"
+            */
+            socket.data.room = "none";
+            socket.leave(client.data.roomname);
+          }
+          // Remove this room
+          rooms.splice(rooms.findIndex(room => {return client.data.roomname == room}, 1));
+
+          // AbdeLah ===========================================
+          /* Add game to clients history in database
+              user 1:{
+                id : client.data.user.id
+                opponent : client.data.opponent.data.user.id
+                result : loss by leaving game
+                score : 0
+              }
+              user 2:{
+                id : client.data.opponent.data.user.id
+                opponent : client.data.user.id
+                result : win opponent left
+                score : 5
+              }
+              set client.data.opponent.data.user.id to "online" in database
           */
       }
     }

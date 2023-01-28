@@ -3,24 +3,24 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from 'socket.io';
 import { GameService } from './game.service';
   
-// @WebSocketGateway({ namespace: '/first'})
-@WebSocketGateway(80)
+@WebSocketGateway({namespace:"/game"})
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() wss: Server;
 
   private clients: Socket[] = [];
   private rooms: string[] = [];
+  private ongameclients: Socket[] = [];
+  private waitingSpectators: Socket[] = [];
 
-  constructor(private gameService: GameService) {}
+  constructor(private GameService: GameService) {}
 
-  async handleConnection(client: Socket, rooms: string[]) {
+  async handleConnection(client: Socket) {
     console.log(client.id);
-    await this.gameService.handleConnection(client, this.clients, this.wss, this.rooms);
+    this.GameService.handleConnection(client, this.clients, this.wss, this.rooms, this.ongameclients, this.waitingSpectators);
   }
 
   async handleDisconnect(client: Socket) {
-    await this.gameService.handleDisconnection(this.wss, client, this.clients);
+    await this.GameService.handleDisconnection(this.wss, client, this.clients, this.rooms, this.ongameclients, this.waitingSpectators);
 }
-
 }

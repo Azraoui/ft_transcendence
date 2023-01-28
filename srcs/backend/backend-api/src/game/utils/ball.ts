@@ -15,7 +15,7 @@ export class Ball {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 5;
+        this.speed = 3;
         this.directionX = 1;
         this.directionY = 1;
         this.color = color;
@@ -42,7 +42,10 @@ export class Ball {
             this.directionX *= -1;
             this.directionY = (this.y <= paddle.y + paddle.height/2) ? -1 : 1;
             // Increasing speed
-            this.speed += 0.1;
+            if (this.speed + 0.2 >=5)
+                this.speed = 5;
+            else
+                this.speed += 0.2;
         }
         // Updating ball coordinates
         this.x += Math.cos(this.movement_angle) * this.speed * this.directionX;
@@ -51,8 +54,9 @@ export class Ball {
     // Reseting ball
     public resetBall (x: number, y: number): void 
     {
-        this.speed = 5;
+        this.speed = 3;
         this.x = x;
         this.y = y;
     }
 }
+

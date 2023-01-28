@@ -2,7 +2,11 @@
 module.exports = {
   content: [  './src/**/*.{js,jsx,ts,tsx}',], // /**/ -> global pattern
   theme: {
-    extend: {},
+    extend: {
+      screens : {
+        'xs' : "400px"
+      }
+    },
   },
   plugins: [require('tailwind-scrollbar-hide'),
   require('tailwindcss-textshadow'),
