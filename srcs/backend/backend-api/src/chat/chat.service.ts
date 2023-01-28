@@ -551,6 +551,15 @@ export class ChatService {
         return "0";
     }
 
+    async getRoom(roomId:number) {
+        const room = await this.prismaService.room.findUnique({
+            where: {
+                id: roomId,
+            }
+        });
+        return room;
+    }
+
     async viewMembers(roomId: number, userId: number) {
         const room = await this.prismaService.room.findUnique({
             where: {
@@ -574,12 +583,14 @@ export class ChatService {
                         select: {
                             pictureLink: true,
                             nickname: true,
-                            id: true
+                            id: true,
+                            active: true,
                         }
                     })
                     const userData: Record<string, any> = {};
                     userData.id = user.id;
                     userData.pictureLink = user.pictureLink,
+                    userData.active  = user.active,
                     userData.nickName = user.nickname,
                     userData.role = this.findUserStatusInRoom(user.id, room);
                     userData.isMuted = await this.findMutedStatus(user.id, roomId).valueOf();
@@ -616,5 +627,6 @@ export class ChatService {
             })
         }
     }
+
 
 }

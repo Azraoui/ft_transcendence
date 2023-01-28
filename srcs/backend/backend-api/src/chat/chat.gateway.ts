@@ -8,6 +8,7 @@ import {
 	WebSocketGateway,
 	WebSocketServer
 } from "@nestjs/websockets";
+import { Room } from "@prisma/client";
 import { Server, Socket } from "socket.io";
 import { UserService } from "src/users/user/user.service";
 import { ChatService } from "./chat.service";
@@ -51,38 +52,48 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		}
 	}
 
-	handleDisconnect(@ConnectedSocket() client: Socket) {
+	async handleDisconnect(@ConnectedSocket() client: Socket) {
 		console.log('Decconected', client.id);
 		if (this.onlineUser.find((x) => x.id === client.id))
 		{
+			const user = await this.chatService.getUserFromSocket(client);
+			if (!user) return;
 			const index = this.onlineUser.indexOf(client);
 			if (index > -1) {
 				this.onlineUser.splice(index, 1);
+				if (this.onlineUser.indexOf(client) === -1)
+					this.userService.updateUserStatus(user.id, "off");
 			}
-			// if (this.onlineUser.find((x) => x.user.id === ))
 		}
 	}
 
 	@SubscribeMessage('msgToServer')
 	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
 		console.log(`msg  =  ${msg.text}`)
-		const user  =  this.onlineUser.find((x) => x.id === client.id);
-		if (user)
+		const online = this.onlineUser.find((x) => x.id === client.id);
+		if (online)
 		{
-			const  msgData = await this.chatService.createMsg(msg, user.user.id);
+			const room: Room = await this.chatService.getRoom(msg.roomId);
+			const status: string = this.chatService.findUserStatusInRoom(online.user.id, room);
+			if (status === "blocked" || status === "notFound") return;
+			if ((await this.chatService.findMutedStatus(online.user.id, msg.roomId)).valueOf()) return;
+			const  msgData = await this.chatService.createMsg(msg, online.user.id);
 			let obj = {
-				senderId: 1,
-				senderImage: "https://letsenhance.io/static/334225cab5be263aad8e3894809594ce/75c5a/MainAfter.jpg",
-				nickName: "waloMayDi3",
+				senderId: online.user.id,
+				senderImage: online.user.pictureLink,
+				nickName: online.user.nickname,
 				text: msg.text,
-				side: "left",
-				messageId: msgData.id,
+				side: "",
+				messageId: msgData.id
 			}
-			this.server.emit('msgToClients', obj);
-			this.onlineUser.forEach(member => {
-				console.log(`nickName= ${member.user.nickname}, sockerId=${member.client.id}`)
-			});
+			const roomName = `<${msg.roomId}_${online.user.id}>`;
+			for (let i = 0; i < this.onlineUser.length; i++) { // join room members in room
+				const status: string = this.chatService.findUserStatusInRoom(this.onlineUser[i].user.id, room);
+				if (status === "blocked" || status === "notFound") continue;
+				if ((await this.chatService.findMutedStatus(this.onlineUser[i].user.id, msg.roomId)).valueOf()) continue;
+				this.onlineUser[i].join(roomName);
+			}
+			this.server.to(roomName).emit('msgToClients', obj);
 		}
-		// client.emit('msgToClients', obj)
 	}
 }

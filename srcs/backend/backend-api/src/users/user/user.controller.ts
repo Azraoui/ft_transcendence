@@ -4,6 +4,7 @@ import { Express } from 'express'
 import { GetUserReq } from 'src/decorator';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ChatService } from 'src/chat/chat.service';
 
 @Controller('user')
 

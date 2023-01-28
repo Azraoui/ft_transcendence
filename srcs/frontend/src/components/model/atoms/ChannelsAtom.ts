@@ -64,6 +64,7 @@ export const ChannelsMember = atom({
             nickName: "",
             pictureLink: "",
             role: "",
+            active:"",
             isMuted: false
 
         }]
