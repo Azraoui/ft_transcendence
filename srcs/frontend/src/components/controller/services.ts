@@ -1,9 +1,7 @@
 import axios from "axios";
 import http from "./http-common";
 
-const getFriends = () => {
-  return http.get("/friends");  // Andak Tnsa (withCredentials)
-};
+
 const getToken = () => {
   return http.get("/auth/status", {withCredentials:true});
 };
@@ -69,6 +67,16 @@ const getProfile = () => {
     const getChannelMessages = (id:number) => {
     return http.get(`/chat/getRoomData/${id}`, {withCredentials:true});
   };
+
+
+  const getFriends = () => {
+    return http.get('/user/getAllFriends', {withCredentials:true});
+  };
+
+  const getFriendMessages = (id:number) => {
+    return http.get(`/chat/getDirectMsgs/${id}`, {withCredentials:true});
+  };
+
 const updatePicture = async (file:FormData) => {
   try {
     
@@ -119,7 +127,7 @@ const Service = {
   banChannelMember,
   muteMember,
   unmuteChannelMember,
-
+  getFriendMessages
   // get,
   // create,
   // update,

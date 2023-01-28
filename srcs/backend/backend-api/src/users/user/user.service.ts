@@ -3,6 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { ChatService } from 'src/chat/chat.service';
+import { ChatDto, RoomDto } from 'src/chat/dto';
 
 @Injectable()
 
@@ -10,7 +12,8 @@ export class UserService {
 
     constructor(
         private prismaService: PrismaService,
-        private storageProvider: FirebaseStorageProvider
+        private storageProvider: FirebaseStorageProvider,
+        private chatSevice: ChatService,
     ) { }
 
     async getUserProfile(id: number) {
@@ -146,7 +149,12 @@ export class UserService {
                     userId: userId,
                     friendId: friendId
                 }
-            })
+            });
+            const roomData: RoomDto = {
+                name: `|${userId + friendId}_${friendId + userId}|`,
+                type: "private"
+            }
+            this.chatSevice.createDirectMsgRoom(roomData, userId, friendId);
         }
         catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
@@ -192,13 +200,10 @@ export class UserService {
                         id: friends[i].friendId
                     },
                     select: {
-                        firstName: true,
-                        lastName: true,
+                        id: true,
                         bio: true,
-                        email: true,
                         nickname: true,
                         pictureLink: true,
-                        username: true,
                         active: true,
                     }
                 }))
@@ -209,19 +214,37 @@ export class UserService {
                         id: friends[i].userId
                     },
                     select: {
-                        firstName: true,
-                        lastName: true,
+                        id: true,
                         bio: true,
-                        email: true,
                         nickname: true,
                         pictureLink: true,
-                        username: true,
                         active: true,
                     }
                 }))
             }
         }
-        return allFriend;
+        let allUsers = [];
+        for (let i = 0; i  < allFriend.length; i++) {
+            let roomName: string = `|${userId + allFriend[i].id}_${userId + allFriend[i].id}|`
+            let room = await this.prismaService.room.findUnique({
+                where: {
+                    name: roomName
+                },
+                select: {
+                    id: true
+                }
+            })
+            let obj = {
+                id: allFriend[i].id,
+                picture: allFriend[i].pictureLink,
+                nickName: allFriend[i].nickname,
+                active: allFriend[i].active,
+                bio: allFriend[i].bio,
+                roomId: room.id
+            }
+            allUsers.push(obj);
+        }
+        return allUsers;
     }
 
     async getAllUserWithoutFriends(userId: number) {

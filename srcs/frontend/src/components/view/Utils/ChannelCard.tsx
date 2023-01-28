@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
-import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
+import { ChatFriends } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
 import { ChannelClickedAtom, ChannelMessage, ChannelNavAtom, IsJoined } from '../../model/atoms/ChannelsAtom';
@@ -27,7 +27,6 @@ function ChannelCard({ data }: ChannelCardPorps) {
 
     const getMessages = (id: number) => {
         Service.getChannelMessages(id).then((res: any) => {
-            // console.log("+++++++++++++++++++++",res.data);
             setChannelMessage(res.data)
             setisJoined(true);
         }).catch(() => {
@@ -53,15 +52,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
         })
     }
 
-    // useEffect(() => {
-    //     chatSocket.on("msgToClients", (data) => {
-    //         setChannelMessage({ ...channelMessage, ...data });
 
-    //     });
-    // console.log("}}}}}}}}}}}}}}}}}}}}}",channelMessage);
-
-    // }, [chatSocket])
-    
 
     return (
         <div onClick={() => {

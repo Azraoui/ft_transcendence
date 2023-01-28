@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
-import { ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
+import { ChatFriendNav, ChatFriends, FriendClickedAtom, FriendMessages } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
+import Service from '../../controller/services';
+import { error_alert } from './Alerts';
+import { ChannelClickedAtom } from '../../model/atoms/ChannelsAtom';
 
 
 type FriendCardPorps =
     {
         data: {
-            name: string
+            nickName: string
             picture: string
             bio: string
             id: number
             active: string
-            chatlog: {
-                text: string,
-                side: string
-                message_id: number
-                timestamp: string
-            }[]
-
-
         }
     }
 function FriendCard({ data }: FriendCardPorps) {
-
 
     let BgColour = "";
     switch (data.active) {
@@ -39,25 +33,34 @@ function FriendCard({ data }: FriendCardPorps) {
             BgColour = "bg-red-500"
 
     }
-    const [activeNavItem, setActiveNavItem] = useRecoilState(ChatFriends)
-    const [chat, setChat] = useRecoilState(ChatLog)
-    useEffect(()=>
-    {
+    const [activeNavFriend, setActiveNavFriend] = useRecoilState(ChatFriendNav)
+    const [chat, setChat] = useRecoilState(FriendMessages)
+    const [isChannelClicked, setChannelClicked] = useRecoilState(FriendClickedAtom)
 
-    }, [activeNavItem])
+
+    const getMessages = (id: number) => {
+        Service.getFriendMessages(id).then((res: any) => {
+            console.log("__________ = ", res.data);
+            setChat(res.data)
+        }).catch(() => {
+            error_alert()
+        })
+    }
 
     return (
         <div onClick={() => {
-            setActiveNavItem({...activeNavItem, ...data} );
-            setChat(data.chatlog);
-        }} className={`flex items-center space-x-4 py-7 ${activeNavItem.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
+            setActiveNavFriend({...activeNavFriend, ...data} );
+            getMessages(data.id)
+            setChannelClicked(true)
+            // setChat(data.chatlog);
+        }} className={`flex items-center space-x-4 py-7 ${activeNavFriend.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-shrink-0 relative ">
                 <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
                 <img src={data.picture} alt="avatar" className=' h-12 rounded-full ring-2 ring-offset-2  shadow-lg shadow-gray-700' />
             </div>
             <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium ">
-                    {data.name}
+                    {data.nickName}
                 </p>
                 <p className="text-sm  truncate">
                     {data.bio}

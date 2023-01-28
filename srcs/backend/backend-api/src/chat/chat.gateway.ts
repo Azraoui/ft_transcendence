@@ -67,13 +67,6 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		}
 	}
 
-	// var roomno = 1;
-	// io.on('connection', function(socket){
-	//    socket.join("room-"+roomno);
-	//    //Send this event to everyone in the room.
-	//    io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
-	// })
-
 	@SubscribeMessage('msgToServer')
 	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
 		console.log(`msg  =  ${msg.text}`)

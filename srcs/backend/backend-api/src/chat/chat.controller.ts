@@ -87,5 +87,13 @@ export class ChatController {
     unmute(@GetUserReq('id') userId: number, @Body() body: UnMuteDto) {
         return this.chatService.unMuteMember(body.roomId, userId, body.memberId);
     }
+    
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Get('getDirectMsgs/:friendId')
+    getDirectMsgs(@GetUserReq('id') userId: number, @Param('friendId') friendId: number,) {
+        return this.chatService.getDirectMsgs(+userId, +friendId);
+    }
+    
 
 }

@@ -15,7 +15,6 @@ function MuteChannelMemberModal() {
 
     const [isSubmit, setSubmit] = useState(false);
     const [duration, setDuration] = useState('0')
-    console.log(memberData.roomId, " ******* ", memberData.memberId);
     
     const onSubmit = (e: any) => {
         e.preventDefault();
@@ -24,7 +23,6 @@ function MuteChannelMemberModal() {
             duration: +duration, //default
             memberId: memberData.memberId
         }
-        console.log(data.duration," duration +++++++++++++++++++++++");
         
         Service.muteMember(data).then(() => {
             success_alert(`${memberData.nickName} muted successfuly`)
