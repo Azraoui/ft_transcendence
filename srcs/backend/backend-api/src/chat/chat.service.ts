@@ -628,8 +628,5 @@ export class ChatService {
         }
     }
 
-    // getRoomMembers(roomId: number) {
-        
-    // }
 
 }

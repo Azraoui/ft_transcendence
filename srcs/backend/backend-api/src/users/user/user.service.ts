@@ -3,6 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FirebaseStorageProvider } from 'src/utils/firebase-storage.provider';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { ChatService } from 'src/chat/chat.service';
+import { ChatDto, RoomDto } from 'src/chat/dto';
 
 @Injectable()
 
@@ -10,7 +12,8 @@ export class UserService {
 
     constructor(
         private prismaService: PrismaService,
-        private storageProvider: FirebaseStorageProvider
+        private storageProvider: FirebaseStorageProvider,
+        private chatSevice: ChatService,
     ) { }
 
     async getUserProfile(id: number) {
@@ -146,7 +149,12 @@ export class UserService {
                     userId: userId,
                     friendId: friendId
                 }
-            })
+            });
+            // const roomData: RoomDto = {
+            //     name: `|${userId}_${friendId}|`,
+            //     type: "private"
+            // }
+            // this.chatSevice.createRoom(userId, roomData);
         }
         catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
@@ -221,7 +229,21 @@ export class UserService {
                 }))
             }
         }
-        return allFriend;
+        let allUsers = [];
+        allFriend.forEach(element => {
+            let obj = {
+                id: element.id,
+                picture: element.pictureLink,
+                nickName: element.nickname,
+                username: element.username,
+                firstName: element.firstName,
+                lastName: element.lastName,
+                active: element.active,
+                bio: element.bio,
+            }
+            allUsers.push(obj);
+        });
+        return allUsers;
     }
 
     async getAllUserWithoutFriends(userId: number) {
