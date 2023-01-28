@@ -655,4 +655,36 @@ export class ChatService {
 		return allMessages;
 	}
 
+	async createDirectMsgRoom(roomData: RoomDto, userId: number, friendId: number) {
+		try {
+			const newDMRoom = await this.prismaService.room.create({
+				data: {
+					name: roomData.name,
+					type: roomData.type,
+				}
+			})
+			if (newDMRoom) {
+				const room = await this.prismaService.room.update({
+					where: {
+						id: newDMRoom.id,
+					},
+					data: {
+						members: {
+							push: [userId, friendId]
+						}
+					}
+				})
+				return room;
+			}
+		}
+		catch (error) {
+			if (error instanceof PrismaClientKnownRequestError) {
+				if (error.code === 'P2002') {
+					throw new ForbiddenException('Credentials Taken');
+				}
+			}
+			throw error
+		}
+	}
+
 }

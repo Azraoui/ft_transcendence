@@ -150,11 +150,11 @@ export class UserService {
                     friendId: friendId
                 }
             });
-            // const roomData: RoomDto = {
-            //     name: `|${userId}_${friendId}|`,
-            //     type: "private"
-            // }
-            // this.chatSevice.createRoom(userId, roomData);
+            const roomData: RoomDto = {
+                name: `|${userId + friendId}_${friendId + userId}|`,
+                type: "private"
+            }
+            this.chatSevice.createDirectMsgRoom(roomData, userId, friendId);
         }
         catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
