@@ -200,13 +200,10 @@ export class UserService {
                         id: friends[i].friendId
                     },
                     select: {
-                        firstName: true,
-                        lastName: true,
+                        id: true,
                         bio: true,
-                        email: true,
                         nickname: true,
                         pictureLink: true,
-                        username: true,
                         active: true,
                     }
                 }))
@@ -217,13 +214,10 @@ export class UserService {
                         id: friends[i].userId
                     },
                     select: {
-                        firstName: true,
-                        lastName: true,
+                        id: true,
                         bio: true,
-                        email: true,
                         nickname: true,
                         pictureLink: true,
-                        username: true,
                         active: true,
                     }
                 }))
@@ -235,9 +229,6 @@ export class UserService {
                 id: element.id,
                 picture: element.pictureLink,
                 nickName: element.nickname,
-                username: element.username,
-                firstName: element.firstName,
-                lastName: element.lastName,
                 active: element.active,
                 bio: element.bio,
             }
