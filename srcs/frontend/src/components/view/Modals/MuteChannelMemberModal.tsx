@@ -23,7 +23,6 @@ function MuteChannelMemberModal() {
             duration: +duration, //default
             memberId: memberData.memberId
         }
-        console.log(data.duration," duration +++++++++++++++++++++++");
         
         Service.muteMember(data).then(() => {
             success_alert(`${memberData.nickName} muted successfuly`)

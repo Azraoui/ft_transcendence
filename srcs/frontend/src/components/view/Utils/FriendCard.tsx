@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import avtar from '../../../assets/avatar.jpeg'
-import { ChatFriendNav, ChatFriends, ChatLog } from '../../model/atoms/ChatFriends'
+import { ChatFriendNav, ChatFriends, FriendClickedAtom, FriendMessages } from '../../model/atoms/ChatFriends'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import BanModal from '../Modals/BanModal';
+import Service from '../../controller/services';
+import { error_alert } from './Alerts';
+import { ChannelClickedAtom } from '../../model/atoms/ChannelsAtom';
 
 
 type FriendCardPorps =
@@ -18,8 +21,6 @@ type FriendCardPorps =
     }
 function FriendCard({ data }: FriendCardPorps) {
 
-console.log("__________",data.id);
-
     let BgColour = "";
     switch (data.active) {
         case "on":
@@ -33,15 +34,24 @@ console.log("__________",data.id);
 
     }
     const [activeNavFriend, setActiveNavFriend] = useRecoilState(ChatFriendNav)
-    const [chat, setChat] = useRecoilState(ChatLog)
-    useEffect(()=>
-    {
+    const [chat, setChat] = useRecoilState(FriendMessages)
+    const [isChannelClicked, setChannelClicked] = useRecoilState(FriendClickedAtom)
 
-    }, [activeNavFriend])
+
+    const getMessages = (id: number) => {
+        Service.getFriendMessages(id).then((res: any) => {
+            console.log("__________ = ", res.data);
+            setChat(res.data)
+        }).catch(() => {
+            error_alert()
+        })
+    }
 
     return (
         <div onClick={() => {
             setActiveNavFriend({...activeNavFriend, ...data} );
+            getMessages(data.id)
+            setChannelClicked(true)
             // setChat(data.chatlog);
         }} className={`flex items-center space-x-4 py-7 ${activeNavFriend.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-shrink-0 relative ">

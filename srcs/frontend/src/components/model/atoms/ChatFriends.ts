@@ -23,7 +23,24 @@ export const ChatFriendNav = atom({
 
     }
 })
-export const ChatLog = atom({
-    key: "ChatLog",
-    default: {}
+export const FriendMessages = atom({
+    key: "FriendMessages",
+    default:
+        [
+            {
+            senderId: 0,
+            senderImage: "",
+            nickName: "",
+            text: "",
+            side: "",
+            messageId: 0
+
+        }
+    ]
 })
+
+export const FriendClickedAtom = atom({
+    key: "FriendClickedAtom",
+    default: false
+})
+

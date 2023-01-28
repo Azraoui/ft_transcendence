@@ -116,13 +116,13 @@ export function ProfileEditCard() {
           <div className="flex w-full justify-center">
             <div className="mb-3 w-full">
               <label htmlFor='exampleText0' className="form-label inline-block mb-3 ">NickName</label>
-              <input type="text" placeholder={profileData.nickName} name='nickname' className="input input-bordered input-success text-gray-800 w-full" onChange={handleChange} />
+              <input type="text" placeholder={profileData.nickName} name='nickname' className="input input-bordered input-success text-pink-500  w-full" onChange={handleChange} />
             </div>
           </div>
           <div className="flex w-full justify-center">
             <div className="mb-1 w-full">
               <label className="form-label inline-block mb-3 ">About You</label>
-              <textarea name='bio' maxLength={80}  minLength={8}  className="textarea textarea-accent w-full text-gray-800" placeholder={profileData.bio} onChange={handleChange}></textarea>
+              <textarea name='bio' maxLength={80}  minLength={8}  className="textarea textarea-accent w-full text-pink-500 " placeholder={profileData.bio} onChange={handleChange}></textarea>
             </div>
           </div>
 

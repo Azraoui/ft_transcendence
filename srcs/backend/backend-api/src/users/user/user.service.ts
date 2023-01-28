@@ -224,9 +224,9 @@ export class UserService {
             }
         }
         let allUsers = [];
-        allFriend.forEach(async element => {
-            const roomName = `|${userId + element.id}_${userId + element.id}|`
-            const room = await this.prismaService.room.findUnique({
+        for (let i = 0; i  < allFriend.length; i++) {
+            let roomName: string = `|${userId + allFriend[i].id}_${userId + allFriend[i].id}|`
+            let room = await this.prismaService.room.findUnique({
                 where: {
                     name: roomName
                 },
@@ -235,15 +235,15 @@ export class UserService {
                 }
             })
             let obj = {
-                id: element.id,
-                picture: element.pictureLink,
-                nickName: element.nickname,
-                active: element.active,
-                bio: element.bio,
+                id: allFriend[i].id,
+                picture: allFriend[i].pictureLink,
+                nickName: allFriend[i].nickname,
+                active: allFriend[i].active,
+                bio: allFriend[i].bio,
                 roomId: room.id
             }
             allUsers.push(obj);
-        });
+        }
         return allUsers;
     }
 
