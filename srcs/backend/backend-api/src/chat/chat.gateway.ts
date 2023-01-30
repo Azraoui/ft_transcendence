@@ -67,10 +67,15 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage('msgToServer')
 	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
+		this.server.removeAllListeners("msgToClients");
+		this.server.removeAllListeners("msgToServer");
 		console.log(`msg  =  ${msg.text}`)
+		console.log(`roomId  =  ${msg.roomId}`)
 		const online = this.onlineUser.find((x) => x.id === client.id);
 		if (online)
 		{
+			let type: string = (await this.chatService.getRoomType(msg.roomId)).valueOf();
+
 			const room: Room = await this.chatService.getRoom(msg.roomId);
 			const status: string = this.chatService.findUserStatusInRoom(online.user.id, room);
 			if (status === "blocked" || status === "notFound") return;
@@ -82,7 +87,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				nickName: online.user.nickname,
 				text: msg.text,
 				side: "",
-				messageId: msgData.id
+				messageId: msgData.id,
+				type: type
 			}
 			const roomName = `<${msg.roomId}_${online.user.id}>`;
 			for (let i = 0; i < this.onlineUser.length; i++) { // join room members in room
@@ -92,6 +98,9 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				this.onlineUser[i].join(roomName);
 			}
 			this.server.to(roomName).emit('msgToClients', obj);
+			for (let i = 0; i < this.onlineUser.length; i++) {
+				this.onlineUser[i].leave(roomName)
+			}
 		}
 	}
 }

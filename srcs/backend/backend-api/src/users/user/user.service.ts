@@ -144,6 +144,14 @@ export class UserService {
 
     async addFriend(userId: number, friendId: number) {
         try {
+            if (await this.prismaService.friends.findFirst({
+                where: {
+                    AND: [
+                        {userId: friendId},
+                        {friendId: userId}
+                    ]
+                }
+            })) return;
             await this.prismaService.friends.create({
                 data: {
                     userId: userId,

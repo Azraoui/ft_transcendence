@@ -4,7 +4,7 @@ import { ChannelAtom, ChannelClickedAtom } from '../../model/atoms/ChannelsAtom'
 import ChannelConversation from './ChannelConversation';
 
 import ChannelList from './ChannelList'
-import Conversation from './Conversation'
+import Conversation from './ChatConversation'
 
 function Channel() {
   const [channel, setChannel] = useRecoilState(ChannelAtom)

@@ -74,6 +74,8 @@ const getProfile = () => {
   };
 
   const getFriendMessages = (id:number) => {
+    console.log("))))))))",id);
+
     return http.get(`/chat/getDirectMsgs/${id}`, {withCredentials:true});
   };
 

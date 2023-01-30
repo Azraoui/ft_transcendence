@@ -67,7 +67,7 @@ const onNameChange = (e:any) =>
                 <form className="w-full" onSubmit={onSubmit}>
                         <label htmlFor="my-modal-1" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                         <h3 className="font-bold text-lg pb-4">Add Channel</h3>
-                        <input type="text" placeholder="name" name="name" className="input w-full m-2 text-black" value={channelName} required onChange={onNameChange} />
+                        <input type="text" placeholder="name" name="name" className="input w-full m-2 text-pink-500" value={channelName} required onChange={onNameChange} />
                         <div className="form-control">
                             <label className="label cursor-pointer  px-6">
                                 <span className="label-text text-white font-bold  ">public</span>

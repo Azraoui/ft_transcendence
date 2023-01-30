@@ -25,3 +25,16 @@ export const error_alert_channel_password = () => {
     });
 };
 
+
+export const new_message_alert = (msg:string) => {
+    toast.info(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        });
+};

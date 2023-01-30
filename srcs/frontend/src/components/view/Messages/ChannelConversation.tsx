@@ -8,7 +8,7 @@ import { ChannelMemberData, ChannelMessage, ChannelNavAtom, IsJoined } from '../
 import ConversationChannelBubble from './ConversationChannelBubble';
 import { chatSocket } from '../../controller/socket';
 import Service from '../../controller/services';
-import { success_alert } from '../Utils/Alerts';
+import { new_message_alert, success_alert } from '../Utils/Alerts';
 import { ProfileData } from '../../model/atoms/ProfileData';
 
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -36,7 +36,6 @@ function ChannelConversation() {
   const [sendClicked, setSendClicked] = useState(false);
   const [channel, setChannel] = useRecoilState(ChannelNavAtom)
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-  const messageEl = useRef<HTMLDivElement>(null);
 
   const [messageList, setMessageList] = useState([
     {
@@ -59,12 +58,7 @@ function ChannelConversation() {
       };
       await chatSocket.emit("msgToServer", messageData);
       setSendClicked(false)
-      if (messageEl) {
-        messageEl.current?.addEventListener('DOMNodeInserted', event => {
-          const {target} = event;
-          (target  as HTMLDivElement ).scroll({ top: (target  as HTMLDivElement ).scrollHeight, behavior: 'smooth' });
-        });
-      }
+
       setCurrentMessage("");
     }
   }
@@ -74,16 +68,23 @@ function ChannelConversation() {
     setMessageList(channelMessage)
   }, [channelMessage])
 
-  useEffect(()=>
-  {
+  useEffect(() => {
     chatSocket.on("msgToClients", (data) => {
-      setMessageList((list => [...list, data] ));
-      console.log("_________________ ",data.senderId, "___________", profileData.id);
-      
-      if  (data.senderId !== profileData.id)
-          success_alert("new message from " + data.nickName)
+      if (data.type == "CH")  // channel
+       {
+
+        setMessageList((list => [...list, data]));
+        setChannelMessage((list => [...list, data]));
+        console.log("_________________ ", data.senderId, "___________", profileData.id);
+
+        if (data.senderId !== profileData.id)
+        new_message_alert("new channel message from " + data.nickName)
+
+      }
     });
-  },[])
+    return () => {chatSocket.off("msgToClients")};
+
+  }, [chatSocket])
 
   const getMessage = (e: any) => {
     const val = e.target.value;
@@ -96,7 +97,7 @@ function ChannelConversation() {
   return (
     <div className="col-span-4  max-h-[800px] w-full sm:px-12 px-1 bg-[#242424] py-4">
       <div className="flex items-center h-full flex-col justify-between relative mb-2 space-y-5">
-        <ScrollToBottom   className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
+        <ScrollToBottom className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
           {
             isJoined ?
               messageList.length ?
@@ -125,11 +126,11 @@ function ChannelConversation() {
               <div className="flex w-full justify-center">
                 <div className="mb-3 max-w-6xl  w-full relative">
                   <form onSubmit={SendMessage}>
-                    <button  type='submit' onClick={()  =>  setSendClicked(true)} 
-                    className='right-0 -top-1 rounded-full absolute h-14 w-14 bg-login-gradient flex items-center justify-center '>
+                    <button type='submit' onClick={() => setSendClicked(true)}
+                      className='right-0 -top-1 rounded-full absolute h-14 w-14 bg-login-gradient flex items-center justify-center '>
                       <PaperAirplaneIcon className='header-icon text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110' />
                     </button>
-                    <input required type="text" placeholder="Type here" value={currentMessage} onChange={ getMessage} className="input input-bordered text-pink-500 rounded-full input-primary w-full " />
+                    <input required type="text" placeholder="Type here" value={currentMessage} onChange={getMessage} className="input input-bordered text-pink-500 rounded-full input-primary w-full " />
                   </form>
                 </div>
               </div>

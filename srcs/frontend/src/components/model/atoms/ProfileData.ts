@@ -16,3 +16,9 @@ export const ProfileData = atom({
         
     }
 })
+
+export const UserId = atom({
+    key: "UserId",
+    default: -1
+})
+

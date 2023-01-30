@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { ChatFriends, FriendClickedAtom } from '../../model/atoms/ChatFriends'
-import Conversation  from './Conversation'
+import Conversation  from './ChatConversation'
 import FriendList from './FriendList'
 
 function Chat() {
