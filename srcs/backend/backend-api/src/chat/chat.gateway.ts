@@ -19,9 +19,7 @@ import { ChatDto } from "./dto";
 	{
 		namespace: 'chat',
 		cors: {
-			// origin: process.env.HOST_MACHINE_URL + ':5173'
-			// origin: 'http://localhost:5173'
-			origin: '*'
+			origin: [process.env.HOST_MACHINE_URL + ':5173', "http://localhost:5173"]
 		},
 	}
 )
