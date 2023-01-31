@@ -80,7 +80,7 @@ const getProfile = () => {
   };
 
   const blockFriend = (id:number) => {
-    return http.post(`/user/blockFriend/${id}`, {withCredentials:true} );
+    return http.post(`/user/blockFriend/${id}`,{}, {withCredentials:true} );
   };
 
 const updatePicture = async (file:FormData) => {

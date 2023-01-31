@@ -15,8 +15,10 @@ function BlockModal() {
             {
                 success_alert(activeNavFriend.nickName + " blocked successfully")
                 setOK(true)
-            }).catch(()=>
+            }).catch((e:Error)=>
             {
+                console.log(e);
+                
                 error_alert()
             })
     }

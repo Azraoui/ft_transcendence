@@ -21,7 +21,8 @@ function Users() {
     username:"",
     picture:"",
     bio:"",
-    active:"off"
+    active:"off",
+    isBlocked: false,
   }])
   useEffect(() => {
     retrieveProfile();

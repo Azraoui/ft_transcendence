@@ -19,7 +19,8 @@ type UserCardProps =
       nickName: string,
       username: string,
       picture: string
-      active: string
+      active: string,
+      isBlocked:boolean
     }
   }
 
@@ -28,10 +29,19 @@ function UserCard({ data }: UserCardProps) {
   const [userId, setUserId] = useRecoilState(UserId)
 
   const [isFriend, setIsFriend] = useState(false);
+  const [isUnblocked, setUnblocked] = useState(false);
   const AddFriend = () => {
     Service.addFriend(data.id).then(() => {
       success_alert(`${data.firstName} ${data.lastName} is now your friend`)
       setIsFriend(true)
+    }).catch((e: Error) => {
+      console.log(e);
+    })
+  }
+  const Unblock = () => {
+    Service.addFriend(data.id).then(() => {
+      success_alert(`${data.firstName} ${data.lastName} is Unblocked`)
+      setUnblocked(true)
     }).catch((e: Error) => {
       console.log(e);
     })
@@ -65,7 +75,7 @@ function UserCard({ data }: UserCardProps) {
         <span className="mb-1 lg:text-lg  text-xs text-center truncate font-extralight ">{data.nickName}</span>
         <span className="mb-1 lg:text-lg  text-xs text-center font-extralight ">{data.bio}</span>
         <div className="flex flex-col lg:flex-row mt-4  lg:space-x-2">
-          <button onClick={AddFriend} disabled={isFriend} className={`btn disabled:text-white mb-1`}>Add friend</button>
+          {data.isBlocked ? <button onClick={Unblock} disabled={isUnblocked} className={`btn disabled:text-white mb-1`}>Unblock</button>: <button onClick={AddFriend} disabled={isFriend} className={`btn disabled:text-white mb-1`}>Add friend</button>}
           <label htmlFor="my-modal-4" className="btn ">View Profile</label>
         </div>
       </div>
