@@ -7,6 +7,7 @@ import BanModal from '../Modals/BanModal';
 import Service from '../../controller/services';
 import { error_alert } from './Alerts';
 import { ChannelClickedAtom } from '../../model/atoms/ChannelsAtom';
+import { UserId } from '../../model/atoms/ProfileData';
 
 
 type FriendCardPorps =
@@ -17,7 +18,7 @@ type FriendCardPorps =
             bio: string
             id: number
             active: string
-            roomId:number
+            roomId: number
         }
     }
 function FriendCard({ data }: FriendCardPorps) {
@@ -37,12 +38,9 @@ function FriendCard({ data }: FriendCardPorps) {
     const [activeNavFriend, setActiveNavFriend] = useRecoilState(ChatFriendNav)
     const [chat, setChat] = useRecoilState(FriendMessages)
     const [isChannelClicked, setChannelClicked] = useRecoilState(FriendClickedAtom)
-
+    const [userId, setUserId] = useRecoilState(UserId)
 
     const getMessages = (id: number) => {
-
-       
-        
         Service.getFriendMessages(id).then((res: any) => {
             console.log("__________ = ", res.data);
             setChat(res.data)
@@ -56,6 +54,7 @@ function FriendCard({ data }: FriendCardPorps) {
             setActiveNavFriend(data);
             getMessages(data.roomId)
             setChannelClicked(true)
+            setUserId(data.id)
         }} className={`flex items-center space-x-4 py-7 ${activeNavFriend.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
             <div className="flex-shrink-0 relative ">
                 <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
@@ -70,11 +69,11 @@ function FriendCard({ data }: FriendCardPorps) {
                 </p>
             </div>
             {/* Block Modal*/}
-            <div className="dropdown dropdown-left  ">
-                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon '/></div>
+            <div className="dropdown dropdown-left   ">
+                <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon ' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li><label htmlFor="my-modal-3" className="btn  w-full">Block</label></li>
-                    <li><a className="btn my-1 w-full text-sm ">View Profile</a></li>
+                    <li> <label htmlFor="my-modal-4" className="btn ">View Profile</label></li>
                 </ul>
             </div>
         </div>

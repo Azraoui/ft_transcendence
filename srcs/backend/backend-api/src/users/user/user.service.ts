@@ -320,4 +320,42 @@ export class UserService {
         }
     }
 
+    async blockFriend(userId: number, friendId: number) {
+        if (!friendId) return;
+        const friend = await this.prismaService.friends.findFirst({
+            where: {
+                OR: [
+                    {
+                        AND: [
+                            {userId: userId},
+                            {friendId: friendId}
+                        ]
+                    },
+                    {
+                        AND: [
+                            {userId: friendId},
+                            {friendId: userId}
+                        ]
+                    }
+                ]
+            },
+            select: {
+                id: true
+            }
+        })
+        if (friend) {
+            await this.prismaService.friends.delete({
+                where: {
+                    id: friend.id
+                }
+            })
+            const roomName: string = `|${userId + friendId}_${userId + friendId}|`
+            await this.prismaService.room.delete({
+                where: {
+                    name: roomName
+                }
+            })
+        }
+    }
+
 } // End Of UserServices Class

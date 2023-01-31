@@ -536,7 +536,7 @@ export class ChatService {
 		if (mutedUser) {
 			const time = moment().format('YYYY-MM-DD hh:mm:ss');
 			for (let i = 0; i < mutedUser.length; i++) {
-				if (mutedUser[i].time >= time) {
+				if (mutedUser[i].time < time) {
 					await this.prismaService.mutedUser.delete({
 						where: {
 							id: mutedUser[i].id

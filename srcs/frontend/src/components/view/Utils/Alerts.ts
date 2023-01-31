@@ -38,3 +38,17 @@ export const new_message_alert = (msg:string) => {
         theme: "colored",
         });
 };
+
+export const muted_user_alert = (msg:string) => {
+    toast.warn(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+};
+

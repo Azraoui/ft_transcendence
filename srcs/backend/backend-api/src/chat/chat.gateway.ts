@@ -79,7 +79,10 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 			const room: Room = await this.chatService.getRoom(msg.roomId);
 			const status: string = this.chatService.findUserStatusInRoom(online.user.id, room);
 			if (status === "blocked" || status === "notFound") return;
-			if ((await this.chatService.findMutedStatus(online.user.id, msg.roomId)).valueOf()) return;
+			if ((await this.chatService.findMutedStatus(online.user.id, msg.roomId)).valueOf()){
+				client.emit('muteNotification', {duration: (await this.chatService.getRestTime(online.user.id, msg.roomId)).valueOf()});
+				return;
+			}
 			const  msgData = await this.chatService.createMsg(msg, online.user.id);
 			let obj = {
 				senderId: online.user.id,
@@ -94,7 +97,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 			for (let i = 0; i < this.onlineUser.length; i++) { // join room members in room
 				const status: string = this.chatService.findUserStatusInRoom(this.onlineUser[i].user.id, room);
 				if (status === "blocked" || status === "notFound") continue;
-				if ((await this.chatService.findMutedStatus(this.onlineUser[i].user.id, msg.roomId)).valueOf()) continue;
+				// if ((await this.chatService.findMutedStatus(this.onlineUser[i].user.id, msg.roomId)).valueOf()) continue;
 				this.onlineUser[i].join(roomName);
 			}
 			this.server.to(roomName).emit('msgToClients', obj);

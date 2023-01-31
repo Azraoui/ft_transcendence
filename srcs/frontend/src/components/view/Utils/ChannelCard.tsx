@@ -37,6 +37,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
         Service.joinChannel(param.roomId, param.type, param.password).then((res: any) => {
             success_alert("You Joined this channel successfully");
             setisJoined(true);
+            // window.location.reload()
         }).catch(() => {
             error_alert();
             setisJoined(false);
