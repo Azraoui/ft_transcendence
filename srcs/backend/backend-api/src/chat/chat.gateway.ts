@@ -67,8 +67,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage('msgToServer')
 	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
-		this.server.removeAllListeners("msgToClients");
-		this.server.removeAllListeners("msgToServer");
+		// this.server.removeAllListeners("msgToClients");
+		// this.server.removeAllListeners("msgToServer");
 		console.log(`msg  =  ${msg.text}`)
 		console.log(`roomId  =  ${msg.roomId}`)
 		const online = this.onlineUser.find((x) => x.id === client.id);
@@ -101,9 +101,9 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				this.onlineUser[i].join(roomName);
 			}
 			this.server.to(roomName).emit('msgToClients', obj);
-			for (let i = 0; i < this.onlineUser.length; i++) {
-				this.onlineUser[i].leave(roomName)
-			}
+			// for (let i = 0; i < this.onlineUser.length; i++) {
+			// 	this.onlineUser[i].leave(roomName)
+			// }
 		}
 	}
 }
