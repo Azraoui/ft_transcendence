@@ -8,7 +8,7 @@ import { ChannelMemberData, ChannelMessage, ChannelNavAtom, IsJoined } from '../
 import ConversationChannelBubble from './ConversationChannelBubble';
 import { chatSocket } from '../../controller/socket';
 import Service from '../../controller/services';
-import { new_message_alert, success_alert } from '../Utils/Alerts';
+import { muted_user_alert, new_message_alert, success_alert } from '../Utils/Alerts';
 import { ProfileData } from '../../model/atoms/ProfileData';
 
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -68,15 +68,21 @@ function ChannelConversation() {
     setMessageList(channelMessage)
   }, [channelMessage])
 
+
+  useEffect(() => {
+    chatSocket.on("muteNotification", (data) => {
+      muted_user_alert("You're  muted till " + data.duration)
+    });
+    return () => {chatSocket.off("muteNotification")};
+
+  }, [chatSocket])
+
   useEffect(() => {
     chatSocket.on("msgToClients", (data) => {
       if (data.type == "CH")  // channel
        {
-
         setMessageList((list => [...list, data]));
         setChannelMessage((list => [...list, data]));
-        console.log("_________________ ", data.senderId, "___________", profileData.id);
-
         if (data.senderId !== profileData.id)
         new_message_alert("new channel message from " + data.nickName)
 
@@ -102,7 +108,6 @@ function ChannelConversation() {
             isJoined ?
               messageList.length ?
                 messageList.map((item) => (
-
                   <ConversationChannelBubble key={item.messageId} data={item} />
                 ))
                 :

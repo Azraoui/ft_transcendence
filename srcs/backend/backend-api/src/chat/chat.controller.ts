@@ -91,9 +91,8 @@ export class ChatController {
     @UseGuards(JwtTwoFactorGuard)
     @HttpCode(HttpStatus.OK)
     @Get('getDirectMsgs/:id')
-    getDirectMsgs(@GetUserReq('id') userId: number, @Param('id') roomId: number,) {
+    getDirectMsgs(@GetUserReq('id') userId: number, @Param('id') roomId: number) {
         return this.chatService.getDirectMsgs(+userId, +roomId);
     }
-    
 
 }
