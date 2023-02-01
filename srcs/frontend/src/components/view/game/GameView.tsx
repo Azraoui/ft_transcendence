@@ -14,10 +14,10 @@ import purple from "../../../assets/purple.webp"
 const role:string = "player";
 
 
-const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
+const socket = io(`http://127.0.0.1:5000/game`, {
     autoConnect: false,
     reconnection: true,
-    transports: ["websocket"],
+    // transports: ["websocket"],
     query: {
         role: role
     },

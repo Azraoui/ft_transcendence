@@ -39,6 +39,7 @@ export class GameService {
     client.data.user = new user();
     client.data.user.id = client.id;
     client.data.user.piclink = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg";
+    console.log(client.handshake.query.role);
     if (client.handshake.query.role == "player")
       this.handlePlayerConnection(client, players, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
