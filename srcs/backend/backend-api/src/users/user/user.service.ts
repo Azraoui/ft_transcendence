@@ -359,4 +359,8 @@ export class UserService {
         }
     }
 
+    async unBlock(userId: number, friendId: number) {
+        
+    }
+
 } // End Of UserServices Class

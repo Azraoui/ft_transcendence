@@ -77,4 +77,11 @@ export class UserController {
         return this.userService.blockFriend(+userId, +friendId);
     }
 
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('unBlock/:id')
+    unBlock(@GetUserReq('id') userId: number, @Param('id') friendId: number) {
+        return this.userService.unBlock(+userId, +friendId);
+    }
+
 }
