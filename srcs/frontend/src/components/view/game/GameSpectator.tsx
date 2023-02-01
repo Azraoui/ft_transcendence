@@ -13,7 +13,7 @@ import canvasBg from "../../../assets/canvasBg.jpeg";
 const role:string = "spectator";
 
 
-const socket = io("http://localhost:5000/game", {
+const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
     autoConnect: false,
     transports: ["websocket"],
     query: {

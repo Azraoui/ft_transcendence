@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { Express } from 'express'
 import { GetUserReq } from 'src/decorator';
@@ -68,6 +68,13 @@ export class UserController {
     @Get('getAllFriends')
     async getAllFriends(@GetUserReq('id') userId: number) {
         return this.userService.getAllFriends(userId);
+    }
+
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('blockFriend/:id')
+    blockFriend(@GetUserReq('id') userId: number, @Param('id') friendId: number) {
+        return this.userService.blockFriend(+userId, +friendId);
     }
 
 }

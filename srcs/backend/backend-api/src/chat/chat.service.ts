@@ -397,7 +397,7 @@ export class ChatService {
 					}
 				})
 			}
-			if (room.members.length === 0) {
+			if (room.members.length === 1) {
 				await this.prismaService.room.delete({
 					where: {
 						id: roomId
@@ -494,13 +494,13 @@ export class ChatService {
 
 	findUserStatusInRoom(userId: number, room: Room): string {
 
-		if (room.owner === userId)
+		if (room?.owner === userId)
 			return "owner";
-		else if (room.admins.find((id) => id === userId))
+		else if (room?.admins?.find((id) => id === userId))
 			return "admin";
-		else if (room.blocked.find((id) => id === userId))
+		else if (room?.blocked?.find((id) => id === userId))
 			return "blocked";
-		else if (room.members.find((id) => id === userId))
+		else if (room?.members?.find((id) => id === userId))
 			return "member";
 		else
 			return "notFound";
@@ -536,7 +536,7 @@ export class ChatService {
 		if (mutedUser) {
 			const time = moment().format('YYYY-MM-DD hh:mm:ss');
 			for (let i = 0; i < mutedUser.length; i++) {
-				if (mutedUser[i].time >= time) {
+				if (mutedUser[i].time < time) {
 					await this.prismaService.mutedUser.delete({
 						where: {
 							id: mutedUser[i].id
@@ -625,13 +625,14 @@ export class ChatService {
 		}
 	}
 
-	async getDirectMsgs(userId: number, friendId: number) {
-		if (!friendId)
+	async getDirectMsgs(userId: number, roomId: number) {
+		console.log(`roomId = ${roomId}, userId = ${userId}`)
+		if (!roomId)
 			return;
-		const roomName: string = `|${userId + friendId}_${friendId + userId}|`
+		// const roomName: string = `|${userId + friendId}_${friendId + userId}|`
 		const room = await this.prismaService.room.findUnique({
 			where: {
-				name: roomName
+				id: roomId
 			},
 			include: {
 				messages: true
@@ -697,5 +698,24 @@ export class ChatService {
 			throw error
 		}
 	}
-
+	async getRoomType(roomId: number):  Promise<string> {
+		const room  =  await  this.prismaService.room.findUnique({
+			where: {
+				id: roomId,
+			},
+			select: {
+				type: true,
+				owner: true,
+				members: true,
+				name: true
+			}
+		});
+		if (room)  {
+			if (room.owner  ===  null && room.type === "private") {
+				return "DM"
+			}
+			return "CH"
+		}
+		return "NO"
+	}
 }

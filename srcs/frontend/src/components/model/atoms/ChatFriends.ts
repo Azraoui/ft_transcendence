@@ -8,6 +8,7 @@ export const ChatFriends = atom({
         active: "",
         nickName: "",
         bio: "",
+        roomId:0
 
     }]
 })
@@ -20,6 +21,7 @@ export const ChatFriendNav = atom({
         active: "",
         nickName: "",
         bio: "",
+        roomId:0
 
     }
 })

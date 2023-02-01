@@ -17,7 +17,6 @@ function FriendList(my_message:any) {
     {
         Service.getFriends().then((res:any)=>
         {
-            console.log(res.data);
             setFriends(res.data)
         }).catch(()=>
         {

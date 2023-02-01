@@ -144,6 +144,14 @@ export class UserService {
 
     async addFriend(userId: number, friendId: number) {
         try {
+            if (await this.prismaService.friends.findFirst({
+                where: {
+                    AND: [
+                        {userId: friendId},
+                        {friendId: userId}
+                    ]
+                }
+            })) return;
             await this.prismaService.friends.create({
                 data: {
                     userId: userId,
@@ -309,6 +317,45 @@ export class UserService {
         }
         catch (error) {
             throw error;
+        }
+    }
+
+    async blockFriend(userId: number, friendId: number) {
+        console.log(`friendId = ${friendId}, userId = ${userId} --> blockFriend`)
+        if (!friendId) return;
+        const friend = await this.prismaService.friends.findFirst({
+            where: {
+                OR: [
+                    {
+                        AND: [
+                            {userId: userId},
+                            {friendId: friendId}
+                        ]
+                    },
+                    {
+                        AND: [
+                            {userId: friendId},
+                            {friendId: userId}
+                        ]
+                    }
+                ]
+            },
+            select: {
+                id: true
+            }
+        })
+        if (friend) {
+            await this.prismaService.friends.delete({
+                where: {
+                    id: friend.id
+                }
+            })
+            const roomName: string = `|${userId + friendId}_${userId + friendId}|`
+            await this.prismaService.room.delete({
+                where: {
+                    name: roomName
+                }
+            })
         }
     }
 

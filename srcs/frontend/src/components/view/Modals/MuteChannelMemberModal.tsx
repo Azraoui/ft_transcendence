@@ -27,10 +27,12 @@ function MuteChannelMemberModal() {
         Service.muteMember(data).then(() => {
             success_alert(`${memberData.nickName} muted successfuly`)
             setSubmit(false);
+            setDuration("0")
 
         }).catch((err: Error) => {
         setSubmit(false);
             error_alert()
+            setDuration("0")
         })
     }
 

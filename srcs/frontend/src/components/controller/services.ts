@@ -74,7 +74,13 @@ const getProfile = () => {
   };
 
   const getFriendMessages = (id:number) => {
+    console.log("))))))))",id);
+
     return http.get(`/chat/getDirectMsgs/${id}`, {withCredentials:true});
+  };
+
+  const blockFriend = (id:number) => {
+    return http.post(`/user/blockFriend/${id}`,{}, {withCredentials:true} );
   };
 
 const updatePicture = async (file:FormData) => {
@@ -127,7 +133,8 @@ const Service = {
   banChannelMember,
   muteMember,
   unmuteChannelMember,
-  getFriendMessages
+  getFriendMessages,
+  blockFriend
   // get,
   // create,
   // update,

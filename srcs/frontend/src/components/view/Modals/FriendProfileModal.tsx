@@ -7,10 +7,15 @@ import ProfileImage from '../Utils/ProfileImage';
 import Stats from '../Utils/Stats';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserId } from '../../model/atoms/ProfileData';
+import { useRecoilState } from 'recoil';
 
-function FriendProfileModal({ id }: { id: number }) {
+function FriendProfileModal() {
 
   
+    const [userId, setUserId] = useRecoilState(UserId)
+    console.log("___________= ", userId);
+    
 
     const [data, setData] = useState({
         firstName: "",
@@ -27,10 +32,10 @@ function FriendProfileModal({ id }: { id: number }) {
     useEffect(() => {
         // console.log(window.location.pathname.split("/").pop());
         retrieveFriendProfile();
-    }, []);
+    }, [userId]);
 
     const retrieveFriendProfile = () => {
-        Service.viewFriend(id)
+        Service.viewFriend(userId)
             .then((response: any) => {
                 console.log(response.data);
                 setData(response.data)
@@ -39,6 +44,18 @@ function FriendProfileModal({ id }: { id: number }) {
                 console.log(e);
             });
     };
+    let BgColour = "";
+    switch (data.active) {
+        case "on":
+            BgColour = "bg-green-500";
+            break;
+        case "in":
+            BgColour = " bg-orange-500";
+            break;
+        default:
+            BgColour = "bg-red-500"
+  
+    }
     return (
         <div>
            
@@ -58,7 +75,7 @@ function FriendProfileModal({ id }: { id: number }) {
                             <div className='flex flex-col items-center justify-center space-y-4'>
                                 {/* <hr className=' bg-slate-400 w-full' /> */}
 
-                                <ProfileImage avatar={data.picture} />
+                                <ProfileImage avatar={data.picture} BgColour={BgColour} />
                                 <h5 className="lg:text-xl text-sm text-center font-medium ">{data.firstName} {data.lastName}</h5>
                                 <span className="lg:text-lg text-xs text-center  font-extralight ">{data.nickName}</span>
                                 <span className="lg:text-lg text-xs text-center  font-extralight ">{data.bio}</span>
