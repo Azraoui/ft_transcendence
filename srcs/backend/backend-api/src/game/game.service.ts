@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Server, Socket } from 'socket.io';
+import { ChatService } from 'src/chat/chat.service';
 import { clearInterval } from 'timers';
 import { GameInfo } from './utils/gameinfo';
 
@@ -16,13 +17,15 @@ export class oneVone{
 }
 @Injectable()
 export class GameService {
-  constructor() {}
-  handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]): void 
+  constructor(private readonly chatService: ChatService) {
+  }
+  async handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) 
   {
     client.data.manageDisconnection = "Checking user";
     // Get token
     /*
     */
+    const userInfo = await this.chatService.getUserFromSocket(client);
     // AbdeLah=============================================
     try {
        // need a function that takes token, and throw if not validated, otherwise return ({id:string,piclink:string})
@@ -37,8 +40,8 @@ export class GameService {
       }
     */
     client.data.user = new user();
-    client.data.user.id = client.id;
-    client.data.user.piclink = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg";
+    client.data.user.id = userInfo.nickname;
+    client.data.user.piclink = userInfo.pictureLink;
     console.log(client.handshake.query.role);
     if (client.handshake.query.role == "player")
     {
