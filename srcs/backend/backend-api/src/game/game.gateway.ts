@@ -22,7 +22,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect
   constructor(private GameService: GameService) {}
 
   async handleConnection(client: Socket) {
-    console.log(client.id);
+    console.log(` id = ${client.id}`);
     this.GameService.handleConnection(client, this.clients, this.wss, this.rooms, this.ongameclients, this.waitingSpectators);
   }
 

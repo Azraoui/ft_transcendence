@@ -13,3 +13,12 @@ export const chatSocket = io(
         }
     }
 );
+
+export const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
+    autoConnect: false,
+    reconnection: true,
+    transports: ["websocket"],
+    query: {
+        role: "player"
+    },
+});
