@@ -4,11 +4,11 @@ import { Server, Socket } from 'socket.io';
 import { GameService } from './game.service';
 import { oneVone } from "./game.service";
   
-@WebSocketGateway({
+@WebSocketGateway(1337,{
     namespace: 'game',
     cors: {
-      origin: [process.env.HOST_MACHINE_URL + ':5173', "http://localhost:5173"]
-      // origin: "*"
+      // origin: [process.env.HOST_MACHINE_URL + ':5173', "http://localhost:5173"]
+      origin: "*"
     },
 })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect
