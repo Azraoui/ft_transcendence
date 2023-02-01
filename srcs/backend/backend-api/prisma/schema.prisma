@@ -22,6 +22,7 @@ model User {
   accessToken  String
   refreshToken String
   bio          String?
+  blocked       Int[]
   active String @default("off")
   twoFacAuthSecret  String?
   isTwoFacAuthEnabled Boolean @default(false)

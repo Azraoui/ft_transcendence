@@ -344,6 +344,14 @@ export class UserService {
                 id: true
             }
         })
+        await this.prismaService.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                // blocke
+            }
+        })
         if (friend) {
             await this.prismaService.friends.delete({
                 where: {
@@ -357,6 +365,10 @@ export class UserService {
                 }
             })
         }
+    }
+
+    async unBlock(userId: number, friendId: number) {
+        
     }
 
 } // End Of UserServices Class
