@@ -84,6 +84,7 @@ class Game
     queueIntervalId:any = -1;
     conIntervalId:any = -1;
     noGameInterval:any = -1;
+    invitationexpired:any = -1;
     seconds:number=0;
     minutes:number=0;
     queue:boolean=false;
@@ -138,6 +139,8 @@ start()
                 this.minutes = 0;
                 clearInterval(this.noGameInterval);
                 this.noGameInterval = -1;
+                clearTimeout(this.invitationexpired);
+                this.invitationexpired = -1;
                 this.ref.lImageRef.current.src = Avatar;
                 this.ref.lnameRef.current.innerText = "";
                 this.ref.rImageRef.current.src = Avatar;
@@ -179,7 +182,14 @@ start()
                 // this.ref.buttonRef.current.addEventListener('click', ()=>window.location.reload());
                 this.renderEnd("Opponent Left");
             });
-            this.socket.on("expired", ()=> window.location.href = window.location.origin + '/chat');
+            this.socket.on("expired", ()=> 
+                {
+                    clearInterval(this.noGameInterval);
+                    this.renderEnd("Invitation Expired");
+                    this.invitationexpired =  setTimeout(() => {
+                        window.location.href = window.location.origin + '/chat'
+                    }, 1000);
+                    });
         }
         if (this.role == "spectator")
         {
