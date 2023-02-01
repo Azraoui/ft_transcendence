@@ -8,21 +8,21 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 import purple from "../../../assets/purple.webp"
+// import { socket } from "../../controller/socket";
 
 
 
 const role:string = "player";
 
 
-const socket = io(`http://172.18.0.1:5000/game`, {
+const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     autoConnect: false,
     reconnection: true,
-    // transports: ["websocket"],
+    transports: ["websocket"],
     query: {
         role: role
     },
 });
-
 
 const GameView: React.FC = () => {
     

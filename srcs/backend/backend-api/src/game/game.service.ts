@@ -41,7 +41,10 @@ export class GameService {
     client.data.user.piclink = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg";
     console.log(client.handshake.query.role);
     if (client.handshake.query.role == "player")
+    {
+
       this.handlePlayerConnection(client, players, wss, rooms, ongameclients, waitingSpectators);
+    }
     else if (client.handshake.query.role == "spectator")
       this.handleSpectatorConnection(client, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "inviting" || client.handshake.query.role == "invited")
@@ -169,6 +172,8 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
   // Function handles when player is connected to the firstGateway
   async handlePlayerConnection (client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {
+    console.log("Here");
+    
     if (client.connected) // Proceed if the client hasn't disconnected
     {
       // If no one is waiting, add client to queue
