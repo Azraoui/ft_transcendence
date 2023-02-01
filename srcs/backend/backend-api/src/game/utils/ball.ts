@@ -22,7 +22,7 @@ export class Ball {
         this.movement_angle = Math.PI/4;
     }
     // Checking ball collision with paddles
-    public collision(paddle: Paddle) : boolean{
+    public collision(paddle: Paddle) : boolean {
         return (this.x >= paddle.x - (this.radius - 1) && this.x <= paddle.x + (paddle.width - 1) + (this.radius - 1)
         &&  this.y >= paddle.y - (this.radius - 1) && this.y <= paddle.y + (paddle.height - 1) + (this.radius - 1))
       }
@@ -50,6 +50,7 @@ export class Ball {
         // Updating ball coordinates
         this.x += Math.cos(this.movement_angle) * this.speed * this.directionX;
         this.y += Math.sin(this.movement_angle) * this.speed * this.directionY;
+
     }
     // Reseting ball
     public resetBall (x: number, y: number): void 

@@ -10,10 +10,14 @@ class user{
   side : string;
 }
 
+export class oneVone{
+  inviter: Socket;
+  timeoutId:any;
+}
 @Injectable()
 export class GameService {
   constructor() {}
-  handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[]): void 
+  handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]): void 
   {
     client.data.manageDisconnection = "Checking user";
     // Get token
@@ -39,7 +43,62 @@ export class GameService {
       this.handlePlayerConnection(client, players, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
       this.handleSpectatorConnection(client, rooms, ongameclients, waitingSpectators);
+    else if (client.handshake.query.role == "inviting" || client.handshake.query.role == "invited")
+      this.handle1v1Connection(client, wss, oneVone, rooms, ongameclients, waitingSpectators);
   }
+
+// 1v1 mode
+async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+{
+  if (client.connected)
+  {
+    client.data.inGame = false;
+    if (client.handshake.query.role == "inviting")
+    {
+      client.data.manageDisconnection = "Waiting"; 
+      // // Set an Interval that search for the invited in all namespaces then sends the invite
+      // const intervalId = setInterval(async ()=>
+      // {
+      //   // Finding the invited and send them the invitation
+        const namespace = wss.of('/chat');
+        let clients = await namespace.fetchSockets();
+        for (const cli of clients)
+        {
+          if (cli.data.user.id == client.handshake.query.id)
+          {
+            cli.emit("invited", {Id:client.data.user.id, piclink: client.data.user.piclink});
+            break ;
+          }
+        }
+      // }, 1000/2);
+      const timeoutId = setTimeout(async () => {
+        const index = oneVone.findIndex((cli)=>{return cli.inviter == client});
+        oneVone.splice(index, 1);
+        client.data.manageDisconnection = "connected"; 
+        client.emit("expired");
+      }, 10*1000);
+      oneVone.push({inviter : client, timeoutId : timeoutId});
+      client.data.user.side = "left";
+      client.emit("playerInfo", client.data.user);
+    }
+    else if (client.handshake.query.role == "invited")
+    {
+      const index = oneVone.findIndex((cli)=>{return (cli.inviter.data.user.id == client.handshake.query.id) && (cli.inviter.handshake.query.id == client.data.user.id)});
+      if (index != -1)
+      {
+        clearTimeout(oneVone[index].timeoutId);
+        const first = oneVone[index].inviter;
+        const second = client;
+        oneVone.splice(index, 1);
+        client.data.user.side = "right";
+        client.emit("playerInfo", client.data.user);
+        this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
+      }
+      else
+        client.emit("expired");
+    }
+  }
+}
 
   //  Spectator mode
   async handleSpectatorConnection(client: Socket, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
@@ -93,7 +152,7 @@ export class GameService {
   {
     let id:string[];
 
-    // Get playersInfo and send them  
+    // Get playersInfo and send them
     id = room.split("+");
 
     let player:Socket = ongameclients.find((cl)=>{if(cl.data.user.id == id[0])return 1;return 0;});
@@ -216,7 +275,7 @@ export class GameService {
     clearInterval(first.data.gameIntervalId);
     first.data.manageDisconnection = "After game";
     second.data.manageDisconnection = "After game";
-    
+
     ongameclients.splice(ongameclients.findIndex((client)=>{return client == first}), 1);
     ongameclients.splice(ongameclients.findIndex((client)=>{return client == second}), 1);
 
@@ -251,7 +310,7 @@ export class GameService {
     rooms.splice(rooms.findIndex(room => {return first.data.roomname == room}), 1);
 
     // AbdeLah ============================================
-          /*    Add game to users history and their state to "online"
+          /*  Add game to users history and their state to "online"
               user 1:{
                 id : first.data.user.id
                 opponent : second.data.user.id
@@ -267,7 +326,7 @@ export class GameService {
           */
   }
 
-  async handleDisconnection(wss: Server, client: Socket, queue: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  async handleDisconnection(wss: Server, client: Socket, queue: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[])
   {
 
     // If client has a spectator role
@@ -278,12 +337,27 @@ export class GameService {
     }
 
     // If client has a player role
-    if (client.handshake.query.role == "player" && client.data.manageDisconnection != "Checking user")
+    if ((client.handshake.query.role == "player" || client.handshake.query.role == "inviting" || client.handshake.query.role == "invited") && client.data.manageDisconnection != "Checking user")
     {
       // Filter queue from client
       if (client.data.manageDisconnection == "In queue")
         queue.splice(queue.findIndex(clientInQueue => {return clientInQueue == client}), 1);
-
+      // Filter inviter from oneVone
+      else if (client.handshake.query.role == "inviting" &&  client.data.manageDisconnection == "Waiting")
+      {
+        const idx = oneVone.findIndex(cli=> {return cli.inviter == client});
+        const inviter = oneVone.splice(idx, 1);
+        clearTimeout(inviter[idx].timeoutId);
+        const clients = await wss.of("/chat").fetchSockets();
+        for (const cli of clients)
+        {
+          if (cli.data.user.id == client.handshake.query.id)
+          {
+            cli.emit("Cancel", client.data.user.id);
+            break ;
+          }
+        }
+      }
       // If client is already in game
       else if (client.data.manageDisconnection == "In game")
       {
