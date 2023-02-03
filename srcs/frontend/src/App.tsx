@@ -75,9 +75,9 @@ function App() {
     <div className='text-white  '>
       {
       
-        status ? <Login />
-          :
-          profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
+        // status ? <Login />
+        //   :
+        //   profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}

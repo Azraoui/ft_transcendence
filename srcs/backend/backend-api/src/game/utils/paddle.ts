@@ -1,3 +1,5 @@
+import { Ball } from "./ball";
+
 export class Paddle {
     public x: number;
     public y: number;
@@ -18,13 +20,31 @@ export class Paddle {
       this.score = 0;
     }
   
-    public moveUp(): void {
-        this.y = (this.y - this.movSpeed >= 0) ? this.y - this.movSpeed : 0;
-    }
-  
-    public moveDown(canvasHeight: number): void {
-        this.y = (this.y + this.movSpeed <= canvasHeight - this.height) ? this.y + this.movSpeed : canvasHeight - this.height;
-    }
+    public moveUp(ball:Ball): void {
+      this.y = (this.y - this.movSpeed >= 0) ? this.y - this.movSpeed : 0;
+      if (ball.collision(this) && ball.x >= this.x && this.x <= this.x + this.width - 1)
+      {
+        if (ball.y < this.y + this.height/2)
+            ball.y = this.y - (ball.radius - 1);
+        else
+            ball.y = this.y + (this.height - 1) + (ball.radius - 1);
+
+      }
+  }
+
+  public moveDown(canvasHeight: number, ball:Ball): void {
+      this.y = (this.y + this.movSpeed <= canvasHeight - this.height) ? this.y + this.movSpeed : canvasHeight - this.height;
+      if (ball.collision(this) && ball.x >= this.x && this.x <= this.x + this.width - 1)
+      {
+          ball.movement_angle = Math.PI/3;
+        if (ball.y < this.y + this.height/2)
+            ball.y = this.y - (ball.radius - 1);
+
+        else
+            ball.y = this.y + (this.height - 1) + (ball.radius - 1);
+
+      }
+  }
 
     public reset(x: number, y: number): void {
       this.x = this.x;

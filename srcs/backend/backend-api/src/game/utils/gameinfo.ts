@@ -67,16 +67,16 @@ export class GameInfo
         if (which == "left")
         {
             if (dir == "up")
-                this.leftPaddle.moveUp();
+                this.leftPaddle.moveUp(this.ball);
             else
-                this.leftPaddle.moveDown(this.canvasHeight);
+                this.leftPaddle.moveDown(this.canvasHeight, this.ball);
         }
         else
         {
             if (dir == "up")
-                this.rightPaddle.moveUp();
+                this.rightPaddle.moveUp(this.ball);
             else
-                this.rightPaddle.moveDown(this.canvasHeight);
+                this.rightPaddle.moveDown(this.canvasHeight, this.ball);
         }
     }
 }
