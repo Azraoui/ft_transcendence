@@ -1,6 +1,7 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer,   OnGatewayConnection,
   OnGatewayDisconnect } from "@nestjs/websockets";
 import { Server, Socket } from 'socket.io';
+import { ChatService } from "src/chat/chat.service";
 import { GameService } from './game.service';
 import { oneVone } from "./game.service";
   
@@ -22,14 +23,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect
   private oneVone: oneVone[] = [];
 
 
-  constructor(private GameService: GameService) {}
+  constructor(private GameService: GameService, private chatService: ChatService) {}
 
   async handleConnection(client: Socket) {
-    console.log(client.id);
+    console.log(`game connected = ${client.id}`)
+    const user = await this.chatService.getUserFromSocket(client);
+    console.log(`user = ${user.nickname}`)
+    if (!user) client.disconnect();
     this.GameService.handleConnection(client, this.clients, this.wss, this.rooms, this.ongameclients, this.waitingSpectators, this.oneVone);
   }
 
   async handleDisconnect(client: Socket) {
+    console.log(`game disconnected = ${client.id}`)
     await this.GameService.handleDisconnection(this.wss, client, this.clients, this.rooms, this.ongameclients, this.waitingSpectators, this.oneVone);
 }
 }

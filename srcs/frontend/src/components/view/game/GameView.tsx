@@ -10,7 +10,10 @@ import canvasBg from "../../../assets/canvasBg.jpeg";
 import purple from "../../../assets/purple.webp"
 // import { socket } from "../../controller/socket";
 
-
+let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
+    const [ key, ...v ] = c.split('=');
+    return [ key, v.join('=') ];
+}));
 
 const role:string = "player";
 
@@ -21,6 +24,9 @@ const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     transports: ["websocket"],
     query: {
         role: role
+    },
+    auth: {
+        token: cookies['TwoFacAuthToken']
     },
 });
 
