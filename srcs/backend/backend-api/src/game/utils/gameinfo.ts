@@ -20,9 +20,9 @@ export class GameInfo
     public canvasWidth : number = 600;
     public winScore : number  = 5;
 
-    constructor()
+    constructor(mode : string)
     {
-        this.ball = new Ball(this.canvasWidth/2, this.canvasHeight/2, this.canvasHeight/70, "YELLOW");
+        this.ball = new Ball(this.canvasWidth/2, this.canvasHeight/2, this.canvasHeight/70, "YELLOW", mode);
         this.leftPaddle = new Paddle(this.canvasHeight/24/4, this.canvasHeight/2 - this.canvasHeight/12, this.canvasHeight/24, this.canvasHeight/6, "WHITE", this.canvasHeight/4 * .2);
         this.rightPaddle = new  Paddle(this.canvasWidth - 5*(this.canvasHeight/24/4), this.canvasHeight/2 - this.canvasHeight/12, this.canvasHeight/24, this.canvasHeight/6, "WHITE", this.canvasHeight/4 * .2);
     }

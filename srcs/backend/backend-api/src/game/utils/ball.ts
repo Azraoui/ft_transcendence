@@ -10,8 +10,9 @@ export class Ball {
     public directionX : number;
     public directionY : number;
     public last_col : string = "dmatter";
+    public mode : string;
     
-    constructor (x: number, y: number, radius: number, color: string) 
+    constructor (x: number, y: number, radius: number, color: string, mode: string) 
     {
         this.x = x;
         this.y = y;
@@ -21,6 +22,7 @@ export class Ball {
         this.directionY = 1;
         this.color = color;
         this.movement_angle = Math.PI/4;
+        this.mode = mode;
     }
     // Checking ball collision with paddles
     public collision(paddle: Paddle) : boolean{
@@ -52,14 +54,16 @@ export class Ball {
                     else 
                         this.directionY = 1;
                 }
-                else {
+                else
                 // Updating directions
                 this.directionX *= -1;
                 // Increasing speed
-                // if (this.speed + 0.2 >=5)
-                //     this.speed = 5;
-                // else
-                //     this.speed += 0.2;
+                if (this.mode == "advanced")
+                {
+                    if (this.speed + 0.2 >=5)
+                        this.speed = 5;
+                    else
+                        this.speed += 0.2;
                 }
             }
         }

@@ -7,25 +7,29 @@ import io from "socket.io-client";
 import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
+import purple from "../../../assets/purple.webp"
+// import { socket } from "../../controller/socket";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     const [ key, ...v ] = c.split('=');
     return [ key, v.join('=') ];
 }));
 
-const role:string = "spectator";
+const role:string = "player";
 
 
-const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
+const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     autoConnect: false,
+    reconnection: true,
+    transports: ["websocket"],
     query: {
-        role: role
+        role: role,
+        mode: "normal"
     },
     auth: {
         token: cookies['TwoFacAuthToken']
     },
 });
-
 
 const GameView: React.FC = () => {
     
@@ -59,7 +63,7 @@ const GameView: React.FC = () => {
                 </div>
             </div>
             < canvas className="rounded-2xl" ref={canvasRef}/>
-            <button ref = {buttonRef} hidden className ="my-button  rounded-2xl text-white" style={{backgroundImage: `url(${canvasBg})`}}>next</button>
+            {/* <button ref = {buttonRef} className ="my-button  rounded-2xl text-white" style={{backgroundImage: `url(${canvasBg})`}}>Play Again</button> */}
         </div>
     );
 };

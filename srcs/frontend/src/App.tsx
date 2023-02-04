@@ -24,7 +24,7 @@ import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 import { io } from 'socket.io-client'
 import { chatSocket } from './components/controller/socket'
-import GameView  from './components/view/game/GameView'
+import GameView  from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
 
 

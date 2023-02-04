@@ -8,17 +8,23 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 
-
+let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
+    const [ key, ...v ] = c.split('=');
+    return [ key, v.join('=') ];
+}));
 
 const role:string = "inviting";
 
 
-const socket = io("http://localhost:5000/game", {
+const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     autoConnect: false,
-    transports: ["websocket"],
     query: {
         role: role,
         id: "invited",
+        mode: "advanced",
+    },
+    auth: {
+        token: cookies['TwoFacAuthToken']
     },
 });
 

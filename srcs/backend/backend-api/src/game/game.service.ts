@@ -11,7 +11,7 @@ class user{
   side : string;
 }
 
-export class oneVone{
+export class oneVone {
   inviter: Socket;
   timeoutId:any;
 }
@@ -19,35 +19,19 @@ export class oneVone{
 export class GameService {
   constructor(private readonly chatService: ChatService) {
   }
-  async handleConnection(client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) 
+  async handleConnection(client: Socket, queue_normal: Socket[], queue_advanced: Socket[],wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) 
   {
     client.data.manageDisconnection = "Checking user";
-    // Get token
-    /*
-    */
+
     const userInfo = await this.chatService.getUserFromSocket(client);
-    // AbdeLah=============================================
-    try {
-       // need a function that takes token, and throw if not validated, otherwise return ({id:string,piclink:string})
-    }
-    catch
-    {
-      return ;
-    } 
-      /* need to fill these :{
-        client.data.user.id
-        client.data.user.piclink
-      }
-    */
+
+    // Storing client's info
     client.data.user = new user();
     client.data.user.id = userInfo.nickname;
     client.data.user.piclink = userInfo.pictureLink;
-    console.log(client.handshake.query.role);
-    if (client.handshake.query.role == "player")
-    {
 
-      this.handlePlayerConnection(client, players, wss, rooms, ongameclients, waitingSpectators);
-    }
+    if (client.handshake.query.role == "player")
+      this.handlePlayerConnection(client, queue_normal, queue_advanced, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
       this.handleSpectatorConnection(client, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "inviting" || client.handshake.query.role == "invited")
@@ -173,34 +157,61 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
   }
 
   // Function handles when player is connected to the firstGateway
-  async handlePlayerConnection (client: Socket, players: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
-  {
-    console.log("Here");
-    
+  async handlePlayerConnection (client: Socket, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  {    
     if (client.connected) // Proceed if the client hasn't disconnected
     {
-      // If no one is waiting, add client to queue
-      if (players.length == 0)
+      if (client.handshake.query.mode == "normal")
       {
-        client.data.manageDisconnection = "In queue";
-        players.push(client);
-        client.emit("queue");
-        client.data.user.side = 'left';
-        client.emit("playerInfo", client.data.user);
-      //AbdLah=============================================================
-      /*
-        change client.data.user.id  state to "in queue" in database
-      */
+        // If no one is waiting, add client to queue
+        if (queue_normal.length == 0)
+        {
+          client.data.manageDisconnection = "In queue";
+          queue_normal.push(client);
+          client.emit("queue");
+          client.data.user.side = 'left';
+          client.emit("playerInfo", client.data.user);
+          //AbdLah=============================================================
+          /*
+          change client.data.user.id  state to "in queue" in database
+          */
+        }
+        else // If someone already in queue join him in a game with client
+        {
+          client.data.user.side = 'right';
+          client.emit("playerInfo", client.data.user);
+          const second = client;
+          const first = queue_normal.pop();
+          ongameclients.push(first, second);
+          // Join them
+          this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
+        }
       }
-      else // If someone already in queue join him in a game with client
+      else if (client.handshake.query.mode == "advanced")
       {
-        client.data.user.side = 'right';
-        client.emit("playerInfo", client.data.user);
-        const second = client;
-        const first = players.pop();
-        ongameclients.push(first, second);
-        // Join them
-        this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
+        // If no one is waiting, add client to queue
+        if (queue_advanced.length == 0)
+        {
+          client.data.manageDisconnection = "In queue";
+          queue_advanced.push(client);
+          client.emit("queue");
+          client.data.user.side = 'left';
+          client.emit("playerInfo", client.data.user);
+          //AbdLah=============================================================
+          /*
+          change client.data.user.id  state to "in queue" in database
+          */
+        }
+        else // If someone already in queue join him in a game with client
+        {
+          client.data.user.side = 'right';
+          client.emit("playerInfo", client.data.user);
+          const second = client;
+          const first = queue_advanced.pop();
+          ongameclients.push(first, second);
+          // Join them
+          this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
+        }
       }
     }
 }
@@ -220,7 +231,11 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
     second.data.opponent = first;
 
     // Create a GameInfo for players
-    const gameinfo = new GameInfo();
+    let gameinfo;
+    if (first.handshake.query.mode == "normal")
+      gameinfo = new GameInfo("normal");
+    else
+      gameinfo = new GameInfo("advanced");
     first.data.gameinfo = gameinfo;
     // first.data.gameinfo = gameinfo;
     second.data.gameinfo = first.data.gameinfo;
@@ -325,17 +340,19 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
                 opponent : second.data.user.id
                 result : first.data.result
                 score : first.data.gameinfo.leftPaddleScore
+                mode : first.handshake.query.mode
               }
               user 2:{
                 id : second.data.user.id
                 opponent : first.data.user.id
                 result : second.data.result
                 score : second.data.gameinfo.rightPaddleScore
+                mode : second.handshake.query.mode
               }
           */
   }
 
-  async handleDisconnection(wss: Server, client: Socket, queue: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[])
+  async handleDisconnection(wss: Server, client: Socket, queue_normal: Socket[], queue_advanced: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[])
   {
 
     // If client has a spectator role
@@ -350,7 +367,13 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
     {
       // Filter queue from client
       if (client.data.manageDisconnection == "In queue")
-        queue.splice(queue.findIndex(clientInQueue => {return clientInQueue == client}), 1);
+      {
+        if (client.handshake.query.mode == "normal")
+          queue_normal.splice(queue_normal.findIndex(clientInQueue => {return clientInQueue == client}), 1);
+
+        else if (client.handshake.query.mode == "advanced")
+          queue_advanced.splice(queue_advanced.findIndex(clientInQueue => {return clientInQueue == client}), 1);
+      }
       // Filter inviter from oneVone
       else if (client.handshake.query.role == "inviting" &&  client.data.manageDisconnection == "Waiting")
       {
@@ -405,12 +428,14 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
                 opponent : client.data.opponent.data.user.id
                 result : loss by leaving game
                 score : 0
+                mode : client.handshake.query.mode
               }
               user 2:{
                 id : client.data.opponent.data.user.id
                 opponent : client.data.user.id
                 result : win opponent left
                 score : 5
+                mode : client.handshake.query.mode
               }
               set client.data.opponent.data.user.id to "online" in database
           */
