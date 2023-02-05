@@ -30,6 +30,7 @@ model User {
 
   friends Friends[] @relation("friends")
   friendOf Friends[] @relation("friendOf")
+  game Game[]
 
   @@unique([id, username, email])
   @@map("users")
@@ -84,4 +85,17 @@ model MutedUser {
   time String
 
   @@map("mutedUser")
+}
+
+model Game {
+  id Int @id @default(autoincrement())
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  opponent_fullName String
+  opponent_imgUrl String
+  result  String
+  score String
+  gameMode String
+  time String
 }

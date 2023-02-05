@@ -38,7 +38,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
-			if (user.active === "off") {
+			if (user.active === "off" || user.active === "in") {
 				// update user status
 				this.userService.updateUserStatus(user.id, "on");
 				client.user.active = "on";

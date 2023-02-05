@@ -321,7 +321,6 @@ export class UserService {
     }
 
     async blockFriend(userId: number, friendId: number) {
-        console.log(`friendId = ${friendId}, userId = ${userId} --> blockFriend`)
         if (!friendId) return;
         const friend = await this.prismaService.friends.findFirst({
             where: {

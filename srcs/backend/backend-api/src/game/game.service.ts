@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/chat.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UserService } from 'src/users/user/user.service';
 import { clearInterval } from 'timers';
 import { GameInfo } from './utils/gameinfo';
 
@@ -17,9 +19,13 @@ export class oneVone {
 }
 @Injectable()
 export class GameService {
-  constructor(private readonly chatService: ChatService) {
+  constructor(
+    private readonly chatService: ChatService,
+    private readonly prismaService: PrismaService,
+    private readonly userService: UserService
+    ) {
   }
-  async handleConnection(client: Socket, queue_normal: Socket[], queue_advanced: Socket[],wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) 
+  async handleConnection(client: any, queue_normal: Socket[], queue_advanced: Socket[],wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) 
   {
     client.data.manageDisconnection = "Checking user";
 
@@ -30,6 +36,7 @@ export class GameService {
     client.data.user.id = userInfo.nickname;
     client.data.user.piclink = userInfo.pictureLink;
 
+    client.user = userInfo;
     if (client.handshake.query.role == "player")
       this.handlePlayerConnection(client, queue_normal, queue_advanced, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
@@ -157,7 +164,7 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
   }
 
   // Function handles when player is connected to the firstGateway
-  async handlePlayerConnection (client: Socket, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  async handlePlayerConnection (client: any, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {    
     if (client.connected) // Proceed if the client hasn't disconnected
     {
@@ -175,6 +182,7 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
           /*
           change client.data.user.id  state to "in queue" in database
           */
+          await this.userService.updateUserStatus(client.user.id, "in");
         }
         else // If someone already in queue join him in a game with client
         {
@@ -216,8 +224,7 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
     }
 }
 
-
-  joinPlayersToGame(first: Socket, second: Socket, wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
+  async joinPlayersToGame(first: any, second: any, wss: Server, rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[])
   {
     const roomname = first.data.user.id + '+' + second.data.user.id;
     // Join players to room
@@ -252,6 +259,8 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
       Set both clients state in database to "in game"
         first.data.user.id && second.data.user.id
     */
+    await this.userService.updateUserStatus(first.user.id, "in");
+    await this.userService.updateUserStatus(second.user.id, "in");
     // Send opponent info
     first.emit("playerInfo", second.data.user);
     second.emit("playerInfo", first.data.user);
@@ -294,7 +303,7 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
     waitingSpectators.length = 0;
   }
 
-  async gameFinished(first: Socket, second: Socket, wss: Server, rooms: string[], ongameclients:Socket[])
+  async gameFinished(first: any, second: any, wss: Server, rooms: string[], ongameclients:Socket[])
   {
     clearInterval(first.data.gameIntervalId);
     first.data.manageDisconnection = "After game";
@@ -333,6 +342,8 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
     // Remove this room
     rooms.splice(rooms.findIndex(room => {return first.data.roomname == room}), 1);
 
+    await this.userService.updateUserStatus(first.user.id, "on");
+    await this.userService.updateUserStatus(second.user.id, "on");
     // AbdeLah ============================================
           /*  Add game to users history and their state to "online"
               user 1:{
@@ -350,6 +361,20 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
                 mode : second.handshake.query.mode
               }
           */
+  }
+
+  async setGameHistory(userId: number, opponentId: number, data: any) {
+    const game = await this.prismaService.game.create({
+      data: {
+        opponent_fullName: "",
+        opponent_imgUrl: "",
+        result: "",
+        score: "",
+        time: "",
+        userId: 0,
+        gameMode: ""
+      }
+    })
   }
 
   async handleDisconnection(wss: Server, client: Socket, queue_normal: Socket[], queue_advanced: Socket[], rooms: string[], ongameclients:Socket[], waitingSpectators: Socket[], oneVone: oneVone[])
@@ -439,6 +464,7 @@ async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms
               }
               set client.data.opponent.data.user.id to "online" in database
           */
+         await this.userService.updateUserStatus(client.data.opponent.user.id, "on");
       }
     }
   }
