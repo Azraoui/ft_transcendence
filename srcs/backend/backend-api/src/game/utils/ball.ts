@@ -17,7 +17,7 @@ export class Ball {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 1;
+        this.speed = 5;
         this.directionX = 1;
         this.directionY = 1;
         this.color = color;
@@ -76,7 +76,7 @@ export class Ball {
     public resetBall (x: number, y: number): void 
     {
         this.last_col = "dmatter";
-        this.speed = 2;
+        this.speed = 5;
         this.x = x;
         this.y = y;
         this.movement_angle = Math.PI/4;
