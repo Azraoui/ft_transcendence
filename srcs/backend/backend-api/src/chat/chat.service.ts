@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatDto, JoinRoomDto, RoomDto } from './dto';
 import * as argon2 from 'argon2';
@@ -668,33 +668,16 @@ export class ChatService {
 
 	async createDirectMsgRoom(roomData: RoomDto, userId: number, friendId: number) {
 		try {
-			const newDMRoom = await this.prismaService.room.create({
+			await this.prismaService.room.create({
 				data: {
 					name: roomData.name,
 					type: roomData.type,
+					members: [userId, friendId]
 				}
 			})
-			if (newDMRoom) {
-				const room = await this.prismaService.room.update({
-					where: {
-						id: newDMRoom.id,
-					},
-					data: {
-						members: {
-							push: [userId, friendId]
-						}
-					}
-				})
-				return room;
-			}
 		}
 		catch (error) {
-			if (error instanceof PrismaClientKnownRequestError) {
-				if (error.code === 'P2002') {
-					throw new ForbiddenException('Credentials Taken');
-				}
-			}
-			throw error
+			return;
 		}
 	}
 	async getRoomType(roomId: number):  Promise<string> {
