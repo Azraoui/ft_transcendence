@@ -85,6 +85,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 			}
 			const  msgData = await this.chatService.createMsg(msg, online.user.id);
 			let obj = {
+				roomId: msg.roomId, // i add this to filter msg which users should see the message
 				senderId: online.user.id,
 				senderImage: online.user.pictureLink,
 				nickName: online.user.nickname,
