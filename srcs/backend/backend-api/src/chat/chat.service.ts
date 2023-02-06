@@ -626,7 +626,6 @@ export class ChatService {
 	}
 
 	async getDirectMsgs(userId: number, roomId: number) {
-		console.log(`roomId = ${roomId}, userId = ${userId}`)
 		if (!roomId)
 			return;
 		// const roomName: string = `|${userId + friendId}_${friendId + userId}|`
