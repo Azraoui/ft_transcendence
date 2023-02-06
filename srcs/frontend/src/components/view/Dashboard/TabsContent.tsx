@@ -19,7 +19,10 @@ export function TabsPlayContent({ params }: TabsContentProps) {
       </div>
       <span className=' flex-col space-y-5 items-center justify-center'>
         <h1 className='font-bold text-center'>{params.title}</h1>
-        <h1 className= 'font-bold'>Play</h1>
+        {params.id == 0  ? <Link  className='btn btn-primary font-bold' to={'/game-normal'}>Play</Link > :
+        <Link  className='btn btn-primary font-bold' to={'/game-advanced'}>Play</Link >
+        
+        }
       </span>
 
     </div>
@@ -34,10 +37,7 @@ export function TabsLiveContent({ params }: TabsContentProps) {
       </div>
       <span className='xl:flex hidden flex-col space-y-5 items-center justify-center'>
         <h1 className='font-bold'>{params.title}</h1>
-         { params.id == 1  ? <Link className='font-bold' to={'http://localhost:5173/game-normal'} > Play</Link> : 
-         <Link className='font-bold' to={'http://localhost:5173/game-normal'}> Play</Link>
-        }
-        {/* <h1 className='font-bold'>Play</h1> */}
+        <h1 className='font-bold'>Play</h1>
       </span>
 
     </div>
