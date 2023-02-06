@@ -49,6 +49,9 @@ html,body
 html,body
 {
     min-width: 280px;
+    /* height: 100vh; */
+    /* background-color: aquamarine; */
+
 }
 
 
