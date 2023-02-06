@@ -14,15 +14,9 @@ export const chatSocket = io(
     }
 );
 
-// const role:string = "player";
-
-
-// export const new_socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
-//     // autoConnect: false,
-//     reconnection: true,
-//     transports: ["websocket"],
-//     query: {
-//         role: "player",
-//     },
-// });
- 
+export const game_socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
+    autoConnect: false,
+    auth: {
+        token: cookies['TwoFacAuthToken']
+    },
+});

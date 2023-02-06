@@ -23,7 +23,7 @@ import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModa
 import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 import { io } from 'socket.io-client'
-import { chatSocket } from './components/controller/socket'
+import { chatSocket, game_socket } from './components/controller/socket'
 import GameView  from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
 import GameNormal from './components/view/game/GameNormal'
@@ -66,6 +66,7 @@ function App() {
         setprofileData({...profileData, ...response.data})
         setStatus(false);
         chatSocket
+        game_socket
       })
       .catch((e: Error) => {
         console.log(`error === > ${e}`);
@@ -94,8 +95,8 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
-                <Route path='/game-normal' element={<GameNormal />} />
-                <Route path='/game-advanced' element={<GameAdvanced />} />
+                <Route path='/game-normal' element={<GameNormal/>} />
+                <Route path='/game-advanced' element={<GameView />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />
