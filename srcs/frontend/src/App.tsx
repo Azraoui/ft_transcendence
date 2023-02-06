@@ -26,6 +26,8 @@ import { io } from 'socket.io-client'
 import { chatSocket } from './components/controller/socket'
 import GameView  from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
+import GameNormal from './components/view/game/GameNormal'
+import GameAdvanced from './components/view/game/GameAdvanced'
 
 
 
@@ -92,7 +94,8 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
-                <Route path='/game' element={<GameView />} />
+                <Route path='/game-normal' element={<GameNormal />} />
+                <Route path='/game-advanced' element={<GameAdvanced />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />
