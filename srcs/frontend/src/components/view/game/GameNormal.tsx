@@ -31,7 +31,7 @@ const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     },
 });
 
-const GameView: React.FC = () => {
+const GameNormal: React.FC = () => {
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -68,4 +68,4 @@ const GameView: React.FC = () => {
     );
 };
 
-export default GameView;
+export default GameNormal;
