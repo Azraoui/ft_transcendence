@@ -321,6 +321,8 @@ export class UserService {
     }
 
     async blockFriend(userId: number, friendId: number) {
+        console.log(`block friend userId = ${userId}, friendId = ${friendId}`);
+        
         if (!friendId) return;
         const friend = await this.prismaService.friends.findFirst({
             where: {
@@ -343,21 +345,24 @@ export class UserService {
                 id: true
             }
         })
-        await this.prismaService.user.update({
-            where: {
-                id: userId
-            },
-            data: {
-                // blocke
-            }
-        })
+        // await this.prismaService.user.update({
+        //     where: {
+        //         id: userId
+        //     },
+        //     data: {
+        //         // block
+        //     }
+        // })
         if (friend) {
             await this.prismaService.friends.delete({
                 where: {
                     id: friend.id
                 }
             })
+            console.log(`friend id = ${friend.id}`);
+            
             const roomName: string = `|${userId + friendId}_${userId + friendId}|`
+            console.log(`block: roomName = ${roomName}`);
             await this.prismaService.room.delete({
                 where: {
                     name: roomName

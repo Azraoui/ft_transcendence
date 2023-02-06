@@ -321,7 +321,8 @@ start()
     {
         this.context.drawImage(this.image, 0 ,0, this.context.canvas.width, this.context.canvas.height);
         // this.rectangle(0, 0, this.context.canvas.width, this.context.canvas.height, "BLACK");
-        this.text(`${this.minutes} : ${this.seconds}`, this.context.canvas.width * .4, this.context.canvas.height * .5, "WHITE", `${this.context.canvas.width / 24 * 2.5}px system-ui`);
+        this.text("Waiting for a player to join...", this.context.canvas.width * .2, this.context.canvas.height * .4, "WHITE", `${this.context.canvas.width / 24 }px system-ui`);
+        this.text(`${this.minutes} : ${this.seconds}`, this.context.canvas.width * .4, this.context.canvas.height * .6, "WHITE", `${this.context.canvas.width / 24 * 1.5}px system-ui`);
     }
     renderqueueInterval(){
     this.queueIntervalId = setInterval(()=>
