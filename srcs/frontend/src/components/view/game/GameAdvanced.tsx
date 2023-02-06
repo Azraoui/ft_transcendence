@@ -8,6 +8,7 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 import purple from "../../../assets/purple.webp"
+import { game_socket } from "../../controller/socket";
 // import { socket } from "../../controller/socket";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
@@ -15,20 +16,12 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     return [ key, v.join('=') ];
 }));
 
-const role:string = "player";
-
-
-const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
-    autoConnect: false,
-    reconnection: true,
-    query: {
-        role: role,
-        mode: "advanced"
-    },
-    auth: {
-        token: cookies['TwoFacAuthToken']
-    },
-});
+game_socket.io.opts.query = {
+    role : "player",
+    mode : "advanced"
+}
+if (game_socket.connected)
+    game_socket.disconnect();
 
 const GameAdvanced: React.FC = () => {
     
@@ -42,7 +35,7 @@ const GameAdvanced: React.FC = () => {
     const buttonRef = useRef(null);
 
     useEffect(() => {
-        const game:Game = new Game(socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, role,{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
+        const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "player",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
 

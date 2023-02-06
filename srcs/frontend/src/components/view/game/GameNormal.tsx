@@ -20,7 +20,9 @@ game_socket.io.opts.query = {
     role : "player",
     mode : "normal"
 }
-game_socket.disconnect();
+if (game_socket.connected)
+    game_socket.disconnect();
+
 
 const GameNormal: React.FC = () => {
     
