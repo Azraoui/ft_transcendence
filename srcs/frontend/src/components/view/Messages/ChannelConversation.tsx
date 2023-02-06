@@ -49,14 +49,14 @@ function ChannelConversation() {
   ]);
 
 
-  const SendMessage = async (e: any) => {
+  const SendMessage =  (e: any) => {
     e.preventDefault()
     if (currentMessage !== "" && sendClicked) {
       const messageData = {
         roomId: channel.id,
         text: currentMessage
       };
-      await chatSocket.emit("msgToServer", messageData);
+      chatSocket.emit("msgToServer", messageData);
       setSendClicked(false)
 
       setCurrentMessage("");
