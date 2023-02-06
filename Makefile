@@ -22,7 +22,7 @@ down:
 	docker-compose -f srcs/docker-compose.yml down  --remove-orphans
 
 studio:
-	cd srcs/backend/backend-api/ ;  npx prisma studio
+	cd srcs/backend/backend-api/ ;  npx prisma studio --port 6498
 
 pull :
 	git add .
