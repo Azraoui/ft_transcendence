@@ -127,9 +127,6 @@ export class GameService {
       waitingSpectators.push(client);
     }
     else {
-      /*
-        Change state of client to "Spectating"
-      */
       this.WatchGame(client, rooms[0], ongameclients);
     }
   }
@@ -165,7 +162,6 @@ export class GameService {
           /*
           change client.data.user.id  state to "in queue" in database
           */
-          await this.userService.updateUserStatus(client.user.id, "in");
         }
         else // If someone already in queue join him in a game with client
         {
@@ -271,9 +267,6 @@ export class GameService {
     second.data.manageDisconnection = "In game";
     // Join Waiting spectators to room
     waitingSpectators.forEach((cli) => {
-      /*
-      Change state of cli to "Spectating"
-      */
       this.WatchGame(cli, first.data.roomname, ongameclients);
     })
     waitingSpectators.length = 0;
@@ -305,15 +298,12 @@ export class GameService {
     // Kick spectators out of room and Setting  them as not in room anymore
     const sockets = await wss.in(first.data.roomname).fetchSockets();
     for (const socket of sockets) {
-      /*
-        Change state of client to "Online"
-      */
       socket.data.room = "none";
       socket.leave(first.data.roomname);
     }
     // Remove this room
     rooms.splice(rooms.findIndex(room => { return first.data.roomname == room }), 1);
-
+    // Add Game to user history
     await this.userService.updateUserStatus(first.user.id, "on");
     await this.userService.updateUserStatus(second.user.id, "on");
     let user1: any = {
@@ -336,7 +326,6 @@ export class GameService {
       time: moment().format('YYYY-MM-DD hh:mm:ss'),
     }
     this.setGameHistory(user2);
-
   }
 
   async setGameHistory(data: any) {
@@ -404,33 +393,12 @@ export class GameService {
         // Kick spectators out of room and Setting  them as not in room anymore
         const sockets = await wss.in(client.data.roomname).fetchSockets();
         for (const socket of sockets) {
-          /*
-            Change state of client to "Online"
-          */
           socket.data.room = "none";
           socket.leave(client.data.roomname);
         }
         // Remove this room
         rooms.splice(rooms.findIndex(room => { return client.data.roomname == room }, 1));
-
-        // AbdeLah ===========================================
-        /* Add game to clients history in database
-            user 1:{
-              id : client.data.user.id
-              opponent : client.data.opponent.data.user.id
-              result : loss by leaving game
-              score : 0
-              mode : client.handshake.query.mode
-            }
-            user 2:{
-              id : client.data.opponent.data.user.id
-              opponent : client.data.user.id
-              result : win opponent left
-              score : 5
-              mode : client.handshake.query.mode
-            }
-            set client.data.opponent.data.user.id to "online" in database
-            */
+        // Add Game to user history
            await this.userService.updateUserStatus(client.data.opponent.user.id, "on");
            let user1: any = {
               fullName: client.data.opponent.user.nickname,
