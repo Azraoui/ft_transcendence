@@ -8,6 +8,8 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 import purple from "../../../assets/purple.webp"
+import { ActiveTabState } from "../../model/atoms/ActiveTabState";
+import { useRecoilState } from "recoil";
 // import { socket } from "../../controller/socket";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
@@ -18,7 +20,7 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 const role:string = "player";
 
 
-const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
+export const socket_normal_game = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     autoConnect: false,
     reconnection: true,
     transports: ["websocket"],
@@ -32,6 +34,7 @@ const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
 });
 
 const GameNormal: React.FC = () => {
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -41,9 +44,12 @@ const GameNormal: React.FC = () => {
     const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
+  
 
     useEffect(() => {
-        const game:Game = new Game(socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, role,{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
+    setActiveNavItem(-1)
+
+        const game:Game = new Game(socket_normal_game, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, role,{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
 
@@ -69,3 +75,7 @@ const GameNormal: React.FC = () => {
 };
 
 export default GameNormal;
+
+function setActiveNavItem(arg0: number) {
+    throw new Error("Function not implemented.");
+}

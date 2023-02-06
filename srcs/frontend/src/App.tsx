@@ -28,6 +28,7 @@ import GameView  from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
 import GameNormal from './components/view/game/GameNormal'
 import GameAdvanced from './components/view/game/GameAdvanced'
+import GameSpectator from './components/view/game/GameSpectator'
 
 
 
@@ -89,13 +90,14 @@ function App() {
             <ChannelMembersModal/>
             <MuteChannelMemberModal/>
             <FriendProfileModal  />
-
+            
             <div className='w-full bg-black   grid grid-cols-12'>
               <Navbar />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/game-normal' element={<GameNormal />} />
                 <Route path='/game-advanced' element={<GameAdvanced />} />
+                <Route path='/live-games' element={<GameSpectator />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />

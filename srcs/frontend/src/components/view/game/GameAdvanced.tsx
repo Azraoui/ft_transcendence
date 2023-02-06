@@ -8,6 +8,8 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 import purple from "../../../assets/purple.webp"
+import { ActiveTabState } from "../../model/atoms/ActiveTabState";
+import { useRecoilState } from "recoil";
 // import { socket } from "../../controller/socket";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
@@ -40,8 +42,10 @@ const GameAdvanced: React.FC = () => {
     const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
+    const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
 
     useEffect(() => {
+        setActiveNavItem(-1)
         const game:Game = new Game(socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, role,{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);

@@ -7,6 +7,8 @@ import io from "socket.io-client";
 import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
+import { useRecoilState } from "recoil";
+import { ActiveTabState } from "../../model/atoms/ActiveTabState";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     const [ key, ...v ] = c.split('=');
@@ -16,7 +18,7 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 const role:string = "spectator";
 
 
-const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
+const socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
     autoConnect: false,
     query: {
         role: role
@@ -27,7 +29,9 @@ const socket = io(`http://${import.meta.env.VITE_IP}:5000/game`, {
 });
 
 
-const GameView: React.FC = () => {
+const GameSpectator: React.FC = () => {
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
+
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -39,6 +43,8 @@ const GameView: React.FC = () => {
     const buttonRef = useRef(null);
 
     useEffect(() => {
+    setActiveNavItem(-1)
+
         const game:Game = new Game(socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, role,{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
@@ -59,9 +65,13 @@ const GameView: React.FC = () => {
                 </div>
             </div>
             < canvas className="rounded-2xl" ref={canvasRef}/>
-            <button ref = {buttonRef} hidden className ="my-button  rounded-2xl text-white" style={{backgroundImage: `url(${canvasBg})`}}>next</button>
+            <button ref = {buttonRef} hidden className ="btn p-4  m-4" >next</button>
         </div>
     );
 };
 
-export default GameView;
+export default GameSpectator;
+
+function setActiveNavItem(arg0: number) {
+    throw new Error("Function not implemented.");
+}
