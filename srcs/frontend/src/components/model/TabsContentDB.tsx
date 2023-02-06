@@ -10,13 +10,13 @@ export const TabPlayContentData = [
       title: "Easy",
       img: pieceofcake
     },
+    // {
+    //   id: 1,
+    //   title: "Meduim",
+    //   img: notbad
+    // },
     {
-      id: 1,
-      title: "Meduim",
-      img: notbad
-    },
-    {
-        id: 3,
+        id: 1,
         title: "Hard",
         img: liftingrok
     },

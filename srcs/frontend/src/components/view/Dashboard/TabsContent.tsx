@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 type TabsContentProps = {
   params: {
@@ -33,7 +34,10 @@ export function TabsLiveContent({ params }: TabsContentProps) {
       </div>
       <span className='xl:flex hidden flex-col space-y-5 items-center justify-center'>
         <h1 className='font-bold'>{params.title}</h1>
-        <h1 className='font-bold'>Play</h1>
+         { params.id == 1  ? <Link className='font-bold' to={'http://localhost:5173/game-normal'} > Play</Link> : 
+         <Link className='font-bold' to={'http://localhost:5173/game-normal'}> Play</Link>
+        }
+        {/* <h1 className='font-bold'>Play</h1> */}
       </span>
 
     </div>
