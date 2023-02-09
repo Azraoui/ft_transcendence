@@ -47,6 +47,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
+			console.log("--> query: ", client.handshake.query);
+			
 			if (client.handshake.query.service == "game")
 				console.log('connected to game', client.user.username);
 			else 
@@ -82,10 +84,9 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	async handleDisconnect(@ConnectedSocket() client: any) {
-		if (client.handshake.query.service == "game")
+		if (client.handshake.query.service == "game" && client.user)
 		{
-			if (client.user)
-				console.log('Disconnected from game', client.user.username);
+			console.log('Disconnected from game', client.user.username);
 			this.gameService.handleDisconnection(this.server, client, this.clients_normal_mode, this.clients_advanced_mode, this.rooms, this.ongameclients, this.waitingSpectators, this.oneVone);
 		}
 		else

@@ -151,6 +151,7 @@ export class GameService {
   async handlePlayerConnection(client: any, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
     if (client.connected) // Proceed if the client hasn't disconnected
     {
+      console.log(client.handshake.query.mode);
       if (client.handshake.query.mode == "normal") {
         // If no one is waiting, add client to queue
         if (queue_normal.length == 0) {

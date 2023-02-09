@@ -402,13 +402,13 @@ export class UserService {
 				time: true,
 				score: true,
 				result: true,
-				// add oppenentId here
+				opponentId: true
 			}
 		});
 		for (let i = 0; i < userGames.length; i++) {
 				const opponentInfo = await this.prismaService.user.findUnique({
 				where: {
-					// id: userGames[i].opponentId
+					id: userGames[i].opponentId
 				},
 				select: {
 					pictureLink: true,

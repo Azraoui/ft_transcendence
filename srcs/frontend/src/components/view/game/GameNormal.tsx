@@ -41,10 +41,6 @@ const GameNormal: React.FC = () => {
     
 
     useEffect(() => {
-        game_socket.io.opts.query = {
-            role: "player",
-            mode: "normal"
-        }
         const game: Game = new Game(game_socket, { canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef }, "player", { bcWidth: 600, bcHeight: 400 }, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);

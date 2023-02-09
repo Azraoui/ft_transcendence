@@ -24,7 +24,6 @@ export function TabsPlayContent({ params }: TabsContentProps) {
         
         }
       </span>
-
     </div>
   )
 }
@@ -33,7 +32,7 @@ export function TabsLiveContent({ params }: TabsContentProps) {
   return (
     <div className='flex xl:flex-col 2xl:w-80 w-full px-8 items-center justify-center ring-1 ring-white 2xl:justify-between xl:h-96 bg-[#242424] hover:bg-tab-gradient rounded-xl py-6 my-2 cursor-pointer'>
       <div className='w-56 h-w-56  '>
-  
+
       </div>
       <span className='xl:flex hidden flex-col space-y-5 items-center justify-center'>
         <h1 className='font-bold'>{params.title}</h1>
