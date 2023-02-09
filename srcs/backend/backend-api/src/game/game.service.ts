@@ -303,6 +303,7 @@ export class GameService {
       gameMode: first.handshake.query.mode,
       userId: first.user.id,
       time: moment().format('YYYY-MM-DD hh:mm:ss'),
+      opponentId: second.user.id
     }
     this.setGameHistory(user1);
     let user2: any = {
@@ -313,6 +314,7 @@ export class GameService {
       gameMode: second.handshake.query.mode,
       userId: second.user.id,
       time: moment().format('YYYY-MM-DD hh:mm:ss'),
+      opponentId: first.user.id
     }
     this.setGameHistory(user2);
   }
@@ -327,6 +329,7 @@ export class GameService {
         time: data.time,
         userId: data.userId,
         gameMode: data.gameMode,
+        opponentId: data.opponentId
       }
     })
   }
@@ -405,6 +408,7 @@ export class GameService {
               gameMode: client.handshake.query.mode,
               userId: client.user.id,
               time: moment().format('YYYY-MM-DD hh:mm:ss'),
+              opponentId: client.data.opponent.user.id,
             }
             this.setGameHistory(user1);
             let user2: any = {
@@ -415,6 +419,7 @@ export class GameService {
               gameMode: client.handshake.query.mode,
               userId: client.data.opponent.user.id,
               time: moment().format('YYYY-MM-DD hh:mm:ss'),
+              opponentId: client.user.id,
             }
             this.setGameHistory(user2);
       }

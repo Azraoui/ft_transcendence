@@ -30,12 +30,10 @@ export class UserService {
 				username: user.username,
 				firstName: user.firstName,
 				lastName: user.lastName,
-				email: user.email,
 				picture: user.pictureLink,
 				bio: user.bio,
 				active: user.active,
-				isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
-				isTwoFacAuthVerified: user.isTwoFacAuthVerified,
+				game: await this.getMatchHistory(id).valueOf(),
 			}
 		}
 	}

@@ -7,6 +7,8 @@ import io from "socket.io-client";
 import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
+import { useRecoilState } from "recoil";
+import { ActiveTabState } from "../../model/atoms/ActiveTabState";
 import { game_socket } from "../../controller/socket";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
@@ -22,7 +24,9 @@ game_socket.io.opts.query = {
 if (game_socket.connected)
     game_socket.disconnect();
 
-const GameView: React.FC = () => {
+const GameSpectator: React.FC = () => {
+  const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
+
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -54,9 +58,13 @@ const GameView: React.FC = () => {
                 </div>
             </div>
             < canvas className="rounded-2xl" ref={canvasRef}/>
-            <button ref = {buttonRef} hidden className ="my-button  rounded-2xl text-white" style={{backgroundImage: `url(${canvasBg})`}}>next</button>
+            <button ref = {buttonRef} hidden className ="btn p-4  m-4" >next</button>
         </div>
     );
 };
 
-export default GameView;
+export default GameSpectator;
+
+function setActiveNavItem(arg0: number) {
+    throw new Error("Function not implemented.");
+}

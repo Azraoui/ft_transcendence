@@ -8,12 +8,33 @@ export const ProfileData = atom({
         id: 0,
         picture: "",
         nickName: "",
-        username:"",
+        username: "",
         bio: "",
         isTwoFacAuthEnabled: false,
-        isTwoFacAuthVerified:false
-      
-        
+        isTwoFacAuthVerified: false,
+        game: {
+            stats: {
+                games: 0,
+                loses: 0,
+                wins: 0
+            },
+            gameHistory: [
+                {
+                opponentStatus: "",
+                opponentImgUrl: "",
+                opponentNickname: "",
+                result: "",
+                score: "",
+                time: "",
+                userId: 0,
+                gameMode: "",
+            }
+        ]
+
+
+        }
+
+
     }
 })
 

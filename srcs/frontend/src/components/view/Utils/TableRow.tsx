@@ -5,11 +5,14 @@ type TableRowProps =
     {
         params:
         {
-            opponent: string,
-            resutl: string,
+            opponentStatus: string,
+            opponentImgUrl: string,
+            opponentNickname: string,
+            result: string,
             score: string,
-            difficulty: string,
             time: string,
+            userId: number,
+            gameMode: string,
 
         }
     }
@@ -21,22 +24,22 @@ function TableRow({ params }: TableRowProps) {
                 <div className="flex items-center space-x-3">
                     <div className="avatar relative ">
                         <div className="mask mask-squircle w-12 h-12">
-                            <img src={avtar} alt="Avatar Tailwind CSS Component" />
+                            <img src={params.opponentImgUrl} alt="Avatar Tailwind CSS Component" />
                         </div>
                         <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
 
                     </div>
-                    <div className="font-bold"> {params.opponent}</div>
+                    <div className="font-bold"> {params.opponentNickname}</div>
                 </div>
             </th>
             <td className="py-4 px-6 uppercase">
-                {params.resutl}
+                {params.result}
             </td>
             <td className="py-4 px-6 uppercase">
                 {params.score}
             </td>
             <td className="py-4 px-6 uppercase">
-                {params.difficulty}
+                {params.gameMode}
             </td>
             <td className="py-4 px-6 uppercase">
                 {params.time}
