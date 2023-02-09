@@ -10,6 +10,7 @@ CREATE TABLE "users" (
     "accessToken" TEXT NOT NULL,
     "refreshToken" TEXT NOT NULL,
     "bio" TEXT,
+    "blocked" INTEGER[],
     "active" TEXT NOT NULL DEFAULT 'off',
     "twoFacAuthSecret" TEXT,
     "isTwoFacAuthEnabled" BOOLEAN NOT NULL DEFAULT false,
@@ -61,6 +62,21 @@ CREATE TABLE "mutedUser" (
     CONSTRAINT "mutedUser_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Game" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "opponentId" INTEGER NOT NULL,
+    "opponent_fullName" TEXT NOT NULL,
+    "opponent_imgUrl" TEXT NOT NULL,
+    "result" TEXT NOT NULL,
+    "score" TEXT NOT NULL,
+    "gameMode" TEXT NOT NULL,
+    "time" TEXT NOT NULL,
+
+    CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_nickname_key" ON "users"("nickname");
 
@@ -83,7 +99,10 @@ ALTER TABLE "friends" ADD CONSTRAINT "friends_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "friends" ADD CONSTRAINT "friends_friendId_fkey" FOREIGN KEY ("friendId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "messages" ADD CONSTRAINT "messages_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "messages" ADD CONSTRAINT "messages_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "mutedUser" ADD CONSTRAINT "mutedUser_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "mutedUser" ADD CONSTRAINT "mutedUser_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Game" ADD CONSTRAINT "Game_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

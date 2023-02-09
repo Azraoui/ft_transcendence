@@ -46,7 +46,11 @@ function NavItem({ link }: NavItemPorp) {
             </a>
           </div>
           : <Link to={link.to} onClick={() => {
-            game_socket.disconnect();
+            if (game_socket.connected)
+            {
+              game_socket.disconnect();
+              game_socket.removeAllListeners();
+            }
             setActiveNavItem(link.id)
           }} key={link.id} className={`w-full flex items-center justify-start space-x-8 px-5 cursor-pointer
           group hover:text-[#DA00FE]  border-transparent ${activeNacItem === link.id && "text-[#DA00FE]"}  `}>

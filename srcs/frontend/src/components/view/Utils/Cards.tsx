@@ -3,7 +3,7 @@ import React from 'react'
 type StatsCardProps = 
 {
     title:string,
-    count:string,
+    count:number,
     color:string,
 }
 

@@ -6,15 +6,18 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 }));
 
 export const chatSocket = io(
-    `http://${import.meta.env.VITE_IP}:5000/chat`,
+    `http://${import.meta.env.VITE_IP}:5000/pingpong`,
     {
         auth: {
             token: cookies['TwoFacAuthToken']
+        },
+        query: {
+            namespace : "chat"
         }
     }
 );
 
-export const game_socket = io(`http://${import.meta.env.VITE_IP}:1337/game`, {
+export const game_socket = io(`http://${import.meta.env.VITE_IP}:5000/pingpong`, {
     autoConnect: false,
     auth: {
         token: cookies['TwoFacAuthToken']

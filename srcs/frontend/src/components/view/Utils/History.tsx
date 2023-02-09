@@ -1,10 +1,12 @@
 import React from 'react'
+import { useRecoilState } from 'recoil';
+import { ProfileData } from '../../model/atoms/ProfileData';
 import { HistoryData } from '../../model/HistoryDB'
 import TableRow from './TableRow'
 
 function History() {
+  const [profileData, setprofileData] = useRecoilState(ProfileData);
     return (
-     
         <div className='flex w-full flex-col '>
 
             <h1 className='w-full font-bold sm:text-xl px-10 py-12 text-center'> History</h1>
@@ -22,7 +24,7 @@ function History() {
                                 score
                             </th>
                             <th scope="col" className="py-3 px-6">
-                                difficulty
+                                Mode
                             </th>
                             <th scope="col" className="py-3 px-6">
                                 time
@@ -30,8 +32,8 @@ function History() {
                         </tr>
                     </thead>
                     <tbody>
-                       { HistoryData.length ?   HistoryData.map((items) => (
-                            <TableRow key={items.id} params={items}/>
+                       { profileData.game.gameHistory?.length ?   profileData.game.gameHistory.map((items) => (
+                            <TableRow key={items.userId} params={items}/>
                        ))
                     : <div className='uppercase  font-bold'> No Data available</div> 
                     }

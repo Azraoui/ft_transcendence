@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from 'src/auth/auth.service';
+import { GameService } from 'src/game/game.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserService } from 'src/users/user/user.service';
 import { ChatService } from './chat.service';
 
 @Module({
@@ -10,7 +12,7 @@ import { ChatService } from './chat.service';
                 ChatService,
                 PrismaService,
                 AuthService,
-                JwtService
+                JwtService,
               ]
 })
 export class ChatModule {}

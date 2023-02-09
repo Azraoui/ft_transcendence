@@ -98,6 +98,8 @@ const updatePicture = async (file:FormData) => {
   }
 };
 
+
+
 // const remove = (id: any) => {
 //   return http.delete<any>(`/tutorials/${id}`);
 // };

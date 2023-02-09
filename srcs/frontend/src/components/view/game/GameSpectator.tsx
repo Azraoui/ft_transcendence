@@ -19,6 +19,7 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 
 game_socket.io.opts.query = {
     role : "spectator",
+    service: "game"
 }
 if (game_socket.connected)
     game_socket.disconnect();

@@ -19,7 +19,7 @@ function Header() {
     Service.getProfile()
       .then((response: any) => {
         setprofileData(response.data)
-        console.log(response.data);
+        console.log("data = ",response.data);
       })
       .catch((e: Error) => {
         console.log(e);

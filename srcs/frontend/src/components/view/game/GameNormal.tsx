@@ -19,9 +19,6 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 }));
 
 
-// if (game_socket.connected)
-//     game_socket.disconnect();
-
 
 const GameNormal: React.FC = () => {
 
@@ -34,6 +31,14 @@ const GameNormal: React.FC = () => {
     const rscore = useRef(null);
     const buttonRef = useRef(null);
 
+    game_socket.io.opts.query = {
+        role : "player",
+        mode : "normal",
+        service: "game"
+    }
+    if (game_socket.connected)
+        game_socket.disconnect();
+    
 
     useEffect(() => {
         game_socket.io.opts.query = {

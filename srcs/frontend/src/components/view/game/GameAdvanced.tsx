@@ -20,7 +20,8 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 
 game_socket.io.opts.query = {
     role : "player",
-    mode : "advanced"
+    mode : "advanced",
+    service: "game"
 }
 if (game_socket.connected)
     game_socket.disconnect();
@@ -59,7 +60,6 @@ const GameAdvanced: React.FC = () => {
                 </div>
             </div>
             < canvas className="rounded-2xl" ref={canvasRef}/>
-            {/* <button ref = {buttonRef} className ="my-button  rounded-2xl text-white" style={{backgroundImage: `url(${canvasBg})`}}>Play Again</button> */}
         </div>
     );
 };

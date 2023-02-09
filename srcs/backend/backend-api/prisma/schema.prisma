@@ -92,6 +92,7 @@ model Game {
 
   user User @relation(fields: [userId], references: [id])
   userId Int
+  opponentId Int
   opponent_fullName String
   opponent_imgUrl String
   result  String

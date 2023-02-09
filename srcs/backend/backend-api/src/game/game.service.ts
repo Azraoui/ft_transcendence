@@ -3,16 +3,12 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/chat.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from 'src/users/user/user.service';
 import { clearInterval } from 'timers';
 import { GameInfo } from './utils/gameinfo';
 import * as moment from 'moment';
+import { UserService } from 'src/users/user/user.service';
 
-class user {
-  id: string;
-  piclink: string;
-  side: string;
-}
+
 
 export class oneVone {
   inviter: Socket;
@@ -29,14 +25,6 @@ export class GameService {
   async handleConnection(client: any, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[], oneVone: oneVone[]) {
     client.data.manageDisconnection = "Checking user";
 
-    const userInfo = await this.chatService.getUserFromSocket(client);
-
-    // Storing client's info
-    client.data.user = new user();
-    client.data.user.id = userInfo.nickname;
-    client.data.user.piclink = userInfo.pictureLink;
-
-    client.user = userInfo;
     if (client.handshake.query.role == "player")
       this.handlePlayerConnection(client, queue_normal, queue_advanced, wss, rooms, ongameclients, waitingSpectators);
     else if (client.handshake.query.role == "spectator")
@@ -44,9 +32,23 @@ export class GameService {
     else if (client.handshake.query.role == "inviting" || client.handshake.query.role == "invited")
       this.handle1v1Connection(client, wss, oneVone, rooms, ongameclients, waitingSpectators);
   }
+/*
+  eventsForChatInvitationsFront()
+  {
+    let chat_socket:Socket
 
+    chat_socket.on("invited", (inviter)=>{
+      // Display invitation (inviter.nickname, inviter.piclink)
+      // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
+      // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
+    })
+    chat_socket.on("expired", (inviter)=>{
+      // stop displaying invitation of inviter
+    })
+  }
+  */
   // 1v1 mode
-  async handle1v1Connection(client: Socket, wss: Server, oneVone: oneVone[], rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
+  async handle1v1Connection(client: any, wss: Server, oneVone: oneVone[], rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
     if (client.connected) {
       client.data.inGame = false;
       if (client.handshake.query.role == "inviting") {
@@ -55,11 +57,10 @@ export class GameService {
         // const intervalId = setInterval(async ()=>
         // {
         //   // Finding the invited and send them the invitation
-        const namespace = wss.of('/chat');
-        let clients = await namespace.fetchSockets();
+        let clients:any = await wss.fetchSockets();
         for (const cli of clients) {
-          if (cli.data.user.id == client.handshake.query.id) {
-            cli.emit("invited", { Id: client.data.user.id, piclink: client.data.user.piclink });
+          if (cli.user.nickname == client.handshake.query.nickname && cli.handshake.query.service == "chat") {
+            cli.emit("invited", { nickname: client.user.nickname, piclink: client.user.pictureLink });
             break;
           }
         }
@@ -71,18 +72,18 @@ export class GameService {
           client.emit("expired");
         }, 10 * 1000);
         oneVone.push({ inviter: client, timeoutId: timeoutId });
-        client.data.user.side = "left";
-        client.emit("playerInfo", client.data.user);
+        client.data.side = "left";
+        client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
       }
       else if (client.handshake.query.role == "invited") {
-        const index = oneVone.findIndex((cli) => { return (cli.inviter.data.user.id == client.handshake.query.id) && (cli.inviter.handshake.query.id == client.data.user.id) });
+        const index = oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == client.handshake.query.nickname) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
         if (index != -1) {
           clearTimeout(oneVone[index].timeoutId);
           const first = oneVone[index].inviter;
           const second = client;
           oneVone.splice(index, 1);
-          client.data.user.side = "right";
-          client.emit("playerInfo", client.data.user);
+          client.data.side = "right";
+          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
         }
         else
@@ -130,17 +131,17 @@ export class GameService {
       this.WatchGame(client, rooms[0], ongameclients);
     }
   }
-  WatchGame(client: Socket, room: string, ongameclients: Socket[]) {
+  WatchGame(client: any, room: string, ongameclients: Socket[]) {
     let id: string[];
 
     // Get playersInfo and send them
     id = room.split("+");
 
-    let player: Socket = ongameclients.find((cl) => { if (cl.data.user.id == id[0]) return 1; return 0; });
+    let player: any = ongameclients.find((cl:any) => { if (cl.user.nickname == id[0]) return 1; return 0; });
     // console.log(player);
-    client.emit("playerInfo", player.data.user);
+    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     player = ongameclients.find((cl) => { if (cl.data.user.id == id[1]) return 1; return 0; });
-    client.emit("playerInfo", player.data.user);
+    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     client.data.room = room;
     // Join client to room
     client.join(room);
@@ -156,17 +157,13 @@ export class GameService {
           client.data.manageDisconnection = "In queue";
           queue_normal.push(client);
           client.emit("queue");
-          client.data.user.side = 'left';
-          client.emit("playerInfo", client.data.user);
-          //AbdLah=============================================================
-          /*
-          change client.data.user.id  state to "in queue" in database
-          */
+          client.data.side = "left";
+          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
         }
         else // If someone already in queue join him in a game with client
         {
-          client.data.user.side = 'right';
-          client.emit("playerInfo", client.data.user);
+          client.data.side = "right";
+          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           const second = client;
           const first = queue_normal.pop();
           ongameclients.push(first, second);
@@ -180,17 +177,13 @@ export class GameService {
           client.data.manageDisconnection = "In queue";
           queue_advanced.push(client);
           client.emit("queue");
-          client.data.user.side = 'left';
-          client.emit("playerInfo", client.data.user);
-          //AbdLah=============================================================
-          /*
-          change client.data.user.id  state to "in queue" in database
-          */
+          client.data.side = "left";
+          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
         }
         else // If someone already in queue join him in a game with client
         {
-          client.data.user.side = 'right';
-          client.emit("playerInfo", client.data.user);
+          client.data.side = "right";
+          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           const second = client;
           const first = queue_advanced.pop();
           ongameclients.push(first, second);
@@ -202,7 +195,7 @@ export class GameService {
   }
 
   async joinPlayersToGame(first: any, second: any, wss: Server, rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
-    const roomname = first.data.user.id + '+' + second.data.user.id;
+    const roomname = first.user.nickname + '+' + second.user.nickname;
     // Join players to room
     first.join(roomname);
     second.join(roomname);
@@ -230,16 +223,12 @@ export class GameService {
     second.on("keyUp", () => { gameinfo.updatePaddles("right", "up"); });
     second.on("keyDown", () => { gameinfo.updatePaddles("right", "down"); });
 
-    // AbdeLah ===============================
-    /*
-      Set both clients state in database to "in game"
-        first.data.user.id && second.data.user.id
-    */
+    // Changing state to "in game"
     await this.userService.updateUserStatus(first.user.id, "in");
     await this.userService.updateUserStatus(second.user.id, "in");
     // Send opponent info
-    first.emit("playerInfo", second.data.user);
-    second.emit("playerInfo", first.data.user);
+    first.emit("playerInfo", {id:second.user.nickname, piclink:second.user.pictureLink, side: "right"});
+    second.emit("playerInfo", {id:first.user.nickname, piclink:first.user.pictureLink, side: "left"});
 
     // Starting game
     const intervalId = setInterval(() => {
@@ -314,6 +303,7 @@ export class GameService {
       gameMode: first.handshake.query.mode,
       userId: first.user.id,
       time: moment().format('YYYY-MM-DD hh:mm:ss'),
+      opponentId: second.user.id
     }
     this.setGameHistory(user1);
     let user2: any = {
@@ -324,6 +314,7 @@ export class GameService {
       gameMode: second.handshake.query.mode,
       userId: second.user.id,
       time: moment().format('YYYY-MM-DD hh:mm:ss'),
+      opponentId: first.user.id
     }
     this.setGameHistory(user2);
   }
@@ -338,6 +329,7 @@ export class GameService {
         time: data.time,
         userId: data.userId,
         gameMode: data.gameMode,
+        opponentId: data.opponentId
       }
     })
   }
@@ -351,7 +343,7 @@ export class GameService {
     }
 
     // If client has a player role
-    if ((client.handshake.query.role == "player" || client.handshake.query.role == "inviting" || client.handshake.query.role == "invited") && client.data.manageDisconnection != "Checking user") {
+    else if ((client.handshake.query.role == "player" || client.handshake.query.role == "inviting" || client.handshake.query.role == "invited") && client.data.manageDisconnection != "Checking user") { 
       // Filter queue from client
       if (client.data.manageDisconnection == "In queue") {
         if (client.handshake.query.mode == "normal")
@@ -365,10 +357,10 @@ export class GameService {
         const idx = oneVone.findIndex(cli => { return cli.inviter == client });
         const inviter = oneVone.splice(idx, 1);
         clearTimeout(inviter[idx].timeoutId);
-        const clients = await wss.of("/chat").fetchSockets();
+        const clients:any = await wss.fetchSockets();
         for (const cli of clients) {
-          if (cli.data.user.id == client.handshake.query.id) {
-            cli.emit("Cancel", client.data.user.id);
+          if (cli.user.nickname == client.handshake.query.nickname) {
+            cli.emit("expired", client.user.id);
             break;
           }
         }
@@ -386,7 +378,7 @@ export class GameService {
         ongameclients.splice(ongameclients.findIndex((cl) => { return cl == client.data.opponent }, 1));
 
         // For spectators
-        if (client.data.user.side == "left")
+        if (client.data.side == "left")
           wss.to(client.data.roomname).emit("Winner", "right");
         else
           wss.to(client.data.roomname).emit("Winner", "left");
@@ -398,8 +390,16 @@ export class GameService {
         }
         // Remove this room
         rooms.splice(rooms.findIndex(room => { return client.data.roomname == room }, 1));
+        // Update state
+        const clients:any = await wss.fetchSockets();
+        for (const cli of clients) {
+          if (cli.user.id == client.user.id) {
+            await this.userService.updateUserStatus(client.user.id, "on");
+            break;
+          }
+        }
+        await this.userService.updateUserStatus(client.data.opponent.user.id, "on");
         // Add Game to user history
-           await this.userService.updateUserStatus(client.data.opponent.user.id, "on");
            let user1: any = {
               fullName: client.data.opponent.user.nickname,
               imgUrl: client.data.opponent.user.pictureLink,
@@ -408,6 +408,7 @@ export class GameService {
               gameMode: client.handshake.query.mode,
               userId: client.user.id,
               time: moment().format('YYYY-MM-DD hh:mm:ss'),
+              opponentId: client.data.opponent.user.id,
             }
             this.setGameHistory(user1);
             let user2: any = {
@@ -418,6 +419,7 @@ export class GameService {
               gameMode: client.handshake.query.mode,
               userId: client.data.opponent.user.id,
               time: moment().format('YYYY-MM-DD hh:mm:ss'),
+              opponentId: client.user.id,
             }
             this.setGameHistory(user2);
       }
