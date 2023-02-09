@@ -38,6 +38,7 @@ const GameSpectator: React.FC = () => {
     const buttonRef = useRef(null);
 
     useEffect(() => {
+    setActiveNavItem(-1)
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "spectator",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
