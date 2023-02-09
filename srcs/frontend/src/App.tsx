@@ -99,6 +99,7 @@ function App() {
                 <Route path='/game-normal' element={<GameNormal />} />
                 <Route path='/game-advanced' element={<GameAdvanced />} />
                 <Route path='/live-games' element={<GameSpectator />} />
+                <Route path='/invited' element={<GameView />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />

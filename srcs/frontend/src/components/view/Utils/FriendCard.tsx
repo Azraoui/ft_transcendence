@@ -8,6 +8,7 @@ import Service from '../../controller/services';
 import { error_alert } from './Alerts';
 import { ChannelClickedAtom } from '../../model/atoms/ChannelsAtom';
 import { UserId } from '../../model/atoms/ProfileData';
+import { Link } from 'react-router-dom';
 
 
 type FriendCardPorps =
@@ -74,6 +75,7 @@ function FriendCard({ data }: FriendCardPorps) {
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li><label htmlFor="my-modal-3" className="btn  w-full">Block</label></li>
                     <li> <label htmlFor="my-modal-4" className="btn ">View Profile</label></li>
+                    <li> <Link to={"/invited"} className="btn ">Play</Link></li>
                 </ul>
             </div>
         </div>
