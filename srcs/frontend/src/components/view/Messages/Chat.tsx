@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { chatSocket } from '../../controller/socket'
 import { ChatFriends, FriendClickedAtom } from '../../model/atoms/ChatFriends'
 import Conversation  from './ChatConversation'
 import FriendList from './FriendList'
@@ -8,6 +9,7 @@ function Chat() {
 // const [message, setMessage] = useState("hello");
 const [isChannelClicked, setChannelClicked] = useRecoilState(FriendClickedAtom)
 const [friends, setFriends] = useRecoilState(ChatFriends)
+
 
 
   return (

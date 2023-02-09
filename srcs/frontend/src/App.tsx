@@ -30,6 +30,7 @@ import GameNormal from './components/view/game/GameNormal'
 import GameAdvanced from './components/view/game/GameAdvanced'
 import GameSpectator from './components/view/game/GameSpectator'
 import GameInviter from './components/view/game/GameInviter'
+import { success_alert } from './components/view/Utils/Alerts'
 
 
 
@@ -48,10 +49,20 @@ function App() {
     // retrieveProfile();
   }, [status]);
 
+  useEffect(()=>{
+    chatSocket.on("invited",(inviter)=>{
+      success_alert(`Invitation to play by ${ inviter.nickname}`);
+       // Display invitation (inviter.nickname, inviter.piclink)
+//   // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
+//   // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
 
+    });
+    return () => {chatSocket.off("invited")};
+  },[chatSocket])
 
   // const retrieveProfile = () => {
   //   Service.getProfile()
+
   //     .then((response: any) => {
   //       setprofileData(response.data)
   //       console.log(profileData);

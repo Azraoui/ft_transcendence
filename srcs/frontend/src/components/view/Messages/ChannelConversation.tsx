@@ -68,7 +68,6 @@ function ChannelConversation() {
     setMessageList(channelMessage)
   }, [channelMessage])
 
-
   useEffect(() => {
     chatSocket.on("muteNotification", (data) => {
       muted_user_alert("You're  muted till " + data.duration)
