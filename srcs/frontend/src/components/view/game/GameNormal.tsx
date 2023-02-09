@@ -21,26 +21,28 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 
 
 const GameNormal: React.FC = () => {
+    const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
 
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
     const lImageRef = useRef(null);
     const rnameRef = useRef(null);
     const lnameRef = useRef(null);
-    const lscore = useRef(null); 
+    const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
 
     game_socket.io.opts.query = {
-        role : "player",
-        mode : "normal",
+        role: "player",
+        mode: "normal",
         service: "game"
     }
     if (game_socket.connected)
         game_socket.disconnect();
-    
+
 
     useEffect(() => {
+        setActiveNavItem(-1)
         const game: Game = new Game(game_socket, { canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef }, "player", { bcWidth: 600, bcHeight: 400 }, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
