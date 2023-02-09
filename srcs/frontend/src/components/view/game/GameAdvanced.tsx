@@ -18,13 +18,6 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     return [ key, v.join('=') ];
 }));
 
-game_socket.io.opts.query = {
-    role : "player",
-    mode : "advanced",
-    service: "game"
-}
-if (game_socket.connected)
-    game_socket.disconnect();
 
 const GameAdvanced: React.FC = () => {
   const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
@@ -37,6 +30,14 @@ const GameAdvanced: React.FC = () => {
     const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
+
+game_socket.io.opts.query = {
+    role : "player",
+    mode : "advanced",
+    service: "game"
+}
+if (game_socket.connected)
+    game_socket.disconnect();
 
     useEffect(() => {
         setActiveNavItem(-1)

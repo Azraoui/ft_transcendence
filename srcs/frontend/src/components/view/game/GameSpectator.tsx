@@ -17,12 +17,6 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 }));
 
 
-game_socket.io.opts.query = {
-    role : "spectator",
-    service: "game"
-}
-if (game_socket.connected)
-    game_socket.disconnect();
 
 const GameSpectator: React.FC = () => {
   const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
@@ -36,6 +30,13 @@ const GameSpectator: React.FC = () => {
     const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
+
+    game_socket.io.opts.query = {
+        role : "spectator",
+        service: "game"
+    }
+    if (game_socket.connected)
+        game_socket.disconnect();
 
     useEffect(() => {
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "spectator",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);

@@ -21,7 +21,7 @@ export function TabsPlayContent({ params }: TabsContentProps) {
         <h1 className='font-bold text-center'>{params.title}</h1>
         {params.id == 0  ? <Link  className='btn btn-primary font-bold' to={'/game-normal'}>Play</Link > :
         <Link  className='btn btn-primary font-bold' to={'/game-advanced'}>Play</Link >
-        
+    
         }
       </span>
 
