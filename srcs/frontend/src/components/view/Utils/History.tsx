@@ -6,7 +6,8 @@ import TableRow from './TableRow'
 
 function History() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-  console.log("=====>",profileData.game.matchesHistory);
+
+  console.log("======> ",profileData.game.matchesHistory);
   
     return (
         <div className='flex w-full flex-col '>
@@ -37,7 +38,7 @@ function History() {
                        { profileData.game.matchesHistory?.length ?   profileData.game.matchesHistory.map((items) => (
                             <TableRow key={items.userId} params={items}/>
                        ))
-                    : <div className='uppercase  font-bold'> No Data available</div> 
+                    : <div className='uppercase w-full font-bold'> No Data available</div> 
                     }
                       
                     </tbody>
