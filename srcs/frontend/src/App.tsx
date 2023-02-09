@@ -96,7 +96,7 @@ function App() {
               <Routes>
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/game-normal' element={<GameNormal/>} />
-                <Route path='/game-advanced' element={<GameView />} />
+                <Route path='/game-advanced' element={<GameAdvanced />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />

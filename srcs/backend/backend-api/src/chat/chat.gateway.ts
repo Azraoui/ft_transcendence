@@ -10,6 +10,7 @@ import {
 } from "@nestjs/websockets";
 import { Room } from "@prisma/client";
 import { Server, Socket } from "socket.io";
+import { GameService, oneVone } from "src/game/game.service";
 import { UserService } from "src/users/user/user.service";
 import { ChatService } from "./chat.service";
 import { ChatDto } from "./dto";
@@ -17,7 +18,7 @@ import { ChatDto } from "./dto";
 @Injectable()
 @WebSocketGateway(
 	{
-		namespace: 'chat',
+		namespace: 'pingpong',
 		cors: {
 			origin: "*"
 		},
@@ -26,41 +27,80 @@ import { ChatDto } from "./dto";
 export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
 	onlineUser: any[] = [];
+	private clients_normal_mode: Socket[] = [];
+	private clients_advanced_mode: Socket[] = [];
+	private rooms: string[] = [];
+	private ongameclients: Socket[] = [];
+	private waitingSpectators: Socket[] = [];
+	private oneVone: oneVone[] = [];
 	constructor(
 		private readonly chatService: ChatService,
-		private readonly userService: UserService
+		private readonly userService: UserService,
+		private readonly gameService: GameService,
+
 	) {}
 
 	@WebSocketServer() server: Server;
 
 	async handleConnection(@ConnectedSocket() client: any) {
-		console.log('connected ', client.id);
+
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
-			if (user.active === "off" || user.active === "in") {
+			if (client.handshake.query.service == "game")
+				console.log('connected to game', client.user.username);
+			else 
+				console.log('connected to chat', client.user.username);
+			if (client.handshake.query.service == "game")
+				this.gameService.handleConnection(client, this.clients_normal_mode,this.clients_advanced_mode, this.server, this.rooms, this.ongameclients, this.waitingSpectators, this.oneVone);
+			else
+			{
+				if (user.active === "off" || user.active === "in") {
 				// update user status
 				this.userService.updateUserStatus(user.id, "on");
 				client.user.active = "on";
+				}
+				this.onlineUser.push(client);
+				// {
+				// 	client.on("declined", (inviter)=>{
+				// 	const index = this.oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == inviter) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
+				// 	if (index != -1)
+				// 	{
+				// 		clearTimeout(oneVone[index].timeoutId);
+				// 		inviter = oneVone[index].inviter;
+				// 		this.oneVone.splice(index, 1);
+				// 		inviter.data.manageDisconnection = "connected";
+				// 		inviter.emit("declined");
+				// 	}
+				// 	})
+				// }
 			}
-			this.onlineUser.push(client);
 		}
 		else {
 			client.disconnect();
 		}
 	}
 
-	async handleDisconnect(@ConnectedSocket() client: Socket) {
-		console.log('Decconected', client.id);
-		if (this.onlineUser.find((x) => x.id === client.id))
+	async handleDisconnect(@ConnectedSocket() client: any) {
+		if (client.handshake.query.service == "game")
 		{
-			const user = await this.chatService.getUserFromSocket(client);
-			if (!user) return;
-			const index = this.onlineUser.indexOf(client);
-			if (index > -1) {
-				this.onlineUser.splice(index, 1);
-				if (this.onlineUser.indexOf(client) === -1)
-					this.userService.updateUserStatus(user.id, "off");
+			if (client.user)
+				console.log('Disconnected from game', client.user.username);
+			this.gameService.handleDisconnection(this.server, client, this.clients_normal_mode, this.clients_advanced_mode, this.rooms, this.ongameclients, this.waitingSpectators, this.oneVone);
+		}
+		else
+		{
+			if (this.onlineUser.find((x) => x.id === client.id))
+			{
+				console.log('Disconnected from chat', client.user.username);
+				const user = await this.chatService.getUserFromSocket(client);
+				if (!user) return;
+				const index = this.onlineUser.indexOf(client);
+				if (index > -1) {
+					this.onlineUser.splice(index, 1);
+					if (this.onlineUser.indexOf(client) === -1)
+						this.userService.updateUserStatus(user.id, "off");
+				}
 			}
 		}
 	}

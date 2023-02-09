@@ -14,14 +14,7 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     return [ key, v.join('=') ];
 }));
 
-game_socket.io.opts.query = {
-    role : "inviting",
-    mode : "advanced",
-    id : "invited"
-}
 
-if (game_socket.connected)
-    game_socket.disconnect();
 
 
 const GameView: React.FC = () => {
@@ -34,6 +27,17 @@ const GameView: React.FC = () => {
     const lscore = useRef(null);
     const rscore = useRef(null);
     const buttonRef = useRef(null);
+
+    game_socket.io.opts.query = {
+        role : "inviting",
+        mode : "advanced",
+        nickname : "invited",
+        service: "game"
+    }
+    
+    if (game_socket.connected)
+        game_socket.disconnect();
+
 
     useEffect(() => {
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "inviting",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
