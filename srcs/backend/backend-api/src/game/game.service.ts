@@ -330,7 +330,7 @@ export class GameService {
         time: data.time,
         userId: data.userId,
         gameMode: data.gameMode,
-        // opponentId: data.opponentId
+        opponentId: data.opponentId
       }
     })
   }

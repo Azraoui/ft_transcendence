@@ -18,7 +18,7 @@ export const ProfileData = atom({
                 loses: 0,
                 wins: 0
             },
-            gameHistory: [
+            matchesHistory: [
                 {
                 opponentStatus: "",
                 opponentImgUrl: "",
