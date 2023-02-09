@@ -14,7 +14,6 @@ function FriendProfileModal() {
 
   
     const [userId, setUserId] = useRecoilState(UserId)
-    console.log("___________= ", userId);
     
 
     const [data, setData] = useState({
