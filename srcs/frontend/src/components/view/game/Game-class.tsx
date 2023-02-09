@@ -188,7 +188,7 @@ start()
                     this.renderEnd("Invitation Expired");
                     this.invitationexpired =  setTimeout(() => {
                         this.socket.disconnect();
-                        window.location.href = window.location.origin + '/chat'
+                        window.location.href = window.location.origin + '/messages'
                     }, 1000);
                     });
             this.socket.on("declined", ()=>
@@ -197,7 +197,7 @@ start()
                 this.renderEnd("Invitation Declined");
                 this.invitationexpired =  setTimeout(() => {
                     this.socket.disconnect();
-                    window.location.href = window.location.origin + '/chat'
+                    window.location.href = window.location.origin + '/messages'
                 }, 1000);
             });
         }
@@ -356,7 +356,7 @@ start()
             this.text(result, this.context.canvas.width * .4, this.context.canvas.height* .7, "WHITE", `${this.context.canvas.width / 24}px system-ui`);
             this.text("YOU WON", this.context.canvas.width * .3, this.context.canvas.height* .5, "WHITE", `${this.context.canvas.width / 24 * 2.5}px system-ui`);
         }
-        else if (result == "Right Player Won" || result == "Left Player Won" || result == "No Games At The Moment" || result == "Waiting for accept") 
+        else if (result == "Right Player Won" || result == "Left Player Won" || result == "No Games At The Moment" || result == "Waiting for accept" || result == "Invitation Expired" || result == "Invitation Declined") 
             this.text(result,this.context.canvas.width * .3, this.context.canvas.height* .5, "WHITE", `${this.context.canvas.width / 24}px system-ui`);
         else
             this.text(result, this.context.canvas.width * .3, this.context.canvas.height* .5, "WHITE", `${this.context.canvas.width / 24 * 2.5}px system-ui`);        

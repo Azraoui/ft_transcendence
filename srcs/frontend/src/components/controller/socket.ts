@@ -12,10 +12,14 @@ export const chatSocket = io(
             token: cookies['TwoFacAuthToken']
         },
         query: {
-            namespace : "chat"
+            service : "chat"
         }
     }
-);
+).on("invited", (inviter)=>{
+    console.log("inviter by", inviter.nickname);
+}).on("expired", (inviter)=>{
+    
+});
 
 export const game_socket = io(`http://${import.meta.env.VITE_IP}:5000/pingpong`, {
     autoConnect: false,

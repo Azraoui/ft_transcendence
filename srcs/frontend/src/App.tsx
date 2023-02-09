@@ -41,11 +41,12 @@ function App() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   useEffect(() => {
+    
     // chatSocket
     retrieveToken();
+    
     // retrieveProfile();
   }, [status]);
-
 
 
 
@@ -67,14 +68,15 @@ function App() {
       .then((response: any) => {
         setprofileData({...profileData, ...response.data})
         setStatus(false);
-        chatSocket
-        game_socket
+        chatSocket;
+        game_socket;
       })
       .catch((e: Error) => {
         console.log(`error === > ${e}`);
         setStatus(true);
       });
   };
+
 
   return (
     <div className='text-white  '>

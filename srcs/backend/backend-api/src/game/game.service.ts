@@ -14,6 +14,16 @@ export class oneVone {
   inviter: Socket;
   timeoutId: any;
 }
+
+// chatSocket.on("invited", (inviter)=>{
+//   console.log("invited by", inviter.nickname);
+//   // Display invitation (inviter.nickname, inviter.piclink)
+//   // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
+//   // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
+// })
+// chatSocket.on("expired", (inviter)=>{
+//   // stop displaying invitation of inviter
+// })
 @Injectable()
 export class GameService {
   constructor(
@@ -32,35 +42,26 @@ export class GameService {
     else if (client.handshake.query.role == "inviting" || client.handshake.query.role == "invited")
       this.handle1v1Connection(client, wss, oneVone, rooms, ongameclients, waitingSpectators);
   }
-/*
-  eventsForChatInvitationsFront()
-  {
-    let chat_socket:Socket
 
-    chat_socket.on("invited", (inviter)=>{
-      // Display invitation (inviter.nickname, inviter.piclink)
-      // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
-      // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
-    })
-    chat_socket.on("expired", (inviter)=>{
-      // stop displaying invitation of inviter
-    })
-  }
-  */
   // 1v1 mode
   async handle1v1Connection(client: any, wss: Server, oneVone: oneVone[], rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
     if (client.connected) {
       client.data.inGame = false;
       if (client.handshake.query.role == "inviting") {
         client.data.manageDisconnection = "Waiting";
+
         // // Set an Interval that search for the invited in all namespaces then sends the invite
         // const intervalId = setInterval(async ()=>
         // {
         //   // Finding the invited and send them the invitation
         let clients:any = await wss.fetchSockets();
+        console.log("client invited: ", client.handshake.query.nickname);
         for (const cli of clients) {
+          console.log(cli.user.nickname);
           if (cli.user.nickname == client.handshake.query.nickname && cli.handshake.query.service == "chat") {
+            console.log("found");
             cli.emit("invited", { nickname: client.user.nickname, piclink: client.user.pictureLink });
+            console.log("invitation sent to", cli.user.nickname);
             break;
           }
         }

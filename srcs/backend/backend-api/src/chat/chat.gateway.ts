@@ -47,7 +47,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
-			console.log("--> query: ", client.handshake.query);
+			// console.log("--> query: ", client.handshake.query);
 			
 			if (client.handshake.query.service == "game")
 				console.log('connected to game', client.user.username);
@@ -63,19 +63,19 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				client.user.active = "on";
 				}
 				this.onlineUser.push(client);
-				// {
-				// 	client.on("declined", (inviter)=>{
-				// 	const index = this.oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == inviter) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
-				// 	if (index != -1)
-				// 	{
-				// 		clearTimeout(oneVone[index].timeoutId);
-				// 		inviter = oneVone[index].inviter;
-				// 		this.oneVone.splice(index, 1);
-				// 		inviter.data.manageDisconnection = "connected";
-				// 		inviter.emit("declined");
-				// 	}
-				// 	})
-				// }
+				{
+					client.on("declined", (inviter)=>{
+					const index = this.oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == inviter) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
+					if (index != -1)
+					{
+						clearTimeout(oneVone[index].timeoutId);
+						inviter = oneVone[index].inviter;
+						this.oneVone.splice(index, 1);
+						inviter.data.manageDisconnection = "connected";
+						inviter.emit("declined");
+					}
+					})
+				}
 			}
 		}
 		else {
