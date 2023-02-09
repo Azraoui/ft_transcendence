@@ -47,6 +47,8 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 		const user = await this.chatService.getUserFromSocket(client);
 		if (user) {
 			client.user = user;
+			console.log("--> query: ", client.handshake.query);
+			
 			if (client.handshake.query.service == "game")
 				console.log('connected to game', client.user.username);
 			else 
