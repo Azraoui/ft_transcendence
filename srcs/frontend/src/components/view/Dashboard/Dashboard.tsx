@@ -5,7 +5,6 @@ import table from "../../../assets/table.png"
 import { chatSocket } from '../../controller/socket';
 import { ActiveTabState } from '../../model/atoms/ActiveTabState';
 import { ProfileData } from '../../model/atoms/ProfileData';
-import { socket_normal_game } from '../game/GameNormal';
 import Tabs from './Tabs'
 
 
@@ -16,7 +15,6 @@ function Dashboard() {
   const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
   useEffect(()=>
   {
-    socket_normal_game.disconnect()
     setActiveNavItem(0)
   },[])
 

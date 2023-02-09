@@ -23,7 +23,7 @@ import ProtectedChannelModal from './components/view/Modals/ProtectedChannelModa
 import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 import { io } from 'socket.io-client'
-import { chatSocket } from './components/controller/socket'
+import { chatSocket, game_socket } from './components/controller/socket'
 import GameView  from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
 import GameNormal from './components/view/game/GameNormal'
@@ -67,6 +67,7 @@ function App() {
         setprofileData({...profileData, ...response.data})
         setStatus(false);
         chatSocket
+        game_socket
       })
       .catch((e: Error) => {
         console.log(`error === > ${e}`);
@@ -77,9 +78,9 @@ function App() {
   return (
     <div className='text-white  '>
       {
-        // status ? <Login />
-        //   :
-        //   profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
+        status ? <Login />
+          :
+          profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
           <div>
             <Header />
             {/** All those Modals are being called by the user there not visible till they got called */}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { ActiveTabState } from '../../model/atoms/ActiveTabState';
 import { TabMessagesLinks } from '../../model/TabsDB';
-import { socket_normal_game } from '../game/GameNormal';
+// import { socket_normal_game } from '../game/GameNormal';
 import Channel from './Channel';
 import Chat from './Chat';
 
@@ -11,7 +11,7 @@ function Messages() {
   const [activeNacItem, setActiveNavItem] = useRecoilState(ActiveTabState)
   useEffect(()=>
   {
-    socket_normal_game.disconnect()
+    // socket_normal_game.disconnect()
     setActiveNavItem(2)
   })
   return (

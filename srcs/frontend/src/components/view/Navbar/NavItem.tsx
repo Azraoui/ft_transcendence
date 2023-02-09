@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { useRecoilState } from 'recoil'
 import Service from '../../controller/services'
+import { game_socket } from '../../controller/socket'
 import { ActiveTabState } from '../../model/atoms/ActiveTabState'
 
 type NavItemPorp =
@@ -45,6 +46,7 @@ function NavItem({ link }: NavItemPorp) {
             </a>
           </div>
           : <Link to={link.to} onClick={() => {
+            game_socket.disconnect();
             setActiveNavItem(link.id)
           }} key={link.id} className={`w-full flex items-center justify-start space-x-8 px-5 cursor-pointer
           group hover:text-[#DA00FE]  border-transparent ${activeNacItem === link.id && "text-[#DA00FE]"}  `}>
