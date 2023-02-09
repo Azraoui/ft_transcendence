@@ -17,7 +17,7 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 
 
 
-const GameView: React.FC = () => {
+const GameInviter: React.FC = () => {
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -65,4 +65,4 @@ const GameView: React.FC = () => {
     );
 };
 
-export default GameView;
+export default GameInviter;
