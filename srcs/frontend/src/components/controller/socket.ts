@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import { success_alert } from "../view/Utils/Alerts";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     const [ key, ...v ] = c.split('=');
@@ -17,6 +18,7 @@ export const chatSocket = io(
     }
 ).on("invited", (inviter)=>{
     console.log("inviter by", inviter.nickname);
+    success_alert()
 }).on("expired", (inviter)=>{
     
 });
