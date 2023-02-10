@@ -5,7 +5,6 @@ import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ChatService } from 'src/chat/chat.service';
 import { ChatDto, RoomDto } from 'src/chat/dto';
-import { statSync } from 'fs';
 
 @Injectable()
 
