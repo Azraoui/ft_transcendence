@@ -28,24 +28,40 @@ services:
   #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
   #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
   # backend:
+  #   build:
+  #     context: ./frontend/frontend
+  #     dockerfile: Dockerfile
   #   images: backend
   #   container_name: backend
-  #   restart: always
+  #   restart: unless-stopped
   #   ports:
   #     - 5000:5000
-  #   env_file:
-  #     - .env
+  #   env_file: .env
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - pingpong-network
 
   # frontend:
+  #   build:
+  #     context: ./backend/backend-api
+  #     dockerfile: Dockerfile
   #   images: frontend
   #   container_name: frontend
-  #   restart: always
+  #   restart: unless-stopped
   #   ports:
   #     - 5173:5173
-  #   env_file:
-  #     - .env
+  #   env_file: .env
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - pingpong-network
 
 # volumes:
 #   pgdata:
 #     name: pgdata
 #     driver: local
+
+# networks:
+#   pingpong-network:
+#     driver: bridge
