@@ -27,6 +27,23 @@ services:
   #   environment:
   #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
   #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+  # backend:
+  #   images: backend
+  #   container_name: backend
+  #   restart: always
+  #   ports:
+  #     - 5000:5000
+  #   env_file:
+  #     - .env
+
+  # frontend:
+  #   images: frontend
+  #   container_name: frontend
+  #   restart: always
+  #   ports:
+  #     - 5173:5173
+  #   env_file:
+  #     - .env
 
 # volumes:
 #   pgdata:
