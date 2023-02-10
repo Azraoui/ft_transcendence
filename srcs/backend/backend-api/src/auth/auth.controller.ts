@@ -16,7 +16,6 @@ export class AuthController {
 
     constructor (private authService: AuthService,
         private userSerivce: UserService,
-        private chatGateway: ChatGateWay,
         ) {}
 
     @UseGuards(FortyTwoOAuthGuard)
@@ -25,7 +24,7 @@ export class AuthController {
     async fortytwoAuth() {}
     
     @UseGuards(FortyTwoOAuthGuard)
-    // @UseFilters(new HttpExceptionFilter())
+    @UseFilters(new HttpExceptionFilter())
     @Get('42-redirect') // http://10.11.6.11:5000/api/auth/42-redirect/ 42 redirect url
     async fortyTwoAuthRedirect(@Req() req, @Res() res: Response) {
         await this.authService.fortytwoLogin(req.user);

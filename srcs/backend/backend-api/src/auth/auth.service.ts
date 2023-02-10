@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+import { uniqueNamesGenerator, NumberDictionary } from 'unique-names-generator';
 import { AuthDto } from './dto';
 
 @Injectable()
@@ -50,7 +50,14 @@ export class AuthService {
             try {
                 await this.prisma.user.create({
                     data: {
-                        nickname: uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }),
+                        nickname: uniqueNamesGenerator({ 
+                            dictionaries: [
+                                [apiData.username], NumberDictionary.generate({ min: 1, max: 1337 })
+                            ],
+                            length: 2,
+                            separator: '',
+                            style: 'capital',
+                        }),
                         username: apiData.username,
                         firstName: apiData.firstName,
                         lastName: apiData.lastName,
