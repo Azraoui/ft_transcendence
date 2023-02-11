@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   app.use(cookieParser());
   app.setGlobalPrefix('api')
-  
+
   // this lines for render the game
   app.use('/api/game', express.static(join(__dirname, '..','views')));
   app.useStaticAssets(join(__dirname, '..', 'views'));
