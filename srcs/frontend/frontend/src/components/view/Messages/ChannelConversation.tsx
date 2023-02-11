@@ -68,13 +68,13 @@ function ChannelConversation() {
     setMessageList(channelMessage)
   }, [channelMessage])
 
-  useEffect(() => {
-    chatSocket.on("muteNotification", (data) => {
-      muted_user_alert("You're  muted till " + data.duration)
-    });
-    return () => {chatSocket.off("muteNotification")};
+  // useEffect(() => {
+  //   chatSocket.on("muteNotification", (data) => {
+  //     muted_user_alert("You're  muted till " + data.duration)
+  //   });
+  //   return () => {chatSocket.off("muteNotification")};
 
-  }, [chatSocket])
+  // }, [chatSocket])
 
   useEffect(() => {
     chatSocket.on("msgToClients", (data) => {
@@ -82,13 +82,13 @@ function ChannelConversation() {
        {
         setMessageList((list => [...list, data]));
         setChannelMessage((list => [...list, data]));
-        if (data.senderId !== profileData.id)
-        new_message_alert("new channel message from " + data.nickName)
+        // if (data.senderId !== profileData.id)
+        // new_message_alert("new channel message from " + data.nickName)
 
       }
     });
 
-    return () => {chatSocket.off("msgToClients")};
+    // return () => {chatSocket.off("msgToClients")};
 
   }, [chatSocket])
 

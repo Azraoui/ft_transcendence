@@ -30,7 +30,7 @@ import GameNormal from './components/view/game/GameNormal'
 import GameAdvanced from './components/view/game/GameAdvanced'
 import GameSpectator from './components/view/game/GameSpectator'
 import GameInviter from './components/view/game/GameInviter'
-import { success_alert } from './components/view/Utils/Alerts'
+import { muted_user_alert, new_message_alert, success_alert } from './components/view/Utils/Alerts'
 import { ToastContainer } from 'react-toastify'
 
 
@@ -48,6 +48,44 @@ function App() {
     
     // retrieveProfile();
   }, [status]);
+
+  useEffect(() => {
+    chatSocket.on("muteNotification", (data) => {
+      muted_user_alert("You're  muted till " + data.duration)
+    });
+    return () => {chatSocket.off("muteNotification")};
+
+  }, [chatSocket])
+  
+  useEffect(() => {
+    chatSocket.on("msgToClients", (data) => {
+      if (data.type == "CH")  // channel
+       {
+        if (data.senderId !== profileData.id)
+        new_message_alert("new channel message from " + data.nickName)
+      }
+    });
+
+    return () => {chatSocket.off("msgToClients")};
+
+  }, [chatSocket])
+
+  useEffect(()=>
+  {
+    chatSocket.on("msgToClients", (data) => {
+      console.log("data = ",data);
+      if (data.type == "DM")
+      { 
+        console.log("sender id = ",data.senderId);
+        console.log("me id =",profileData.id);
+        
+        if  (data.senderId !== profileData.id)
+        new_message_alert("new message from " + data.nickName)
+        // success_alert("new message from " + data.nickName)
+      }
+    });
+    return () => {chatSocket.off("msgToClients")};
+  },[chatSocket])
 
   useEffect(()=>{
     chatSocket.on("invited",(inviter)=>{

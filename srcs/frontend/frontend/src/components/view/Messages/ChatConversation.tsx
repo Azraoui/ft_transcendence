@@ -60,12 +60,12 @@ function Conversation() {
         setMessageList((list => [...list, data] ));
         setChat((list => [...list, data] ));
         
-        if  (data.senderId !== profileData.id)
-        new_message_alert("new message from " + data.nickName)
+        // if  (data.senderId !== profileData.id)
+        // new_message_alert("new message from " + data.nickName)
         // success_alert("new message from " + data.nickName)
       }
     });
-    return () => {chatSocket.off("msgToClients")};
+    // return () => {chatSocket.off("msgToClients")};
   },[chatSocket])
 
   const getMessage = (e: any) => {
