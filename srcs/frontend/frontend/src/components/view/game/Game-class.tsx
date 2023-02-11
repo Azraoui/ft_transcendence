@@ -186,19 +186,11 @@ start()
                 {
                     clearInterval(this.noGameInterval);
                     this.renderEnd("Invitation Expired");
-                    this.invitationexpired =  setTimeout(() => {
-                        this.socket.disconnect();
-                        window.location.href = window.location.origin + '/messages'
-                    }, 1000);
                     });
             this.socket.on("declined", ()=>
             {
                 clearInterval(this.noGameInterval);
                 this.renderEnd("Invitation Declined");
-                this.invitationexpired =  setTimeout(() => {
-                    this.socket.disconnect();
-                    window.location.href = window.location.origin + '/messages'
-                }, 1000);
             });
         }
         if (this.role == "spectator")
