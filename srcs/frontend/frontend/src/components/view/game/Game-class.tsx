@@ -264,12 +264,16 @@ start()
         });
     }
     //Keyboard events
-    setKeyboardEvents(){
+    setKeyboardEvents(){    
     document.addEventListener('keydown', (event) =>{
-        if (event.key == "ArrowUp")
-            this.socket.emit("keyUp");
-        if (event.key == "ArrowDown")
-            this.socket.emit("keyDown");
+        if (event.key == "ArrowUp" || event.key == "ArrowDown")
+        {
+            event.preventDefault();
+            if (event.key == "ArrowUp")
+                this.socket.emit("keyUp");
+            else
+                this.socket.emit("keyDown");
+        }
     });}
     /*For responsivity*/
     makeItResponsive(){

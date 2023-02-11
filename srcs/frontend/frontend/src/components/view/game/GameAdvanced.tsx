@@ -59,7 +59,7 @@ const GameAdvanced: React.FC = () => {
                     <img ref = {rImageRef} className='flex w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white bg-center bg-cover bg-gray-400' style={{backgroundImage: `url(${Avatar})`}} ></img>
                 </div>
             </div>
-            < canvas className="rounded-2xl" ref={canvasRef}/>
+            < canvas id = "pingpong" className="rounded-2xl" ref={canvasRef}/>
         </div>
     );
 };
