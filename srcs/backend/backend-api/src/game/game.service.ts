@@ -49,7 +49,6 @@ export class GameService {
       client.data.inGame = false;
       if (client.handshake.query.role == "inviting") {
         client.data.manageDisconnection = "Waiting";
-
         // // Set an Interval that search for the invited in all namespaces then sends the invite
         // const intervalId = setInterval(async ()=>
         // {
@@ -359,13 +358,13 @@ export class GameService {
         const idx = oneVone.findIndex(cli => { return cli.inviter == client });
         const inviter = oneVone.splice(idx, 1);
         clearTimeout(inviter[idx].timeoutId);
-        const clients:any = await wss.fetchSockets();
-        for (const cli of clients) {
-          if (cli.user.nickname == client.handshake.query.nickname) {
-            cli.emit("expired", client.user.id);
-            break;
-          }
-        }
+        // const clients:any = await wss.fetchSockets();
+        // for (const cli of clients) {
+        //   if (cli.user.nickname == client.handshake.query.nickname) {
+        //     cli.emit("expired", client.user.id);
+        //     break;
+        //   }
+        // }
       }
       // If client is already in game
       else if (client.data.manageDisconnection == "In game") {
