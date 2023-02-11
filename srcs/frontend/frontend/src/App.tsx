@@ -31,7 +31,7 @@ import GameAdvanced from './components/view/game/GameAdvanced'
 import GameSpectator from './components/view/game/GameSpectator'
 import GameInviter from './components/view/game/GameInviter'
 import { success_alert } from './components/view/Utils/Alerts'
-
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -105,6 +105,7 @@ function App() {
             <ChannelMembersModal/>
             <MuteChannelMemberModal/>
             <FriendProfileModal  />
+            <ToastContainer />
             
             <div className='w-full bg-black   grid grid-cols-12'>
               <Navbar />
