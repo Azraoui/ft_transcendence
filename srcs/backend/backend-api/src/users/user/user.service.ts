@@ -382,16 +382,6 @@ export class UserService {
 			gold: false,
 		};
 		let matchesHistory = [];
-		let gameHistory = {
-			opponentStatus: "",
-			opponentImgUrl: "",
-			opponentNickname: "",
-			result: "",
-			score: "",
-			time: "",
-			userId: 0,
-			gameMode: "",
-		};
 		const userGames = await this.prismaService.game.findMany({
 			where: {
 				userId: userId
@@ -415,14 +405,16 @@ export class UserService {
 					nickname: true,
 				}
 			});
-			gameHistory.opponentStatus		= opponentInfo.active;
-			gameHistory.opponentImgUrl		= opponentInfo.pictureLink;
-			gameHistory.opponentNickname	= opponentInfo.nickname;
-			gameHistory.result	 = userGames[i].result;
-			gameHistory.score	 = userGames[i].score;
-			gameHistory.time	 = userGames[i].time;
-			gameHistory.gameMode = userGames[i].gameMode;
-			gameHistory.userId	 = userId;
+			let gameHistory = {
+				opponentStatus: opponentInfo.active,
+				opponentImgUrl: opponentInfo.pictureLink,
+				opponentNickname: opponentInfo.nickname,
+				result: userGames[i].result,
+				score: userGames[i].score,
+				time: userGames[i].time,
+				userId: userId,
+				gameMode: userGames[i].gameMode,
+			};
 			matchesHistory.push(gameHistory);
 			if (userGames[i].result === "win")
 				stats.wins += 1;
