@@ -17,12 +17,15 @@ export class Ball {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 3;
         this.directionX = 1;
         this.directionY = 1;
         this.color = color;
         this.movement_angle = Math.PI/4;
         this.mode = mode;
+        if (this.mode == "advanced")
+            this.speed = 5;
+        else
+            this.speed = 3;
     }
     // Checking ball collision with paddles
     public collision(paddle: Paddle) : boolean{
@@ -57,14 +60,6 @@ export class Ball {
                 else
                 // Updating directions
                 this.directionX *= -1;
-                // Increasing speed
-                if (this.mode == "advanced")
-                {
-                    if (this.speed + 0.2 >=5)
-                        this.speed = 5;
-                    else
-                        this.speed += 0.2;
-                }
             }
         }
         // Updating ball coordinates
@@ -76,7 +71,6 @@ export class Ball {
     public resetBall (x: number, y: number): void 
     {
         this.last_col = "dmatter";
-        this.speed = 3;
         this.x = x;
         this.y = y;
         this.movement_angle = Math.PI/4;
