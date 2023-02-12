@@ -5,6 +5,7 @@ export const success_alert = (msg:string) => {
 
     toast.success(msg, {
         position: toast.POSITION.TOP_RIGHT
+        
     });
 };
 export const error_alert = () => {
@@ -27,7 +28,7 @@ export const error_alert_channel_password = () => {
 
 
 export const new_message_alert = (msg:string) => {
-    toast.info(msg, {
+    toast.info(msg , {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -37,6 +38,7 @@ export const new_message_alert = (msg:string) => {
         progress: undefined,
         theme: "colored",
         });
+        
 };
 
 export const muted_user_alert = (msg:string) => {

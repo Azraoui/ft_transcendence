@@ -8,6 +8,8 @@ import Game from "./Game-class";
 import Avatar from "../../../assets/avatar_none.jpeg";
 import canvasBg from "../../../assets/canvasBg.jpeg";
 import { game_socket } from "../../controller/socket";
+import { useRecoilState } from "recoil";
+import { Inviter } from "../../model/atoms/ChatFriends";
 
 let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
     const [ key, ...v ] = c.split('=');
@@ -16,7 +18,8 @@ let cookies = Object.fromEntries(document.cookie.split('; ').map(c => {
 
 
 
-const GameView: React.FC = () => {
+const GameInvited: React.FC = () => {
+  const [inviter, setInviter] = useRecoilState(Inviter);
     
     const canvasRef = useRef(null);
     const rImageRef = useRef(null);
@@ -28,15 +31,18 @@ const GameView: React.FC = () => {
     const buttonRef = useRef(null);
 
     game_socket.io.opts.query = {
-        role : "invited",
-        id : "inviter",
-        nickname: "game"
+        role: "invited",
+        mode: "advanced",
+        nickname: inviter,
+        service: "game"
     }
     if (game_socket.connected)
         game_socket.disconnect();
     
     
     useEffect(() => {
+        console.log("*********************** = ",inviter );
+        
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "invited",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();
     }, []);
@@ -62,4 +68,4 @@ const GameView: React.FC = () => {
     );
 };
 
-export default GameView;
+export default GameInvited;

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import Dashboard from './components/view/Dashboard/Dashboard'
 import Users from './components/view/Users/Users'
 import Header from './components/view/Header/Header'
@@ -31,15 +31,35 @@ import GameAdvanced from './components/view/game/GameAdvanced'
 import GameSpectator from './components/view/game/GameSpectator'
 import GameInviter from './components/view/game/GameInviter'
 import { muted_user_alert, new_message_alert, success_alert } from './components/view/Utils/Alerts'
-import { ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
+import GameInvited from './components/view/game/GameInvited'
+import { Inviter } from './components/model/atoms/ChatFriends'
 
 
-
+const Accept = ({msg, inviter}:{msg:string, inviter:string}) => {
+  const handleClick = () =>
+  {
+    chatSocket.emit("declined",inviter)
+  }
+  return (
+    <div>
+      <h3  className='font-bold'>
+        {msg}
+      </h3>
+    <div className='flex w-full items-center justify-between'>
+      <Link className='btn' to={'/invited'}>Accept</Link>
+      <button className='btn' onClick={handleClick}>Decline</button>
+    </div>
+    </div>
+  );
+};
 function App() {
 
   const [status, setStatus] = useRecoilState(Status);
   const [twofaEnabled, settwofaEnabled] = useRecoilState(TwoFAEnabled);
   const [profileData, setprofileData] = useRecoilState(ProfileData);
+  const [inviter, setInviter] = useRecoilState(Inviter);
+
 
   useEffect(() => {
     
@@ -81,7 +101,6 @@ function App() {
         
         if  (data.senderId !== profileData.id)
         new_message_alert("new message from " + data.nickName)
-        // success_alert("new message from " + data.nickName)
       }
     });
     return () => {chatSocket.off("msgToClients")};
@@ -89,7 +108,18 @@ function App() {
 
   useEffect(()=>{
     chatSocket.on("invited",(inviter)=>{
-      success_alert(`Invitation to play by ${ inviter.nickname}`);
+      setInviter(inviter.nickname)
+      toast(<Accept msg={`Invitation to play by ${inviter.nickname}`} inviter={inviter.nickname}  />, {
+        position: "top-right",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+        });
+      // success_alert(`Invitation to play by ${ inviter.nickname}`);
        // Display invitation (inviter.nickname, inviter.piclink)
 //   // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
 //   // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
@@ -143,7 +173,7 @@ function App() {
             <ChannelMembersModal/>
             <MuteChannelMemberModal/>
             <FriendProfileModal  />
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             
             <div className='w-full bg-black   grid grid-cols-12'>
               <Navbar />
@@ -152,7 +182,8 @@ function App() {
                 <Route path='/game-normal' element={<GameNormal />} />
                 <Route path='/game-advanced' element={<GameAdvanced />} />
                 <Route path='/live-games' element={<GameSpectator />} />
-                <Route path='/invited' element={<GameInviter />} />
+                <Route path='/inviter' element={<GameInviter />} />
+                <Route path='/invited' element={<GameInvited />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/messages' element={<Messages />} />

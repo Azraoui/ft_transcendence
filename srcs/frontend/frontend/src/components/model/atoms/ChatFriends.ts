@@ -45,4 +45,8 @@ export const FriendClickedAtom = atom({
     key: "FriendClickedAtom",
     default: false
 })
+export const Inviter = atom({
+    key: "Inviter",
+    default: ""
+})
 

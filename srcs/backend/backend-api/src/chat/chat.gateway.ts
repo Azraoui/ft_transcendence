@@ -65,11 +65,13 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				this.onlineUser.push(client);
 				{
 					client.on("declined", (inviter)=>{
+						console.log("inviter = ", inviter);
+						
 					const index = this.oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == inviter) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
 					if (index != -1)
 					{
-						clearTimeout(oneVone[index].timeoutId);
-						inviter = oneVone[index].inviter;
+						clearTimeout(this.oneVone[index].timeoutId);
+						inviter = this.oneVone[index].inviter;
 						this.oneVone.splice(index, 1);
 						inviter.data.manageDisconnection = "connected";
 						inviter.emit("declined");
