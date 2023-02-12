@@ -40,6 +40,8 @@ const Accept = ({msg, inviter}:{msg:string, inviter:string}) => {
   const handleClick = () =>
   {
     chatSocket.emit("declined",inviter)
+    if (game_socket.connected)
+      game_socket.disconnect()
   }
   return (
     <div>

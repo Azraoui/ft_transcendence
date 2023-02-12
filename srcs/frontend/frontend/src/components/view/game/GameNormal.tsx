@@ -37,8 +37,8 @@ const GameNormal: React.FC = () => {
         mode: "normal",
         service: "game"
     }
-    if (game_socket.connected)
-        game_socket.disconnect();
+    // if (game_socket.connected)
+    //     game_socket.disconnect();
 
 
     useEffect(() => {

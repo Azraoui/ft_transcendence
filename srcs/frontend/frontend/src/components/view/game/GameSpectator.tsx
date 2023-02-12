@@ -35,9 +35,6 @@ const GameSpectator: React.FC = () => {
         role : "spectator",
         service: "game"
     }
-    if (game_socket.connected)
-        game_socket.disconnect();
-
     useEffect(() => {
     setActiveNavItem(-1)
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "spectator",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
@@ -60,7 +57,7 @@ const GameSpectator: React.FC = () => {
                 </div>
             </div>
             < canvas className="rounded-2xl" ref={canvasRef}/>
-            <button ref = {buttonRef} hidden className ="btn p-4  m-4" >next</button>
+            <button className = "bg-[#DA00FE] rounded-md  ring-gray-600 ring-offset-1  p-4  m-4" ref = {buttonRef} hidden  >next</button>
         </div>
     );
 };

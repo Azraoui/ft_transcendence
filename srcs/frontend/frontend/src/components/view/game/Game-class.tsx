@@ -128,7 +128,7 @@ start()
             console.log("Connection to server established");
         });
         this.socket.on("disconnect", (reason) => {
-                console.log("Disconnection from server");
+                console.log("Disconnection from server:", reason);
                 clearInterval(this.conIntervalId);
                 this.count = 0;
                 this.renderconnectionInterval();
@@ -211,13 +211,13 @@ start()
                 })
                 this.socket.on("noGames", ()=>
                 {
-                    // console.log(1);
                     clearInterval(this.noGameInterval);
                     clearInterval(this.conIntervalId);
                     this.conIntervalId = -1;
                     this.count = 4;
                     this.renderEnd("No Games At The Moment");
                     this.ref.buttonRef.current.hidden = true;
+                    // console.log(this.ref.buttonRef.current.hidden);
                     this.ref.lImageRef.current.src = Avatar;
                     this.ref.lnameRef.current.innerText = "";
                     this.ref.rImageRef.current.src = Avatar;

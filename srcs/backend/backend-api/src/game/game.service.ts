@@ -128,6 +128,7 @@ export class GameService {
       waitingSpectators.push(client);
     }
     else {
+      // console.log("spectating the game=", rooms[0]);
       this.WatchGame(client, rooms[0], ongameclients);
     }
   }

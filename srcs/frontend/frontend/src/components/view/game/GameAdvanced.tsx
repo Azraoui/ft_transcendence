@@ -35,9 +35,7 @@ const GameAdvanced: React.FC = () => {
         mode : "advanced",
         service: "game"
     }
-    if (game_socket.connected)
-        game_socket.disconnect();
-    
+
     useEffect(() => {
         setActiveNavItem(-1)
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "player",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
