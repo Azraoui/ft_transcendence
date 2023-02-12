@@ -73,7 +73,7 @@ export class GameService {
         }, 10 * 1000);
         oneVone.push({ inviter: client, timeoutId: timeoutId });
         client.data.side = "left";
-        client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
+        client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
       }
       else if (client.handshake.query.role == "invited") {
         const index = oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == client.handshake.query.nickname) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
@@ -83,7 +83,7 @@ export class GameService {
           const second = client;
           oneVone.splice(index, 1);
           client.data.side = "right";
-          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
+          client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
         }
         else
@@ -133,15 +133,16 @@ export class GameService {
   }
   WatchGame(client: any, room: string, ongameclients: Socket[]) {
     let id: string[];
-
+    console.log("room == ", room);
     // Get playersInfo and send them
     id = room.split("+");
-
+    console.log(id);
+    
     let player: any = ongameclients.find((cl:any) => { if (cl.user.nickname == id[0]) return 1; return 0; });
     // console.log(player);
-    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
-    player = ongameclients.find((cl) => { if (cl.data.user.id == id[1]) return 1; return 0; });
-    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
+    client.emit("playerInfo", {nickname:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
+    player = ongameclients.find((cl:any) => { if (cl.user.nickname == id[1]) return 1; return 0; });
+    client.emit("playerInfo", {nickname:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     client.data.room = room;
     // Join client to room
     client.join(room);
@@ -159,12 +160,12 @@ export class GameService {
           queue_normal.push(client);
           client.emit("queue");
           client.data.side = "left";
-          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
+          client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
         }
         else // If someone already in queue join him in a game with client
         {
           client.data.side = "right";
-          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
+          client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           const second = client;
           const first = queue_normal.pop();
           ongameclients.push(first, second);
@@ -179,12 +180,12 @@ export class GameService {
           queue_advanced.push(client);
           client.emit("queue");
           client.data.side = "left";
-          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
+          client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "left"});
         }
         else // If someone already in queue join him in a game with client
         {
           client.data.side = "right";
-          client.emit("playerInfo", {id:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
+          client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
           const second = client;
           const first = queue_advanced.pop();
           ongameclients.push(first, second);
@@ -228,8 +229,8 @@ export class GameService {
     await this.userService.updateUserStatus(first.user.id, "in");
     await this.userService.updateUserStatus(second.user.id, "in");
     // Send opponent info
-    first.emit("playerInfo", {id:second.user.nickname, piclink:second.user.pictureLink, side: "right"});
-    second.emit("playerInfo", {id:first.user.nickname, piclink:first.user.pictureLink, side: "left"});
+    first.emit("playerInfo", {nickname:second.user.nickname, piclink:second.user.pictureLink, side: "right"});
+    second.emit("playerInfo", {nickname:first.user.nickname, piclink:first.user.pictureLink, side: "left"});
 
     // Starting game
     const intervalId = setInterval(() => {

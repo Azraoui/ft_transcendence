@@ -239,12 +239,12 @@ start()
             if (info.side == "left")
             {
                 this.ref.lImageRef.current.src = info.piclink;
-                this.ref.lnameRef.current.innerText = info.id;
+                this.ref.lnameRef.current.innerText = info.nickname;
             }
             else
             {
                 this.ref.rImageRef.current.src = info.piclink;
-                this.ref.rnameRef.current.innerText = info.id;
+                this.ref.rnameRef.current.innerText = info.nickname;
             }
             if (this.role == "inviting")
             {
