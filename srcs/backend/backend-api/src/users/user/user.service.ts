@@ -33,6 +33,8 @@ export class UserService {
 				bio: user.bio,
 				active: user.active,
 				game: await this.getMatchHistory(id).valueOf(),
+				isTwoFacAuthEnabled: user.isTwoFacAuthEnabled,
+				isTwoFacAuthVerified: user.isTwoFacAuthVerified,
 			}
 		}
 	}
@@ -142,6 +144,15 @@ export class UserService {
 
 	async addFriend(userId: number, friendId: number) {
 		try {
+			const findIffriend = await this.prismaService.user.findUnique({
+				where: {
+					id: userId
+				},
+				select: {
+					friends: true
+				}
+			})
+			if (findIffriend.friends.find((id) => id.friendId === friendId)) return;
 			if (await this.prismaService.friends.findFirst({
 				where: {
 					AND: [
@@ -157,7 +168,7 @@ export class UserService {
 				}
 			});
 			const roomData: RoomDto = {
-				name: `|${userId + friendId}_${friendId + userId}|`,
+				name: `|${userId}_${friendId}|`,
 				type: "private"
 			}
 			this.chatSevice.createDirectMsgRoom(roomData, userId, friendId);
@@ -231,7 +242,7 @@ export class UserService {
 		}
 		let allUsers = [];
 		for (let i = 0; i  < allFriend.length; i++) {
-			let roomName: string = `|${userId + allFriend[i].id}_${userId + allFriend[i].id}|`
+			let roomName: string = `|${userId}_${allFriend[i].id}|`
 			let room = await this.prismaService.room.findUnique({
 				where: {
 					name: roomName
@@ -240,15 +251,37 @@ export class UserService {
 					id: true
 				}
 			})
-			let obj = {
-				id: allFriend[i].id,
-				picture: allFriend[i].pictureLink,
-				nickName: allFriend[i].nickname,
-				active: allFriend[i].active,
-				bio: allFriend[i].bio,
-				roomId: room.id
+			if (room) {
+				let obj = {
+					id: allFriend[i].id,
+					picture: allFriend[i].pictureLink,
+					nickName: allFriend[i].nickname,
+					active: allFriend[i].active,
+					bio: allFriend[i].bio,
+					roomId: room.id
+				}
+				allUsers.push(obj);
 			}
-			allUsers.push(obj);
+			else {
+				roomName = `|${allFriend[i].id}_${userId}|`
+				room = await this.prismaService.room.findUnique({
+					where: {
+						name: roomName
+					},
+					select: {
+						id: true
+					}
+				})
+				let obj = {
+					id: allFriend[i].id,
+					picture: allFriend[i].pictureLink,
+					nickName: allFriend[i].nickname,
+					active: allFriend[i].active,
+					bio: allFriend[i].bio,
+					roomId: room.id
+				}
+				allUsers.push(obj);
+			}
 		}
 		return allUsers;
 	}
@@ -357,7 +390,13 @@ export class UserService {
 					id: friend.id
 				}
 			})
-			const roomName: string = `|${userId + friendId}_${userId + friendId}|`
+			let roomName: string = `|${userId}_${friendId}|`
+			let room = await this.prismaService.room.findUnique({
+				where: {
+					name: roomName
+				}
+			})
+			if (!roomName) roomName = `|${friendId}_${userId}|`
 			await this.prismaService.room.delete({
 				where: {
 					name: roomName

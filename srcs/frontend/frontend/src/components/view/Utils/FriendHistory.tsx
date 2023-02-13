@@ -1,10 +1,24 @@
+import { type } from 'os';
 import React from 'react'
 import { useRecoilState } from 'recoil';
 import { ProfileData } from '../../model/atoms/ProfileData';
 import { HistoryData } from '../../model/HistoryDB'
 import TableRow from './TableRow'
 
-function History() {
+type Props = {
+    history: {
+            opponentStatus: string;
+            opponentImgUrl: string;
+            opponentNickname: string;
+            result: string;
+            score: string;
+            time: string;
+            userId: number;
+            gameMode: string;
+    }[]
+}
+
+function FriendHistory(data:Props) {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
 
   console.log("======> ",profileData.game.matchesHistory);
@@ -35,7 +49,7 @@ function History() {
                         </tr>
                     </thead>
                     <tbody>
-                       { profileData.game.matchesHistory?.length ?   profileData.game.matchesHistory.map((items) => (
+                       { data.history?.length ?   data.history.map((items) => (
                             <TableRow key={items.time} params={items}/>
                        ))
                     : <div className='uppercase w-full font-bold'> No Data available</div> 
@@ -51,4 +65,4 @@ function History() {
     )
 }
 
-export default History
+export default FriendHistory

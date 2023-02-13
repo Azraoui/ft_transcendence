@@ -134,13 +134,15 @@ export class GameService {
   WatchGame(client: any, room: string, ongameclients: Socket[]) {
     let id: string[];
 
+    console.log("game: ", room);
     // Get playersInfo and send them
     id = room.split("+");
 
     let player: any = ongameclients.find((cl:any) => { if (cl.user.nickname == id[0]) return 1; return 0; });
     // console.log(player);
+    if (player.user === undefined) return;
     client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
-    player = ongameclients.find((cl) => { if (cl.data.user.id == id[1]) return 1; return 0; });
+    player = ongameclients.find((cl:any) => { if (cl.user.nickname == id[1]) return 1; return 0; });
     client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     client.data.room = room;
     // Join client to room

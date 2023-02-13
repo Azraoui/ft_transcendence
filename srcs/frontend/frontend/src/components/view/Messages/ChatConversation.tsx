@@ -33,40 +33,50 @@ function Conversation() {
   ]);
   const SendMessage = async (e: any) => {
     e.preventDefault()
-    if (currentMessage !== "" && sendClicked) {
-      console.log(activeNavFriend.id);
-      
+    if (currentMessage !== "" && sendClicked) {      
       const messageData = {
         roomId: activeNavFriend.roomId,
-        text: currentMessage
+        text: currentMessage,
       };
       await chatSocket.emit("msgToServer", messageData);
+      const data = {
+        senderId: profileData.id,
+        text: currentMessage,
+        senderImage: profileData.picture,
+        nickName: profileData.nickName,
+        side:"right",
+        messageId: 0
+      };
       setSendClicked(false)
- 
+
+      // setChat((list => [...list, data] ));
       setCurrentMessage("");
     }
   }
 
-  useEffect(() => {
-    setMessageList(chat)
-  }, [chat,chatSocket])
+  // useEffect(() => {
+  //   setMessageList(chat)
+  // }, [chat])
 
   useEffect(()=>
   {
+    
     chatSocket.on("msgToClients", (data) => {
-      console.log("data = ",data);
+      console.log("sender = ",data.nickName);
       if (data.type == "DM")
       { 
-        setMessageList((list => [...list, data] ));
-        setChat((list => [...list, data] ));
+        // setMessageList((list => [...list, data] ));
+        // setChat((list => [...list, data] ));
+        console.log("roomId = ", data.roomId, "**", "chatRoomId = ", activeNavFriend.roomId);
         
-        // if  (data.senderId !== profileData.id)
+        if  (data.roomId === activeNavFriend.roomId)
+            setChat((list => [...list, data] ));
         // new_message_alert("new message from " + data.nickName)
         // success_alert("new message from " + data.nickName)
       }
     });
-    // return () => {chatSocket.off("msgToClients")};
-  },[chatSocket])
+    return () => {chatSocket.off("msgToClients")};
+  })
 
   const getMessage = (e: any) => {
     const val = e.target.value;
@@ -77,8 +87,8 @@ function Conversation() {
     <div className="col-span-4  max-h-[800px] w-full sm:px-12 px-1 bg-[#242424] py-4">
       <div className="flex items-center h-full flex-col justify-between relative mb-2 space-y-5">
         <ScrollToBottom className='w-full  overflow-auto  scrollbar-hide flex  flex-col'>
-          {messageList.length ?
-            messageList.map((item) => (
+          {chat.length ?
+            chat.map((item) => (
               <ConversationChannelBubble key={item.messageId} data={item} />
             )) 
             : 

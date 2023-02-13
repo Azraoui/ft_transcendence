@@ -1,9 +1,15 @@
-FROM debian:buster
+FROM node:18.13.0-buster
 
-WORKDIR /home
+EXPOSE 5000
+EXPOSE 5555
 
-COPY ./backend-api .
-
+USER node
 WORKDIR /home/backend-api
 
-RUN ["npm", "run", "dev"]
+COPY --chown=node:node ./backend-api ./
+
+COPY  ./start.sh ./
+
+RUN npm install --prefix /home/backend-api
+
+CMD ["bash", "+x", "/home/backend-api/start.sh"]

@@ -6,62 +6,35 @@ services:
     restart: always
     ports:
       - 5432:5432
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST_AUTH_METHOD=trust
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   ports:
-  #     - 8888:8888
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
   # backend:
-  #   build:
-  #     context: ./frontend/frontend
-  #     dockerfile: Dockerfile
-  #   images: backend
+  #   build: ./backend
+  #   image: backend
   #   container_name: backend
   #   restart: unless-stopped
   #   ports:
   #     - 5000:5000
-  #   env_file: .env
+  #     - 5555:5555
+  #   env_file:
+  #     - .env
   #   depends_on:
   #     - db
-  #   networks:
-  #     - pingpong-network
 
   # frontend:
-  #   build:
-  #     context: ./backend/backend-api
-  #     dockerfile: Dockerfile
-  #   images: frontend
+  #   build: ./frontend
+  #   image: frontend
   #   container_name: frontend
   #   restart: unless-stopped
   #   ports:
   #     - 5173:5173
-  #   env_file: .env
+  #   env_file:
+  #     - .env
   #   depends_on:
   #     - backend
-  #   networks:
-  #     - pingpong-network
-
-# volumes:
-#   pgdata:
-#     name: pgdata
-#     driver: local
-
-# networks:
-#   pingpong-network:
-#     driver: bridge

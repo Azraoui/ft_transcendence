@@ -80,17 +80,20 @@ function ChannelConversation() {
     chatSocket.on("msgToClients", (data) => {
       if (data.type == "CH")  // channel
        {
-        setMessageList((list => [...list, data]));
-        setChannelMessage((list => [...list, data]));
-        // if (data.senderId !== profileData.id)
+        if (data.roomId === channel.id)
+        {
+          setMessageList((list => [...list, data]));
+
+        }
+        // setChannelMessage((list => [...list, data]));
         // new_message_alert("new channel message from " + data.nickName)
 
       }
     });
 
-    // return () => {chatSocket.off("msgToClients")};
+    return () => {chatSocket.off("msgToClients")};
 
-  }, [chatSocket])
+  })
 
   const getMessage = (e: any) => {
     const val = e.target.value;

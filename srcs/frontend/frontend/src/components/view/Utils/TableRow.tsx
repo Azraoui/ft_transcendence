@@ -17,25 +17,38 @@ type TableRowProps =
         }
     }
 
+
 function TableRow({ params }: TableRowProps) {
+    let BgColour = "";
+    switch (params.opponentStatus) {
+        case "on":
+            BgColour = "bg-green-500";
+            break;
+        case "in":
+            BgColour = " bg-orange-500";
+            break;
+        default:
+            BgColour = "bg-red-500"
+
+    }
     return (
         <tr className="border-b bg-[#242424]">
             <th scope="row" className="py-4 px-6 uppercase font-medium whitespace-nowrap ">
                 <div className="flex items-center space-x-3">
-                    <div className="avatar relative ">
+                <div className="avatar relative ">
                         <div className="mask mask-squircle w-12 h-12">
                             <img src={params.opponentImgUrl} alt="Avatar Tailwind CSS Component" />
                         </div>
-                        <div className={` h-2 w-2 bg-red-500 absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
+                        <div className={` h-2 w-2 ${BgColour} absolute bottom-1  right-0 ring-white ring-4 rounded-full`}></div>
 
                     </div>
                     <div className="font-bold"> {params.opponentNickname}</div>
                 </div>
             </th>
-            <td className="py-4 px-6 uppercase">
-                {params.result}
-            </td>
-            <td className="py-4 px-6 uppercase">
+            <td className={`py-4 px-6 font-bold ${params.result == "win" ? "text-green-500" : "text-red-500" } uppercase`}>
+    { params.result }
+            </td >
+            <td className={`py-4 px-6 font-bold ${params.result == "win" ? "text-green-500" : "text-red-500" }  uppercase`}>
                 {params.score}
             </td>
             <td className="py-4 px-6 uppercase">
@@ -44,7 +57,7 @@ function TableRow({ params }: TableRowProps) {
             <td className="py-4 px-6 uppercase">
                 {params.time}
             </td>
-        </tr>
+        </tr >
     )
 }
 

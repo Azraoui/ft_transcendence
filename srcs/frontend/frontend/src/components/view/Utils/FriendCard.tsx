@@ -53,13 +53,16 @@ function FriendCard({ data }: FriendCardPorps) {
     return (
         <div onClick={() => {
             setActiveNavFriend(data);
+            console.log("room id = ", data.roomId);
             getMessages(data.roomId)
             setChannelClicked(true)
             setUserId(data.id)
         }} className={`flex items-center space-x-4 py-7 ${activeNavFriend.id === data.id && "bg-login-gradient"}  hover:bg-login-gradient px-4 rounded-lg cursor-pointer`}>
-            <div className="flex-shrink-0 relative ">
-                <div className={` h-2 w-2 ${BgColour} absolute top-2  right-0 ring-white ring-4 rounded-full`}></div>
-                <img src={data.picture} alt="avatar" className=' h-12 rounded-full ring-2 ring-offset-2  shadow-lg shadow-gray-700' />
+            <div className="avatar relative mb-3">
+                <div className="mask mask-squircle w-12 h-12  ">
+                    <img src={data.picture} alt="Avatar Tailwind CSS Component" />
+                </div>
+                <div className={` h-2 w-2 ${BgColour} absolute bottom-1  right-1 ring-white ring-4 rounded-full`}></div>
             </div>
             <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
@@ -73,9 +76,9 @@ function FriendCard({ data }: FriendCardPorps) {
             <div className="dropdown dropdown-left   ">
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon ' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
-                    <li><label htmlFor="my-modal-3" className="btn  w-full">Block</label></li>
-                    <li> <label htmlFor="my-modal-4" className="btn ">View Profile</label></li>
-                     {data.active == "on" ? <li> <Link to={"/inviter"} className="btn ">Play</Link></li> : ""}
+                    <li><label htmlFor="my-modal-3" className="btn mb-1 w-full">Block</label></li>
+                    <li> <label htmlFor="my-modal-4" className="btn mb-1">View Profile</label></li>
+                    {data.active == "on" ? <li> <Link to={"/inviter"} className="btn mb-1">Play</Link></li> : ""}
                 </ul>
             </div>
         </div>

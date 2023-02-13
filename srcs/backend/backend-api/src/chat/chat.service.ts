@@ -493,7 +493,6 @@ export class ChatService {
 	}
 
 	findUserStatusInRoom(userId: number, room: Room): string {
-
 		if (room?.owner === userId)
 			return "owner";
 		else if (room?.admins?.find((id) => id === userId))

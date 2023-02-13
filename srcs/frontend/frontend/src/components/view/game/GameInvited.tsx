@@ -36,8 +36,6 @@ const GameInvited: React.FC = () => {
         nickname: inviter,
         service: "game"
     }
-    if (game_socket.connected)
-        game_socket.disconnect();
     
     
     useEffect(() => {

@@ -9,12 +9,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserId } from '../../model/atoms/ProfileData';
 import { useRecoilState } from 'recoil';
+import FriendAcheivements from '../Utils/FriendAcheivements';
+import FriendHistory from '../Utils/FriendHistory';
+import FriendsStats from '../Utils/FriendsStats';
 
 function FriendProfileModal() {
 
-  
+
     const [userId, setUserId] = useRecoilState(UserId)
-    
+
 
     const [data, setData] = useState({
         firstName: "",
@@ -24,7 +27,26 @@ function FriendProfileModal() {
         username: "",
         picture: "",
         bio: "",
-        active: "on"
+        active: "on",
+        game: {
+
+            stats: {
+                games: 0,
+                loses: 0,
+                wins: 0
+            },
+            matchesHistory: [{
+                opponentStatus: "",
+                opponentImgUrl: "",
+                opponentNickname: "",
+                result: "",
+                score: "",
+                time: "",
+                userId: 0,
+                gameMode: "",
+            }]
+        }
+
     })
     const [tab, setTab] = useState(0);
 
@@ -36,7 +58,6 @@ function FriendProfileModal() {
     const retrieveFriendProfile = () => {
         Service.viewFriend(userId)
             .then((response: any) => {
-                console.log(response.data);
                 setData(response.data)
             })
             .catch((e: Error) => {
@@ -53,11 +74,11 @@ function FriendProfileModal() {
             break;
         default:
             BgColour = "bg-red-500"
-  
+
     }
     return (
         <div>
-           
+
             <input type="checkbox" id="my-modal-4" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box relative bg-black">
@@ -78,11 +99,11 @@ function FriendProfileModal() {
                                 <h5 className="lg:text-xl text-sm text-center font-medium ">{data.firstName} {data.lastName}</h5>
                                 <span className="lg:text-lg text-xs text-center  font-extralight ">{data.nickName}</span>
                                 <span className="lg:text-lg text-xs text-center  font-extralight ">{data.bio}</span>
-                                <Stats></Stats>
-                                <Acheivements></Acheivements>
+                                <FriendsStats games={data.game?.stats?.games} wins={data.game?.stats?.wins} loses={data.game?.stats?.loses}  ></FriendsStats>
+                                <FriendAcheivements wins={data.game?.stats?.wins}></FriendAcheivements>
                             </div>
                             :
-                            <History></History>
+                            <FriendHistory history={data.game.matchesHistory}></FriendHistory>
                     }
                 </div>
             </div>

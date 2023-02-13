@@ -104,7 +104,7 @@ export function ProfileEditCard() {
     <div className='col-span-2 bg-[#242424] ring-2 ring-gray-600 ring-offset-1 rounded-md w-full  flex flex-col items-center justify-evenly  px-4 pt-12 pb-6'>
             <ToastContainer />
       <div className='flex flex-col items-center justify-between ring-2 ring-gray-600 ring-offset-1 rounded-md px-2 sm:px-12 pt-12 pb-6 shadow-lg shadow-slate-700 w-3/4 space-y-8' >
-        <ProfileImage  avatar={profileData.picture} />
+        <ProfileImage  avatar={profileData.picture} BgColour="bg-green-500" />
         <form className="mb-2 w-full" onSubmit={Save}>
 
           <div className="mb-2 w-full">

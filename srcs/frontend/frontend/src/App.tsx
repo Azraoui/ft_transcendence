@@ -24,7 +24,7 @@ import ChannelMembersModal from './components/view/Modals/ChannelMembersModal'
 import MuteChannelMemberModal from './components/view/Modals/MuteChannelMemberModal'
 import { io } from 'socket.io-client'
 import { chatSocket, game_socket } from './components/controller/socket'
-import GameView  from './components/view/game/GameNormal'
+import GameView from './components/view/game/GameNormal'
 import FriendProfileModal from './components/view/Modals/FriendProfileModal'
 import GameNormal from './components/view/game/GameNormal'
 import GameAdvanced from './components/view/game/GameAdvanced'
@@ -36,20 +36,27 @@ import GameInvited from './components/view/game/GameInvited'
 import { Inviter } from './components/model/atoms/ChatFriends'
 
 
-const Accept = ({msg, inviter}:{msg:string, inviter:string}) => {
-  const handleClick = () =>
-  {
-    chatSocket.emit("declined",inviter)
+const Accept = ({ msg, inviter }: { msg: string, inviter: string }) => {
+  const handleClick = () => {
+    chatSocket.emit("declined", inviter)
+    toast.dismiss()
   }
   return (
     <div>
-      <h3  className='font-bold'>
+      <h3 className='font-bold'>
         {msg}
       </h3>
-    <div className='flex w-full items-center justify-between'>
-      <Link className='btn' to={'/invited'}>Accept</Link>
-      <button className='btn' onClick={handleClick}>Decline</button>
-    </div>
+      <div className='flex w-full items-center justify-between'>
+        <Link className='btn' onClick={() => {
+          toast.dismiss()
+          if (game_socket.connected) {
+            game_socket.disconnect();
+            game_socket.removeAllListeners();
+          }
+
+        }} to={'/invited'}>Accept</Link>
+        <button className='btn' onClick={handleClick}>Decline</button>
+      </div>
     </div>
   );
 };
@@ -62,10 +69,10 @@ function App() {
 
 
   useEffect(() => {
-    
+
     // chatSocket
     retrieveToken();
-    
+
     // retrieveProfile();
   }, [status]);
 
@@ -73,43 +80,41 @@ function App() {
     chatSocket.on("muteNotification", (data) => {
       muted_user_alert("You're  muted till " + data.duration)
     });
-    return () => {chatSocket.off("muteNotification")};
+    return () => { chatSocket.off("muteNotification") };
 
   }, [chatSocket])
-  
+
+  // useEffect(() => {
+  //   chatSocket.on("msgToClients", (data) => {
+  //     if (data.type == "CH")  // channel
+  //     {
+  //       if (data.senderId !== profileData.id)
+  //         new_message_alert("new channel message from " + data.nickName)
+  //     }
+  //   });
+
+  //   return () => { chatSocket.off("msgToClients") };
+
+  // }, [chatSocket])
+
+  // useEffect(() => {
+  //   chatSocket.on("msgToClients", (data) => {
+  //     console.log("data = ", data);
+  //     if (data.type == "DM") {
+  //       // console.log("sender id = ", data.senderId);
+  //       // console.log("me id =", profileData.id);
+
+  //       if (data.senderId !== profileData.id)
+  //         new_message_alert("new message from " + data.nickName)
+  //     }
+  //   });
+  //   return () => { chatSocket.off("msgToClients") };
+  // }, [chatSocket])
+
   useEffect(() => {
-    chatSocket.on("msgToClients", (data) => {
-      if (data.type == "CH")  // channel
-       {
-        if (data.senderId !== profileData.id)
-        new_message_alert("new channel message from " + data.nickName)
-      }
-    });
-
-    return () => {chatSocket.off("msgToClients")};
-
-  }, [chatSocket])
-
-  useEffect(()=>
-  {
-    chatSocket.on("msgToClients", (data) => {
-      console.log("data = ",data);
-      if (data.type == "DM")
-      { 
-        console.log("sender id = ",data.senderId);
-        console.log("me id =",profileData.id);
-        
-        if  (data.senderId !== profileData.id)
-        new_message_alert("new message from " + data.nickName)
-      }
-    });
-    return () => {chatSocket.off("msgToClients")};
-  },[chatSocket])
-
-  useEffect(()=>{
-    chatSocket.on("invited",(inviter)=>{
+    chatSocket.on("invited", (inviter) => {
       setInviter(inviter.nickname)
-      toast(<Accept msg={`Invitation to play by ${inviter.nickname}`} inviter={inviter.nickname}  />, {
+      toast(<Accept msg={`Invitation to play by ${inviter.nickname}`} inviter={inviter.nickname} />, {
         position: "top-right",
         autoClose: 10000,
         hideProgressBar: false,
@@ -118,15 +123,15 @@ function App() {
         draggable: false,
         progress: undefined,
         theme: "colored",
-        });
+      });
       // success_alert(`Invitation to play by ${ inviter.nickname}`);
-       // Display invitation (inviter.nickname, inviter.piclink)
-//   // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
-//   // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
+      // Display invitation (inviter.nickname, inviter.piclink)
+      //   // If click on Decline: chat.socket.emit("declined", inviter.nickname) and stop displaying invitation
+      //   // If click on Accept : disconnect game_socket the use GameInvited.tsx after modifying game_socket query nickname to inviter.nickname and stop displaying invitation
 
     });
-    return () => {chatSocket.off("invited")};
-  },[chatSocket])
+    return () => { chatSocket.off("invited") };
+  }, [chatSocket])
 
   // const retrieveProfile = () => {
   //   Service.getProfile()
@@ -134,7 +139,7 @@ function App() {
   //     .then((response: any) => {
   //       setprofileData(response.data)
   //       console.log(profileData);
-        
+
   //       settwofaEnabled(profileData.twofactor)
   //     })
   //     .catch((e: Error) => {
@@ -145,7 +150,7 @@ function App() {
 
     Service.getToken()
       .then((response: any) => {
-        setprofileData({...profileData, ...response.data})
+        setprofileData({ ...profileData, ...response.data })
         setStatus(false);
         chatSocket;
         game_socket;
@@ -162,38 +167,38 @@ function App() {
       {
         status ? <Login />
           :
-          profileData.isTwoFacAuthEnabled  &&  (profileData.isTwoFacAuthVerified === false) ? <TwoFA/> : 
-          <div>
-            <Header />
-            {/** All those Modals are being called by the user there not visible till they got called */}
-            <BanModal/> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
-            <BlockModal/>
-            <AddChannelModal/>
-            <ProtectedChannelModal/>
-            <ChannelMembersModal/>
-            <MuteChannelMemberModal/>
-            <FriendProfileModal  />
-            {/* <ToastContainer /> */}
-            
-            <div className='w-full bg-black   grid grid-cols-12'>
-              <Navbar />
-              <Routes>
-                <Route path='/' element={<Dashboard />} />
-                <Route path='/game-normal' element={<GameNormal />} />
-                <Route path='/game-advanced' element={<GameAdvanced />} />
-                <Route path='/live-games' element={<GameSpectator />} />
-                <Route path='/inviter' element={<GameInviter />} />
-                <Route path='/invited' element={<GameInvited />} />
-                <Route path='/users' element={<Users />} />
-                <Route path='/profile' element={<Profile />} />
-                <Route path='/messages' element={<Messages />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </div>
-          </ div>
+          profileData.isTwoFacAuthEnabled && (profileData.isTwoFacAuthVerified === false) ? <TwoFA /> :
+            <div>
+              <Header />
+              {/** All those Modals are being called by the user there not visible till they got called */}
+              <BanModal /> {/*this modal is here  to prevent the state from changing (this modal is called by chatFriend)*/}
+              <BlockModal />
+              <AddChannelModal />
+              <ProtectedChannelModal />
+              <ChannelMembersModal />
+              <MuteChannelMemberModal />
+              <FriendProfileModal />
+              {/* <ToastContainer /> */}
+
+              <div className='w-full bg-black   grid grid-cols-12'>
+                <Navbar />
+                <Routes>
+                  <Route path='/' element={<Dashboard />} />
+                  <Route path='/game-normal' element={<GameNormal />} />
+                  <Route path='/game-advanced' element={<GameAdvanced />} />
+                  <Route path='/live-games' element={<GameSpectator />} />
+                  <Route path='/inviter' element={<GameInviter />} />
+                  <Route path='/invited' element={<GameInvited />} />
+                  <Route path='/users' element={<Users />} />
+                  <Route path='/profile' element={<Profile />} />
+                  <Route path='/messages' element={<Messages />} />
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+              </div>
+            </ div>
       }
-      </div>
-    
+    </div>
+
   )
 }
 

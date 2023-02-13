@@ -184,6 +184,9 @@ start()
             });
             this.socket.on("expired", ()=> 
                 {
+                    clearInterval(this.conIntervalId);
+                    this.conIntervalId = -1;
+                    this.count = 4;
                     clearInterval(this.noGameInterval);
                     this.renderEnd("Invitation Expired");
                     });
