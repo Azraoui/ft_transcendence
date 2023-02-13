@@ -457,7 +457,7 @@ export class ChatService {
 				messages: true
 			}
 		})
-		if (!room.members.find((id) => id === userId) || room.blocked.find((id) => id === userId))
+		if (!room.members || !room.members.find((id) => id === userId) || room.blocked.find((id) => id === userId))
 			throw new UnauthorizedException("You don't have the access");
 		const messages = room.messages;
 		let allMessages = [];

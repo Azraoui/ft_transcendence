@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseFilePipeBuilder, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { Express } from 'express'
 import { GetUserReq } from 'src/decorator';
@@ -24,7 +24,16 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async updatePicture (
         @GetUserReq() userReq,
-        @UploadedFile() file: Express.Multer.File
+        @UploadedFile(            new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+            fileType: 'jpeg|png|jpg',
+        })
+        .addMaxSizeValidator({
+            maxSize: 10000
+        })
+        .build({
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        }),) file: Express.Multer.File
     ) {
         return await this.userService.updateImgUrl(userReq, file);
     }
