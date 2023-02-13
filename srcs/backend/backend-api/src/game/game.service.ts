@@ -138,9 +138,9 @@ export class GameService {
     let player: any = ongameclients.find((cl:any) => { if (cl.user.nickname == id[0]) return 1; return 0; });
     // console.log(player);
     if (player.user === undefined) return;
-    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
+    client.emit("playerInfo", {nickname:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     player = ongameclients.find((cl:any) => { if (cl.user.nickname == id[1]) return 1; return 0; });
-    client.emit("playerInfo", {id:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
+    client.emit("playerInfo", {nickname:player.user.nickname, piclink:player.user.pictureLink, side: player.data.side});
     client.data.room = room;
     // Join client to room
     client.join(room);

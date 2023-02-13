@@ -65,7 +65,7 @@ export class AuthService {
                         pictureLink: apiData.pictureLink,
                         accessToken: apiData.accessToken,
                         refreshToken: apiData.refreshToken,
-                        bio: "I am Noob"
+                        bio: "I am a noob"
                     }
                 })
             }

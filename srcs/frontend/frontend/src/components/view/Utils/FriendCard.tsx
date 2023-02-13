@@ -77,6 +77,7 @@ function FriendCard({ data }: FriendCardPorps) {
                     <li><label htmlFor="my-modal-3" className="btn mb-1 w-full">Block</label></li>
                     <li> <label htmlFor="my-modal-4" className="btn mb-1">View Profile</label></li>
                     {data.active == "on" ? <li> <Link to={"/inviter"} className="btn mb-1">Play</Link></li> : ""}
+                    {data.active == "in" ? <li> <Link to={"/live-games"} className="btn mb-1">Watch Game</Link></li> : ""}
                 </ul>
             </div>
         </div>
