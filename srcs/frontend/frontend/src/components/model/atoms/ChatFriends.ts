@@ -41,6 +41,20 @@ export const FriendMessages = atom({
     ]
 })
 
+
+export const PrivateRoomChannel = atom({
+    key: "PrivateRoomChannel",
+    default: {
+        id: 0,
+        picture: "",
+        active: "",
+        nickName: "",
+        bio: "",
+        roomId:0
+
+    }
+})
+
 export const FriendClickedAtom = atom({
     key: "FriendClickedAtom",
     default: false

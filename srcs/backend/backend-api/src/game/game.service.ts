@@ -84,6 +84,7 @@ export class GameService {
           oneVone.splice(index, 1);
           client.data.side = "right";
           client.emit("playerInfo", {nickname:client.user.nickname, piclink:client.user.pictureLink, side: "right"});
+          ongameclients.push(first, second);
           this.joinPlayersToGame(first, second, wss, rooms, ongameclients, waitingSpectators);
         }
         else

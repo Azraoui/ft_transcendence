@@ -34,6 +34,7 @@ import { muted_user_alert, new_message_alert, success_alert } from './components
 import { toast, ToastContainer } from 'react-toastify'
 import GameInvited from './components/view/game/GameInvited'
 import { Inviter } from './components/model/atoms/ChatFriends'
+import AddChannelMembersModal from './components/view/Modals/AddChannelMembersModal'
 
 
 const Accept = ({ msg, inviter }: { msg: string, inviter: string }) => {
@@ -178,6 +179,7 @@ function App() {
               <ChannelMembersModal />
               <MuteChannelMemberModal />
               <FriendProfileModal />
+              <AddChannelMembersModal/>
               {/* <ToastContainer /> */}
 
               <div className='w-full bg-black   grid grid-cols-12'>

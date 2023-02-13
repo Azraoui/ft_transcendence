@@ -51,9 +51,7 @@ const getProfile = () => {
   const getChannelMembers = (id:number) => {
     return http.get(`/chat/viewMembers/${id}`, {withCredentials:true});
   };
-  const joinChannel = (roomId:number, type:string, password?:string) => {
-    console.log("====>>>>>>>>>>> ",roomId, type, password);
-    
+  const joinChannel = (roomId:number, type:string, password?:string) => {    
     return http.post(`/chat/joinRoom`, {roomId,type, password}, {withCredentials:true});
   };
   const muteMember = (data :{roomId:number, memberId:number, duration:number}) => {
@@ -97,6 +95,10 @@ const updatePicture = async (file:FormData) => {
   }
 };
 
+  const addFriend2PrivateRoom = (id:number, roomId:number) => {
+    return http.post(`/chat/addFriend2PrivateRoom`,{id,roomId}, {withCredentials:true} );
+  };
+
 
 
 // const remove = (id: any) => {
@@ -135,7 +137,8 @@ const Service = {
   muteMember,
   unmuteChannelMember,
   getFriendMessages,
-  blockFriend
+  blockFriend,
+  addFriend2PrivateRoom
   // get,
   // create,
   // update,

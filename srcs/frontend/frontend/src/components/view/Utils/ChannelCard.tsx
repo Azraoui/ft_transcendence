@@ -82,7 +82,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                 <div tabIndex={0} className=""><EllipsisVerticalIcon className='header-icon' /></div>
                 <ul tabIndex={0} className="dropdown-content  menu p-2 shadow bg-[#242424] rounded-box w-26 sm:w-52">
                     <li> {
-                    isJoined ? <div onClick={() => LeaveChannel(data.id)} className="btn  w-full">Leave</div>
+                    isJoined ? <div onClick={() => LeaveChannel(data.id)} className="btn mb-1  w-full">Leave</div>
                         :
                         data.type === "public" ?
                             <div onClick={() => {
@@ -92,8 +92,8 @@ function ChannelCard({ data }: ChannelCardPorps) {
                             <label htmlFor="my-modal-5" className="btn">Join</label>
                     }
                     </li>
-                    <li> {isJoined ? <label htmlFor="my-modal-6" className={`btn my-1`}>View Members</label> : ""}</li>
-                    <li> {  data.type === "public" ? <label htmlFor="my-modal-6" className={`btn my-1`}>Add Members</label> : ""}</li>
+                    <li> {isJoined ? <label htmlFor="my-modal-6" className={`btn mb-1`}>View Members</label> : ""}</li>
+                    <li> {  data.type === "private" && data ? <label htmlFor="my-modal-10" className={`btn mb-1`}>Add Members</label> : ""}</li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

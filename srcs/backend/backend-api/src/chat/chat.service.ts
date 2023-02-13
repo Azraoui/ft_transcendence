@@ -699,4 +699,41 @@ export class ChatService {
 		}
 		return "NO"
 	}
+
+	async addFriend2PrivateRoom(userId:number, memberId:number, roomId:number) {
+		if (!userId || !memberId || !roomId) return;
+
+		const room = await this.prismaService.room.findUnique({
+			where: {
+				id: roomId
+			},
+			select: {
+				owner: true,
+				members: true
+			}
+		})
+		if (room) {
+			console.log("userId = ", userId);
+			console.log("id = ", memberId);
+			console.log("roomId = ", roomId);
+			
+			if (room.owner === userId) {
+				if (room.members.find((id) => id === memberId) === undefined) {
+					const room = await this.prismaService.room.update({
+						where: {
+							id: roomId,
+						},
+						data: {
+							members: {
+								push: memberId
+							}
+						}
+					})
+				return room;
+			}
+			}
+		}
+		
+	}
+
 }

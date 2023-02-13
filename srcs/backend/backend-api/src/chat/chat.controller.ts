@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { GetUserReq } from 'src/decorator';
-import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, RoomDto, UnMuteDto } from './dto';
+import { AddAdminDto, BlockDto, JoinRoomDto, MuteDto, PrivateRoomDto, RoomDto, UnMuteDto } from './dto';
 import { ChatService } from './chat.service';
 
 @Controller('chat')
@@ -93,6 +93,13 @@ export class ChatController {
     @Get('getDirectMsgs/:id')
     getDirectMsgs(@GetUserReq('id') userId: number, @Param('id') roomId: number) {
         return this.chatService.getDirectMsgs(+userId, +roomId);
+    }
+
+    @UseGuards(JwtTwoFactorGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('addFriend2PrivateRoom')
+    addFriend2PrivateRoom(@GetUserReq('id') userId: number, @Body() body: PrivateRoomDto) {
+        return this.chatService.addFriend2PrivateRoom(+userId, +body.id, +body.roomId);
     }
 
 }
