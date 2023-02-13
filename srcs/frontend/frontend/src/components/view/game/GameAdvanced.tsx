@@ -43,7 +43,7 @@ const GameAdvanced: React.FC = () => {
     }, []);
 
     return(
-        <div className="col-start-4 xs:col-start-3 sm:col-start-2 xl:col-start-3 col-end-13 md:pl-5 flex justify-center items-center flex-col bg-cover bg-center">
+        <div className="col-start-4  h-[100%] xl:h-[calc(100vh-88px)] xs:col-start-3 sm:col-start-2 xl:col-start-3 col-end-13 md:pl-5 flex justify-center items-center flex-col bg-cover bg-center">
             <div className="flex items-center justify-between w-[90%] sm:w-[80%] my-6 md:my-9">
                 <div className="flex justify-start items-center">
                     <img ref={lImageRef} className='flex w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white bg-center bg-cover bg-gray-400' style={{backgroundImage: `url(${Avatar})`}} ></img>
