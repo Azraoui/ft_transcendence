@@ -39,7 +39,6 @@ const GameInvited: React.FC = () => {
     
     
     useEffect(() => {
-        console.log("*********************** = ",inviter );
         
         const game:Game = new Game(game_socket, {canvasRef, rImageRef, lImageRef, rnameRef, lnameRef, lscore, rscore, buttonRef}, "invited",{bcWidth:600, bcHeight:400}, "WHITE", "WHITE", "WHITE", canvasBg);
         game.start();

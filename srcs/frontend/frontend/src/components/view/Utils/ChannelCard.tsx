@@ -24,6 +24,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
     const [channel, setChannel] = useRecoilState(ChannelNavAtom)
     const [isChannelClicked, setChannelClicked] = useRecoilState(ChannelClickedAtom)
     const [isJoined, setisJoined] = useRecoilState(IsJoined)
+    const [role, setRole] = useState("");
 
     const getMessages = (id: number) => {
         Service.getChannelMessages(id).then((res: any) => {
@@ -33,6 +34,15 @@ function ChannelCard({ data }: ChannelCardPorps) {
             setisJoined(false);
         })
     }
+
+    useEffect(() => {
+
+        Service.getChannelMembers(channel.id).then((res: any) => {      
+                  
+            setRole(res.data.userRole);
+        }).catch(() => {
+        })
+    })
     const JoinChannel = (param: { roomId: number, type: string, password: string }) => {
         Service.joinChannel(param.roomId, param.type, param.password).then((res: any) => {
             success_alert("You Joined this channel successfully");
@@ -93,7 +103,7 @@ function ChannelCard({ data }: ChannelCardPorps) {
                     }
                     </li>
                     <li> {isJoined ? <label htmlFor="my-modal-6" className={`btn mb-1`}>View Members</label> : ""}</li>
-                    <li> {  data.type === "private" && data ? <label htmlFor="my-modal-10" className={`btn mb-1`}>Add Members</label> : ""}</li>
+                    <li> {  data.type === "private" && role === "owner" ? <label htmlFor="my-modal-10" className={`btn mb-1`}>Add Members</label> : ""}</li>
                 </ul>
             </div>
             {/* <div className="inline-flex items-center text-base font-semibold">

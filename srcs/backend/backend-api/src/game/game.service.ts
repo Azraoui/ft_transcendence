@@ -54,13 +54,9 @@ export class GameService {
         // {
         //   // Finding the invited and send them the invitation
         let clients:any = await wss.fetchSockets();
-        console.log("client invited: ", client.handshake.query.nickname);
         for (const cli of clients) {
-          console.log(cli.user.nickname);
           if (cli.user.nickname == client.handshake.query.nickname && cli.handshake.query.service == "chat") {
-            console.log("found");
             cli.emit("invited", { nickname: client.user.nickname, piclink: client.user.pictureLink });
-            console.log("invitation sent to", cli.user.nickname);
             break;
           }
         }
@@ -136,10 +132,8 @@ export class GameService {
   WatchGame(client: any, room: string, ongameclients: Socket[]) {
     let id: string[];
 
-    console.log("game: ", room);
     // Get playersInfo and send them
     id = room.split("+");
-    console.log(id);
     
     let player: any = ongameclients.find((cl:any) => { if (cl.user.nickname == id[0]) return 1; return 0; });
     // console.log(player);
@@ -156,7 +150,6 @@ export class GameService {
   async handlePlayerConnection(client: any, queue_normal: Socket[], queue_advanced: Socket[], wss: Server, rooms: string[], ongameclients: Socket[], waitingSpectators: Socket[]) {
     if (client.connected) // Proceed if the client hasn't disconnected
     {
-      console.log(client.handshake.query.mode);
       if (client.handshake.query.mode == "normal") {
         // If no one is waiting, add client to queue
         if (queue_normal.length == 0) {

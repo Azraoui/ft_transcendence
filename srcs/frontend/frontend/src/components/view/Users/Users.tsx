@@ -32,11 +32,9 @@ function Users() {
     Service.getNoFriends()
       .then((response: any) => {
     
-        console.log(response.data);
         setUsers(response.data)
       })
       .catch((e: Error) => {
-        console.log(e);
       });
   };
   return (

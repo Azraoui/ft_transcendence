@@ -17,7 +17,6 @@ function BlockModal() {
                 setOK(true)
             }).catch((e:Error)=>
             {
-                console.log(e);
                 
                 error_alert()
             })

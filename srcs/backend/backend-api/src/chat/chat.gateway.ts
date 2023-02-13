@@ -64,9 +64,7 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 				}
 				this.onlineUser.push(client);
 				{
-					client.on("declined", (inviter)=>{
-						console.log("inviter = ", inviter);
-						
+					client.on("declined", (inviter)=>{						
 					const index = this.oneVone.findIndex((cli:any) => { return (cli.inviter.user.nickname == inviter) && (cli.inviter.handshake.query.nickname == client.user.nickname) });
 					if (index != -1)
 					{
@@ -112,8 +110,6 @@ export class ChatGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 	async create(@ConnectedSocket() client: Socket, @MessageBody() msg: ChatDto) {
 		this.server.removeAllListeners("msgToClients");
 		this.server.removeAllListeners("msgToServer");
-		console.log(`msg  =  ${msg.text}`)
-		console.log(`roomId  =  ${msg.roomId}`)
 		const online = this.onlineUser.find((x) => x.id === client.id);
 		if (online)
 		{

@@ -19,22 +19,18 @@ function Header() {
     Service.getProfile()
       .then((response: any) => {
         setprofileData(response.data)
-        console.log("data = ",response.data);
       })
       .catch((e: Error) => {
-        console.log(e);
       });
   };
     const LogOut = () => {
     Service.Logout()
       .then((response: any) => {
 
-        console.log(response.data);
         window.location.reload()
         window.location.href = "/";
       })
       .catch((e: Error) => {
-        console.log("=>>>>>>.", e);
       });
   };
   return (

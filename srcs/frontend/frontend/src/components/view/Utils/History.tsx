@@ -6,8 +6,6 @@ import TableRow from './TableRow'
 
 function History() {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-
-  console.log("======> ",profileData.game.matchesHistory);
   
     return (
         <div className='flex w-full flex-col '>

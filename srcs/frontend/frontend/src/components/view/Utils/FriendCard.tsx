@@ -43,7 +43,6 @@ function FriendCard({ data }: FriendCardPorps) {
 
     const getMessages = (id: number) => {
         Service.getFriendMessages(id).then((res: any) => {
-            console.log("__________ = ", res.data);
             setChat(res.data)
         }).catch(() => {
             error_alert()
@@ -53,7 +52,6 @@ function FriendCard({ data }: FriendCardPorps) {
     return (
         <div onClick={() => {
             setActiveNavFriend(data);
-            console.log("room id = ", data.roomId);
             getMessages(data.roomId)
             setChannelClicked(true)
             setUserId(data.id)

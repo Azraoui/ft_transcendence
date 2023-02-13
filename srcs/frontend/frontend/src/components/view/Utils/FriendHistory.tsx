@@ -20,8 +20,6 @@ type Props = {
 
 function FriendHistory(data:Props) {
   const [profileData, setprofileData] = useRecoilState(ProfileData);
-
-  console.log("======> ",profileData.game.matchesHistory);
   
     return (
         <div className='flex w-full flex-col '>

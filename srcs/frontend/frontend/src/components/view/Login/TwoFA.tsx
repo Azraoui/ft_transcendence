@@ -18,7 +18,6 @@ function TwoFA() {
   const Activate = (evt: FormEvent) => {
     evt.preventDefault();
     Service.post2FQRCode(code).then((res: any) => {
-      console.log(res.data.status);
       if (res.data.status)
         success_alert("Code Successfuly Verified")
       else
@@ -27,14 +26,12 @@ function TwoFA() {
     })
       .catch((e: Error) => {
         error_alert()
-        console.log(e);
       })
   }
 
 
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     const val = e.target.value;
     setCode(e.target.value)
   }

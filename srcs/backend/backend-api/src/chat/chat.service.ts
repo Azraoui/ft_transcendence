@@ -713,10 +713,6 @@ export class ChatService {
 			}
 		})
 		if (room) {
-			console.log("userId = ", userId);
-			console.log("id = ", memberId);
-			console.log("roomId = ", roomId);
-			
 			if (room.owner === userId) {
 				if (room.members.find((id) => id === memberId) === undefined) {
 					const room = await this.prismaService.room.update({

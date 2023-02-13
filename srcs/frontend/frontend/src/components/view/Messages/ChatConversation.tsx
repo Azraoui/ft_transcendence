@@ -62,12 +62,10 @@ function Conversation() {
   {
     
     chatSocket.on("msgToClients", (data) => {
-      console.log("sender = ",data.nickName);
       if (data.type == "DM")
       { 
         // setMessageList((list => [...list, data] ));
         // setChat((list => [...list, data] ));
-        console.log("roomId = ", data.roomId, "**", "chatRoomId = ", activeNavFriend.roomId);
         
         if  (data.roomId === activeNavFriend.roomId)
             setChat((list => [...list, data] ));

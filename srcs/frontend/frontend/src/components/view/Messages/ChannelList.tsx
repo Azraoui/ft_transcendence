@@ -19,7 +19,6 @@ function ChannelList() {
     {
         Service.getChannels().then((res:any)=>
         {
-            console.log(res.data);
             setChannel(res.data)
         }).catch(()=>
         {

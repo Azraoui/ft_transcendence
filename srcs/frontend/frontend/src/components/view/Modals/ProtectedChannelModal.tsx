@@ -15,7 +15,6 @@ function ProtectedChannelModal() {
         evt.preventDefault();
         
         Service.joinChannel(channel.id, channel.type, code).then((res: any) => {
-            console.log(res.data);
             success_alert("You Joined this channel Successfuly");
         
             setOK(true);
@@ -25,7 +24,6 @@ function ProtectedChannelModal() {
             .catch((e: Error) => {
                 error_alert_channel_password()
                 setOK(false)
-                console.log(e);
                 setCode("");
             })
 

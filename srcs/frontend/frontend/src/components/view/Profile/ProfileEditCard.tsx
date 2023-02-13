@@ -36,7 +36,6 @@ export function ProfileEditCard() {
       Service.updatePicture(formData).then((res: any) => {
         window.location.reload();
       }).catch((e: Error) => {
-        console.log(e);
 
       })
     }
@@ -47,11 +46,9 @@ export function ProfileEditCard() {
       }
 
       Service.updateUserInfo(data).then((res: any) => {
-        console.log(data);
         window.location.reload();
 
       }).catch((e: Error) => {
-        console.log(e);
 
       })
     }
@@ -60,12 +57,10 @@ export function ProfileEditCard() {
   }
 
   const handleFileSelect = (event: any) => {
-    console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0])
   }
   function handleChange(evt: any) {
     const value = evt.target.value;
-    console.log(value);
 
 
     setInputs({
@@ -75,12 +70,10 @@ export function ProfileEditCard() {
   }
   const onClickDisable2fa = () => {
     Service.turnOff2FQRCode().then((response: any) => {
-      console.log(response.data);
       success_alert("Your 2FA has been disabled Successfuly")
       set2F(false);
     }).catch((e: Error) => {
       error_alert()
-      console.log(e);
     })
   };
   const onClickEnable2fa = () => {
@@ -94,7 +87,6 @@ export function ProfileEditCard() {
       )
       setQrCode(base64)
     }).catch((e: Error) => {
-      console.log(e);
     })
   };
 

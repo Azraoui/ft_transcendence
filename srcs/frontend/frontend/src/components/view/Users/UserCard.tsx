@@ -35,7 +35,6 @@ function UserCard({ data }: UserCardProps) {
       success_alert(`${data.firstName} ${data.lastName} is now your friend`)
       setIsFriend(true)
     }).catch((e: Error) => {
-      console.log(e);
     })
   }
   const Unblock = () => {
@@ -43,7 +42,6 @@ function UserCard({ data }: UserCardProps) {
       success_alert(`${data.firstName} ${data.lastName} is Unblocked`)
       setUnblocked(true)
     }).catch((e: Error) => {
-      console.log(e);
     })
   }
   

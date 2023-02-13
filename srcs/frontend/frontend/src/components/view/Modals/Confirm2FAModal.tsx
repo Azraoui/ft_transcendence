@@ -21,7 +21,6 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
     const Activate = (evt: FormEvent) => {
         evt.preventDefault();
         Service.post2FQRCode(code).then((res: any) => {
-            console.log(res.data);
             if (res.data.status)
                 success_alert("Your 2FA has been enabled Successfuly")
             else
@@ -33,7 +32,6 @@ function Confirm2FAModal({ src, isEnabled }: TwoFAProps) {
             .catch((e: Error) => {
                 error_alert()
                 setOK(false)
-                console.log(e);
             })
     }
 

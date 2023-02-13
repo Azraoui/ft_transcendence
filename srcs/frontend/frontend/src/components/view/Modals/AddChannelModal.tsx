@@ -30,9 +30,7 @@ function AddChannelModal() {
 
         }).catch((err:Error)=>
         {
-            error_alert_channel()
-                console.log(err.cause);
-                
+            error_alert_channel()                
                 setInputs({
 
                     type: "default", //default
@@ -46,7 +44,6 @@ const onNameChange = (e:any) =>
 }
     const onOptionChange = (e: any) => {
 
-        console.log(e.target.value);
         const value = e.target.value;
             setInputs({
                 ...inputs,

@@ -61,7 +61,6 @@ function FriendProfileModal() {
                 setData(response.data)
             })
             .catch((e: Error) => {
-                console.log(e);
             });
     };
     let BgColour = "";
