@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseFilePipeBuilder, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseFilePipeBuilder, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import {JwtTwoFactorGuard} from 'src/auth/guard/jwt-two-factor.guard';
 import { Express } from 'express'
 import { GetUserReq } from 'src/decorator';
